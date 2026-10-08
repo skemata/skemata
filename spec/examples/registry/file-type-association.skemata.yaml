@@ -1,0 +1,24 @@
+# The values of a file name extension key such as HKLM\SOFTWARE\Classes\.txt.
+# The key's unnamed (Default) value is the member with the empty name ""
+# (decision 0012, MOD-3). Illustrative excerpt. Sample data: file-type-association.reg
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$id: https://skemata.github.io/skemata/examples/registry/file-type-association
+$target: registry
+title: File name extension registration
+type: object
+required: [""]
+properties:
+  "":
+    type: string
+    title: Program ID
+    description: The (Default) value names the program ID that opens files with this extension.
+    examples: [txtfile]
+  Content Type:
+    type: string
+    title: MIME type
+    pattern: "^[a-z]+/[A-Za-z0-9.+-]+$"
+    examples: [text/plain]
+  PerceivedType:
+    type: string
+    title: Perceived type
+    enum: [text, image, audio, video, compressed, document, system, application]

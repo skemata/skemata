@@ -1,0 +1,14 @@
+# INVALID: violates INI-2 (and KW-2: ini-windows does not allow items). Keys in
+# a section hold single text values; INI has no arrays. Numbered keys can be
+# described as dynamic members with propertyNames instead.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: ini-windows
+type: object
+properties:
+  History:
+    type: object
+    properties:
+      RecentFiles:
+        type: array
+        items:
+          type: string

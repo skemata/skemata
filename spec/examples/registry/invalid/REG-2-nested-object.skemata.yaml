@@ -1,0 +1,15 @@
+# INVALID: violates REG-2 (and KW-2). A registry schema describes exactly one key, and
+# objects may appear only at the root. The subkey "Recommended" needs its own
+# schema instead of a nested object (decision 0011).
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: registry
+type: object
+properties:
+  ShowHomeButton:
+    type: integer
+    format: uint32
+  Recommended:
+    type: object
+    properties:
+      HomepageLocation:
+        type: string

@@ -1,0 +1,23 @@
+# A GeoJSON LineString (RFC 7946), as an example of data that is not settings.
+# Shows a tuple (prefixItems) inside a nested array: "coordinates" is an array
+# of positions, and each position is [longitude, latitude] with an optional
+# altitude (KW-27). Sample data: geojson-linestring.json
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$id: https://skemata.github.io/skemata/examples/json/geojson-linestring
+$target: json
+title: GeoJSON LineString
+required: [type, coordinates]
+properties:
+  type:
+    const: LineString
+  coordinates:
+    minItems: 2
+    items:
+      $ref: "#/$defs/position"
+$defs:
+  position:
+    prefixItems:
+      - { type: number, minimum: -180, maximum: 180, title: Longitude }
+      - { type: number, minimum: -90, maximum: 90, title: Latitude }
+      - { type: number, title: Altitude }
+    minItems: 2

@@ -1,0 +1,16 @@
+# INVALID: violates INI-1. Members of the root must be sections (objects).
+# A key before the first section cannot be addressed by the Windows profile
+# API, so ini-windows cannot describe it (decision 0015).
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: ini-windows
+type: object
+properties:
+  Version:
+    type: integer
+    format: uint16
+  Updates:
+    type: object
+    properties:
+      AutoCheck:
+        type: string
+        enum: ["yes", "no"]

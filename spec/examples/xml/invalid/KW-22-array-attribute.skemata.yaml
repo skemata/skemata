@@ -1,0 +1,16 @@
+# INVALID: violates KW-22. Every declared attribute must describe a scalar:
+# XML attributes hold single text values, not lists. Describe repeated values
+# as an array member, which is stored as repeated child elements.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: xml
+type: object
+required: [configuration]
+properties:
+  configuration:
+    type: object
+    attributes:
+      properties:
+        servers:
+          type: array
+          items:
+            type: string

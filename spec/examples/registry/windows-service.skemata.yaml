@@ -1,0 +1,75 @@
+# The values of one service key below HKLM\SYSTEM\CurrentControlSet\Services.
+# Illustrative excerpt; see the Windows documentation for all values.
+# Shows REG_EXPAND_SZ (expandable), REG_MULTI_SZ (string array) and
+# REG_BINARY (contentEncoding). Sample data: windows-service.reg
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$id: https://skemata.github.io/skemata/examples/registry/windows-service
+$target: registry
+title: Windows service configuration
+type: object
+required: [Type, Start, ErrorControl, ImagePath]
+properties:
+  DisplayName:
+    type: string
+    title: Display name
+  Description:
+    type: string
+    title: Description
+  ImagePath:
+    type: string
+    expandable: true
+    title: Executable path
+    examples:
+      - '%SystemRoot%\System32\svchost.exe -k netsvcs -p'
+  ObjectName:
+    type: string
+    title: Account
+    examples: [LocalSystem, 'NT AUTHORITY\LocalService']
+  Type:
+    type: integer
+    format: uint32
+    title: Service type
+    $comment: The value is a bit field; only the common values are listed here.
+    oneOf:
+      - { const: 1, title: Kernel driver }
+      - { const: 2, title: File system driver }
+      - { const: 16, title: Own process }
+      - { const: 32, title: Shared process }
+  Start:
+    type: integer
+    format: uint32
+    title: Start type
+    oneOf:
+      - { const: 0, title: Boot }
+      - { const: 1, title: System }
+      - { const: 2, title: Automatic }
+      - { const: 3, title: Manual }
+      - { const: 4, title: Disabled }
+  DelayedAutostart:
+    type: integer
+    format: uint32
+    title: Delayed automatic start
+    oneOf:
+      - { const: 1, title: Delayed }
+      - { const: 0, title: Not delayed }
+  ErrorControl:
+    type: integer
+    format: uint32
+    title: Error handling
+    oneOf:
+      - { const: 0, title: Ignore }
+      - { const: 1, title: Normal }
+      - { const: 2, title: Severe }
+      - { const: 3, title: Critical }
+  DependOnService:
+    type: array
+    title: Depends on services
+    uniqueItems: true
+    ordered: false
+    items:
+      type: string
+  FailureActions:
+    type: string
+    contentEncoding: base64
+    title: Recovery actions
+    description: A binary SERVICE_FAILURE_ACTIONS structure.

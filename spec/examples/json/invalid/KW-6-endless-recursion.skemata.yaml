@@ -1,0 +1,15 @@
+# INVALID: violates KW-6. Every folder requires a child folder, so data could
+# never end. A recursion must pass through a member that is not required, or
+# through an array that may be empty.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: json
+properties:
+  root:
+    $ref: "#/$defs/folder"
+$defs:
+  folder:
+    required: [name, child]
+    properties:
+      name: { type: string }
+      child:
+        $ref: "#/$defs/folder"

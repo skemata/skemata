@@ -1,0 +1,29 @@
+# An import file for user accounts of a fictitious application.
+# Shows keyed records, type inference, an empty field as an absent value
+# (CSV-4), an on/off column with several accepted spellings, and a unit.
+# Sample data: user-import.csv
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$id: https://skemata.github.io/skemata/examples/csv/user-import
+$target: csv
+title: User import
+identity: [username]
+items:
+  required: [username, email]
+  properties:
+    username:
+      pattern: "^[a-z][a-z0-9.-]{1,19}$"
+    display_name:
+      type: string
+    email:
+      format: email
+    department:
+      enum: [Finance, IT, Sales, Support]
+    quota_mb:
+      format: uint32
+      unit: megabyte
+      title: Quota
+      minimum: 1
+    enabled:
+      oneOf:
+        - { enum: ["true", "1", "yes"], title: Enabled }
+        - { enum: ["false", "0", "no"], title: Disabled }

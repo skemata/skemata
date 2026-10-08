@@ -1,0 +1,9 @@
+# INVALID: violates MOD-3. The empty member name denotes an unnamed value and is
+# allowed only where the target profile needs it; in draft-01 that is only the
+# registry (Default) value (decision 0012).
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: json
+type: object
+properties:
+  "":
+    type: string

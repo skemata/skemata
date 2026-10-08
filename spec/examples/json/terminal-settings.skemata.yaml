@@ -1,0 +1,58 @@
+# Windows Terminal settings file settings.json, which contains comments and
+# trailing commas. Illustrative excerpt. Shows a keyed list of profiles whose
+# identity is a braced GUID, and a reusable definition. Sample data:
+# terminal-settings.json (with comments and trailing commas, JSN-2)
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$id: https://skemata.github.io/skemata/examples/json/terminal-settings
+$target: json
+title: Windows Terminal settings (excerpt)
+type: object
+properties:
+  defaultProfile:
+    $ref: "#/$defs/guid"
+    title: Default profile
+    description: The GUID of the profile that opens by default.
+  copyOnSelect:
+    type: boolean
+    title: Copy selected text to the clipboard
+    default: false
+  profiles:
+    type: object
+    title: Profiles
+    properties:
+      defaults:
+        type: object
+        title: Settings for all profiles
+        properties:
+          colorScheme:
+            type: string
+            title: Color scheme
+      list:
+        type: array
+        title: Profiles
+        identity: [guid]
+        items:
+          type: object
+          required: [guid, name]
+          properties:
+            guid:
+              $ref: "#/$defs/guid"
+              title: Profile ID
+            name:
+              type: string
+              title: Name
+            commandline:
+              type: string
+              title: Command line
+            hidden:
+              type: boolean
+              title: Hide from the menu
+              default: false
+            colorScheme:
+              type: string
+              title: Color scheme
+$defs:
+  guid:
+    type: string
+    description: A GUID in braces. Braced GUIDs do not match format uuid (5.5).
+    pattern: '^\{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\}$'

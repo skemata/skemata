@@ -1,0 +1,20 @@
+# A list stored as numbered values (registry chapter, section 4). The key holds
+# one REG_SZ value per item, named "1", "2", "3", ... One key per schema means
+# this subkey of the Edge policy key gets its own schema, whose root is the list.
+# Sample data: edge-extension-install-forcelist.reg
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$id: https://skemata.github.io/skemata/examples/registry/edge-extension-install-forcelist
+$target: registry
+title: Extensions installed by force
+description: >-
+  Each item is an extension ID, optionally followed by a semicolon and the
+  URL from which the extension is updated.
+type: array
+uniqueItems: true
+ordered: false
+items:
+  type: string
+  title: Extension
+  pattern: "^[a-p]{32}(;https?://.+)?$"
+  examples:
+    - "aaaabbbbccccddddeeeeffffgggghhhh;https://edge.microsoft.com/extensionwebstorebase/v1/crx"

@@ -1,0 +1,11 @@
+# INVALID: violates XML-1. The root describes the document, which has exactly
+# one document element. Declaring two members would describe two root elements.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: xml
+type: object
+required: [configuration]
+properties:
+  configuration:
+    type: object
+  settings:
+    type: object

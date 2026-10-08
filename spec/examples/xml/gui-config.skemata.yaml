@@ -1,0 +1,44 @@
+# Settings stored as elements with a name attribute and the value as text
+# content, modeled on the GUIConfig entries of Notepad++'s config.xml.
+# Illustrative, not an authoritative description of that file.
+# Shows attributes together with content (4.7). Sample data: config.xml
+# In the sample, the "TabBar" entry has attributes this schema does not
+# declare and no text: the attributes are undescribed content (the attribute
+# set is open), and the content is the empty string (XML-6).
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$id: https://skemata.github.io/skemata/examples/xml/gui-config
+$target: xml
+title: GUI configuration
+type: object
+required: [NotepadPlus]
+properties:
+  NotepadPlus:
+    type: object
+    properties:
+      GUIConfigs:
+        type: object
+        title: User interface
+        properties:
+          GUIConfig:
+            type: array
+            title: Interface settings
+            identity: [/attributes/properties/name]
+            items:
+              type: object
+              attributes:
+                required: [name]
+                properties:
+                  name:
+                    type: string
+                    title: Setting
+                  visible:
+                    type: string
+                    title: Visibility
+                    oneOf:
+                      - { const: "yes", title: Visible }
+                      - { const: "no", title: Hidden }
+                additionalProperties:
+                  type: string
+              content:
+                type: string
+                title: Value

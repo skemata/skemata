@@ -1,0 +1,113 @@
+# Firefox enterprise policies file policies.json. Illustrative excerpt: see the
+# vendor's policy templates for the authoritative definitions.
+# Shows native booleans, nested objects, a labeled enum, a map with dynamic
+# keys (one entry per extension ID), dependentRequired, and a recursive
+# structure (bookmark folders, KW-6). Sample data: policies.json
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$id: https://skemata.github.io/skemata/examples/json/firefox-policies
+$target: json
+title: Firefox enterprise policies (excerpt)
+type: object
+required: [policies]
+properties:
+  policies:
+    type: object
+    properties:
+      DisableTelemetry:
+        type: boolean
+        title: Disable telemetry
+      DisableAppUpdate:
+        type: boolean
+        title: Disable application updates
+      Homepage:
+        type: object
+        title: Home page
+        properties:
+          URL:
+            type: string
+            format: uri
+            title: Home page URL
+          Locked:
+            type: boolean
+            title: Prevent users from changing the home page
+          Additional:
+            type: array
+            title: Additional start pages
+            items:
+              type: string
+              format: uri
+          StartPage:
+            type: string
+            title: Start page
+            oneOf:
+              - { const: none, title: Blank page }
+              - { const: homepage, title: Home page }
+              - { const: previous-session, title: Previous session }
+              - { const: homepage-locked, title: "Home page, locked" }
+        dependentRequired:
+          Locked: [URL]
+      ManagedBookmarks:
+        type: array
+        description: >-
+          Bookmarks that users cannot change. The first entry may name the
+          top-level folder; folders contain further entries.
+        items:
+          $ref: "#/$defs/bookmark"
+      ExtensionSettings:
+        type: object
+        title: Extension management
+        description: >-
+          Defaults for all extensions under "*", and one entry per extension ID
+          (patternProperties, KW-31).
+        minProperties: 1
+        properties:
+          "*":
+            type: object
+            title: Defaults for all extensions
+            properties:
+              installation_mode:
+                type: string
+                oneOf:
+                  - { const: allowed, title: Allowed }
+                  - { const: blocked, title: Blocked }
+              install_sources:
+                type: array
+                title: Allowed installation sources
+                items: { type: string }
+              blocked_install_message:
+                type: string
+        patternProperties:
+          "^[^*]":
+            type: object
+            title: Extension
+            properties:
+              installation_mode:
+                type: string
+                oneOf:
+                  - { const: allowed, title: Allowed }
+                  - { const: blocked, title: Blocked }
+                  - { const: force_installed, title: "Installed, cannot be removed" }
+                  - { const: normal_installed, title: "Installed, can be disabled" }
+              install_url:
+                type: string
+                format: uri
+                title: Download URL
+        additionalProperties: false
+$defs:
+  bookmark:
+    type: object
+    properties:
+      toplevel_name:
+        type: string
+        title: Name of the top-level folder
+      name:
+        type: string
+      url:
+        type: string
+        format: uri
+        title: URL
+      children:
+        type: array
+        title: Folder contents
+        items:
+          $ref: "#/$defs/bookmark"

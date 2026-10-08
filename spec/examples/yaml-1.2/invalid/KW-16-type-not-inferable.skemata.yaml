@@ -1,0 +1,9 @@
+# INVALID: violates KW-16. Numeric bounds alone apply to integers and numbers
+# alike, so the type cannot be inferred. Write type: integer (or number), or a
+# format such as uint16.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: yaml-1.2
+properties:
+  retries:
+    minimum: 0
+    maximum: 10

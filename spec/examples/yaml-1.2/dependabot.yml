@@ -1,0 +1,16 @@
+# Sample data for dependabot.skemata.yaml.
+# "09:00" is quoted: unquoted, a YAML 1.1 parser would read it as the
+# base-60 integer 540.
+version: 2
+updates:
+  - package-ecosystem: nuget
+    directory: /
+    schedule:
+      interval: weekly
+      time: "09:00"
+    open-pull-requests-limit: 10
+    labels: [dependencies, dotnet]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

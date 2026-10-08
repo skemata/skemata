@@ -1,0 +1,16 @@
+# INVALID: violates TYP-3 (and KW-2). SQLite has no Boolean storage class; on/off
+# values are stored as integers. Describe the stored integers as a labeled enum.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: sqlite
+type: object
+properties:
+  shortcuts:
+    type: array
+    identity: [command]
+    items:
+      type: object
+      properties:
+        command:
+          type: string
+        enabled:
+          type: boolean

@@ -1,0 +1,59 @@
+# Dependabot version updates configuration .github/dependabot.yml.
+# Illustrative excerpt: see the vendor's documentation for all options.
+# Shows a keyed list whose identity consists of two members. Sample data: dependabot.yml
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$id: https://skemata.github.io/skemata/examples/yaml-1.2/dependabot
+$target: yaml-1.2
+title: Dependabot version updates (excerpt)
+type: object
+required: [version, updates]
+properties:
+  version:
+    type: integer
+    title: Configuration version
+    const: 2
+  updates:
+    type: array
+    title: Update configurations
+    identity: [package-ecosystem, directory]
+    items:
+      type: object
+      required: [package-ecosystem, directory, schedule]
+      properties:
+        package-ecosystem:
+          type: string
+          title: Package ecosystem
+          enum: [github-actions, npm, nuget, pip, docker, gomod, cargo, maven]
+        directory:
+          type: string
+          title: Manifest directory
+          default: /
+        schedule:
+          type: object
+          title: Schedule
+          required: [interval]
+          properties:
+            interval:
+              type: string
+              title: Interval
+              oneOf:
+                - { const: daily, title: Daily }
+                - { const: weekly, title: Weekly }
+                - { const: monthly, title: Monthly }
+            time:
+              type: string
+              title: Time of day (UTC)
+              pattern: "^([01][0-9]|2[0-3]):[0-5][0-9]$"
+              examples: ["09:00"]
+        open-pull-requests-limit:
+          type: integer
+          format: uint8
+          title: Maximum open pull requests
+          default: 5
+        labels:
+          type: array
+          title: Labels
+          uniqueItems: true
+          ordered: false
+          items:
+            type: string

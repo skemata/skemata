@@ -1,0 +1,59 @@
+# Settings file of a fictitious application, read with the Windows profile API.
+# Shows an on/off value with several accepted spellings (TYP-3, 4.4), numbers
+# stored as text with ranges and units, a deprecated choice, a section with
+# dynamic keys, and implicit rules: types are inferred and most titles are
+# derived from the names (4.11). Sample data: example-app.ini
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$id: https://skemata.github.io/skemata/examples/ini-windows/example-app
+$target: ini-windows
+title: Example App settings
+properties:
+  Updates:
+    properties:
+      AutoCheck:
+        title: Check for updates automatically
+        default: "yes"
+        oneOf:
+          - { enum: ["yes", "true", "1"], title: Enabled }
+          - { enum: ["no", "false", "0"], title: Disabled }
+      IntervalHours:
+        format: uint16
+        unit: hour
+        title: Check interval
+        minimum: 1
+        maximum: 168
+        default: 24
+      Channel:
+        default: stable
+        oneOf:
+          - { const: stable, title: Stable }
+          - { const: beta, title: Beta }
+          - { const: nightly, title: Nightly builds, deprecated: true }
+  Network:
+    properties:
+      Port:
+        format: uint16
+        title: Listening port
+        minimum: 1024
+        default: 8080
+      TimeoutSeconds:
+        type: number
+        unit: second
+        title: Connection timeout
+        exclusiveMinimum: 0
+        maximum: 120
+        multipleOf: 0.5
+        default: 2.5
+      ProxyHost:
+        format: hostname
+        maxLength: 253
+  Plugins:
+    description: One key per plugin. The value enables (1) or disables (0) the plugin.
+    maxProperties: 50
+    propertyNames:
+      pattern: "^[A-Za-z][A-Za-z0-9_.-]*$"
+    additionalProperties:
+      format: uint8
+      oneOf:
+        - { const: 1, title: Enabled }
+        - { const: 0, title: Disabled }

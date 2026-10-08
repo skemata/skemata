@@ -1,0 +1,1393 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://skemata.github.io/skemata/draft-01/targets/yaml-1.2",
+  "title": "Skemata draft-01 schema document, target yaml-1.2",
+  "description": "Generated from schemas/source/draft-01.yaml. Do not edit.",
+  "$ref": "#/$defs/root",
+  "$defs": {
+    "root": {
+      "type": "object",
+      "required": [
+        "$schema",
+        "$target"
+      ],
+      "properties": {
+        "$schema": {
+          "const": "https://skemata.github.io/skemata/draft-01/schema"
+        },
+        "$id": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^[^#]*$"
+        },
+        "$target": {
+          "const": "yaml-1.2"
+        },
+        "$locale": {
+          "$ref": "#/$defs/locale"
+        },
+        "groups": {
+          "$ref": "#/$defs/groups"
+        },
+        "$defs": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/schema"
+          }
+        },
+        "$ref": {
+          "type": "string",
+          "pattern": "^#(/\\$defs/.+|[A-Za-z_][A-Za-z0-9._-]*)$"
+        },
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": true,
+        "examples": {
+          "type": "array"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "unit": {
+          "$ref": "#/$defs/unit"
+        },
+        "group": {
+          "$ref": "#/$defs/anchor"
+        },
+        "type": {
+          "$ref": "#/$defs/type"
+        },
+        "properties": {
+          "$ref": "#/$defs/properties"
+        },
+        "required": {
+          "$ref": "#/$defs/nameList"
+        },
+        "dependentRequired": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/nameList"
+          }
+        },
+        "additionalProperties": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/$defs/schema"
+            }
+          ]
+        },
+        "patternProperties": {
+          "type": "object",
+          "propertyNames": {
+            "format": "regex"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/schema"
+          }
+        },
+        "propertyNames": {
+          "$ref": "#/$defs/propertyNames"
+        },
+        "minProperties": {
+          "$ref": "#/$defs/count"
+        },
+        "maxProperties": {
+          "$ref": "#/$defs/count"
+        },
+        "items": {
+          "anyOf": [
+            {
+              "const": false
+            },
+            {
+              "$ref": "#/$defs/schema"
+            }
+          ]
+        },
+        "prefixItems": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/schema"
+          }
+        },
+        "minItems": {
+          "$ref": "#/$defs/count"
+        },
+        "maxItems": {
+          "$ref": "#/$defs/count"
+        },
+        "uniqueItems": {
+          "type": "boolean"
+        },
+        "identity": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "ordered": {
+          "type": "boolean"
+        },
+        "oneOf": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/branch"
+          }
+        },
+        "enum": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "const": true,
+        "minimum": {
+          "type": "number"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "exclusiveMinimum": {
+          "type": "number"
+        },
+        "exclusiveMaximum": {
+          "type": "number"
+        },
+        "multipleOf": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "minLength": {
+          "$ref": "#/$defs/count"
+        },
+        "maxLength": {
+          "$ref": "#/$defs/count"
+        },
+        "pattern": {
+          "type": "string",
+          "format": "regex"
+        },
+        "format": {
+          "$ref": "#/$defs/format"
+        },
+        "contentEncoding": {
+          "const": "base64"
+        },
+        "textual": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$ref"
+            ]
+          },
+          "then": {
+            "properties": {
+              "type": false,
+              "properties": false,
+              "required": false,
+              "dependentRequired": false,
+              "additionalProperties": false,
+              "patternProperties": false,
+              "propertyNames": false,
+              "minProperties": false,
+              "maxProperties": false,
+              "items": false,
+              "prefixItems": false,
+              "minItems": false,
+              "maxItems": false,
+              "uniqueItems": false,
+              "identity": false,
+              "ordered": false,
+              "oneOf": false,
+              "enum": false,
+              "const": false,
+              "minimum": false,
+              "maximum": false,
+              "exclusiveMinimum": false,
+              "exclusiveMaximum": false,
+              "multipleOf": false,
+              "minLength": false,
+              "maxLength": false,
+              "pattern": false,
+              "format": false,
+              "contentEncoding": false,
+              "textual": false
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "anyOf": [
+                  {
+                    "const": "object"
+                  },
+                  {
+                    "type": "array",
+                    "contains": {
+                      "const": "object"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "unit": false,
+              "items": false,
+              "prefixItems": false,
+              "minItems": false,
+              "maxItems": false,
+              "uniqueItems": false,
+              "identity": false,
+              "enum": false,
+              "const": false,
+              "minimum": false,
+              "maximum": false,
+              "exclusiveMinimum": false,
+              "exclusiveMaximum": false,
+              "multipleOf": false,
+              "minLength": false,
+              "maxLength": false,
+              "pattern": false,
+              "format": false,
+              "contentEncoding": false,
+              "textual": false,
+              "ordered": false
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "anyOf": [
+                  {
+                    "const": "array"
+                  },
+                  {
+                    "type": "array",
+                    "contains": {
+                      "const": "array"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "unit": false,
+              "properties": false,
+              "required": false,
+              "dependentRequired": false,
+              "additionalProperties": false,
+              "patternProperties": false,
+              "propertyNames": false,
+              "minProperties": false,
+              "maxProperties": false,
+              "enum": false,
+              "const": false,
+              "minimum": false,
+              "maximum": false,
+              "exclusiveMinimum": false,
+              "exclusiveMaximum": false,
+              "multipleOf": false,
+              "minLength": false,
+              "maxLength": false,
+              "pattern": false,
+              "format": false,
+              "contentEncoding": false,
+              "textual": false
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "anyOf": [
+                  {
+                    "const": "string"
+                  },
+                  {
+                    "type": "array",
+                    "contains": {
+                      "const": "string"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "unit": false,
+              "properties": false,
+              "required": false,
+              "dependentRequired": false,
+              "additionalProperties": false,
+              "patternProperties": false,
+              "propertyNames": false,
+              "minProperties": false,
+              "maxProperties": false,
+              "items": false,
+              "prefixItems": false,
+              "minItems": false,
+              "maxItems": false,
+              "uniqueItems": false,
+              "identity": false,
+              "ordered": false,
+              "minimum": false,
+              "maximum": false,
+              "exclusiveMinimum": false,
+              "exclusiveMaximum": false,
+              "multipleOf": false,
+              "format": {
+                "enum": [
+                  "date",
+                  "time",
+                  "date-time",
+                  "date-time-local",
+                  "time-local",
+                  "duration",
+                  "uuid",
+                  "uri",
+                  "hostname",
+                  "ipv4",
+                  "ipv6",
+                  "email"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "anyOf": [
+                  {
+                    "const": "integer"
+                  },
+                  {
+                    "type": "array",
+                    "contains": {
+                      "const": "integer"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "properties": false,
+              "required": false,
+              "dependentRequired": false,
+              "additionalProperties": false,
+              "patternProperties": false,
+              "propertyNames": false,
+              "minProperties": false,
+              "maxProperties": false,
+              "items": false,
+              "prefixItems": false,
+              "minItems": false,
+              "maxItems": false,
+              "uniqueItems": false,
+              "identity": false,
+              "ordered": false,
+              "minLength": false,
+              "maxLength": false,
+              "pattern": false,
+              "contentEncoding": false,
+              "format": {
+                "enum": [
+                  "int8",
+                  "int16",
+                  "int32",
+                  "int64",
+                  "uint8",
+                  "uint16",
+                  "uint32",
+                  "uint64"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "anyOf": [
+                  {
+                    "const": "number"
+                  },
+                  {
+                    "type": "array",
+                    "contains": {
+                      "const": "number"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "properties": false,
+              "required": false,
+              "dependentRequired": false,
+              "additionalProperties": false,
+              "patternProperties": false,
+              "propertyNames": false,
+              "minProperties": false,
+              "maxProperties": false,
+              "items": false,
+              "prefixItems": false,
+              "minItems": false,
+              "maxItems": false,
+              "uniqueItems": false,
+              "identity": false,
+              "ordered": false,
+              "minLength": false,
+              "maxLength": false,
+              "pattern": false,
+              "contentEncoding": false,
+              "format": {
+                "enum": [
+                  "float",
+                  "double"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "anyOf": [
+                  {
+                    "const": "boolean"
+                  },
+                  {
+                    "type": "array",
+                    "contains": {
+                      "const": "boolean"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "unit": false,
+              "properties": false,
+              "required": false,
+              "dependentRequired": false,
+              "additionalProperties": false,
+              "patternProperties": false,
+              "propertyNames": false,
+              "minProperties": false,
+              "maxProperties": false,
+              "items": false,
+              "prefixItems": false,
+              "minItems": false,
+              "maxItems": false,
+              "uniqueItems": false,
+              "identity": false,
+              "ordered": false,
+              "minimum": false,
+              "maximum": false,
+              "exclusiveMinimum": false,
+              "exclusiveMaximum": false,
+              "multipleOf": false,
+              "minLength": false,
+              "maxLength": false,
+              "pattern": false,
+              "format": false,
+              "contentEncoding": false,
+              "textual": false
+            }
+          }
+        }
+      ]
+    },
+    "schema": {
+      "type": "object",
+      "properties": {
+        "$ref": {
+          "type": "string",
+          "pattern": "^#(/\\$defs/.+|[A-Za-z_][A-Za-z0-9._-]*)$"
+        },
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": true,
+        "examples": {
+          "type": "array"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "unit": {
+          "$ref": "#/$defs/unit"
+        },
+        "group": {
+          "$ref": "#/$defs/anchor"
+        },
+        "type": {
+          "$ref": "#/$defs/type"
+        },
+        "properties": {
+          "$ref": "#/$defs/properties"
+        },
+        "required": {
+          "$ref": "#/$defs/nameList"
+        },
+        "dependentRequired": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/nameList"
+          }
+        },
+        "additionalProperties": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/$defs/schema"
+            }
+          ]
+        },
+        "patternProperties": {
+          "type": "object",
+          "propertyNames": {
+            "format": "regex"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/schema"
+          }
+        },
+        "propertyNames": {
+          "$ref": "#/$defs/propertyNames"
+        },
+        "minProperties": {
+          "$ref": "#/$defs/count"
+        },
+        "maxProperties": {
+          "$ref": "#/$defs/count"
+        },
+        "items": {
+          "anyOf": [
+            {
+              "const": false
+            },
+            {
+              "$ref": "#/$defs/schema"
+            }
+          ]
+        },
+        "prefixItems": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/schema"
+          }
+        },
+        "minItems": {
+          "$ref": "#/$defs/count"
+        },
+        "maxItems": {
+          "$ref": "#/$defs/count"
+        },
+        "uniqueItems": {
+          "type": "boolean"
+        },
+        "identity": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "ordered": {
+          "type": "boolean"
+        },
+        "oneOf": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/branch"
+          }
+        },
+        "enum": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "const": true,
+        "minimum": {
+          "type": "number"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "exclusiveMinimum": {
+          "type": "number"
+        },
+        "exclusiveMaximum": {
+          "type": "number"
+        },
+        "multipleOf": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "minLength": {
+          "$ref": "#/$defs/count"
+        },
+        "maxLength": {
+          "$ref": "#/$defs/count"
+        },
+        "pattern": {
+          "type": "string",
+          "format": "regex"
+        },
+        "format": {
+          "$ref": "#/$defs/format"
+        },
+        "contentEncoding": {
+          "const": "base64"
+        },
+        "textual": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "$ref"
+            ]
+          },
+          "then": {
+            "properties": {
+              "type": false,
+              "properties": false,
+              "required": false,
+              "dependentRequired": false,
+              "additionalProperties": false,
+              "patternProperties": false,
+              "propertyNames": false,
+              "minProperties": false,
+              "maxProperties": false,
+              "items": false,
+              "prefixItems": false,
+              "minItems": false,
+              "maxItems": false,
+              "uniqueItems": false,
+              "identity": false,
+              "ordered": false,
+              "oneOf": false,
+              "enum": false,
+              "const": false,
+              "minimum": false,
+              "maximum": false,
+              "exclusiveMinimum": false,
+              "exclusiveMaximum": false,
+              "multipleOf": false,
+              "minLength": false,
+              "maxLength": false,
+              "pattern": false,
+              "format": false,
+              "contentEncoding": false,
+              "textual": false
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "anyOf": [
+                  {
+                    "const": "object"
+                  },
+                  {
+                    "type": "array",
+                    "contains": {
+                      "const": "object"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "unit": false,
+              "items": false,
+              "prefixItems": false,
+              "minItems": false,
+              "maxItems": false,
+              "uniqueItems": false,
+              "identity": false,
+              "enum": false,
+              "const": false,
+              "minimum": false,
+              "maximum": false,
+              "exclusiveMinimum": false,
+              "exclusiveMaximum": false,
+              "multipleOf": false,
+              "minLength": false,
+              "maxLength": false,
+              "pattern": false,
+              "format": false,
+              "contentEncoding": false,
+              "textual": false,
+              "ordered": false
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "anyOf": [
+                  {
+                    "const": "array"
+                  },
+                  {
+                    "type": "array",
+                    "contains": {
+                      "const": "array"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "unit": false,
+              "properties": false,
+              "required": false,
+              "dependentRequired": false,
+              "additionalProperties": false,
+              "patternProperties": false,
+              "propertyNames": false,
+              "minProperties": false,
+              "maxProperties": false,
+              "enum": false,
+              "const": false,
+              "minimum": false,
+              "maximum": false,
+              "exclusiveMinimum": false,
+              "exclusiveMaximum": false,
+              "multipleOf": false,
+              "minLength": false,
+              "maxLength": false,
+              "pattern": false,
+              "format": false,
+              "contentEncoding": false,
+              "textual": false
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "anyOf": [
+                  {
+                    "const": "string"
+                  },
+                  {
+                    "type": "array",
+                    "contains": {
+                      "const": "string"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "unit": false,
+              "properties": false,
+              "required": false,
+              "dependentRequired": false,
+              "additionalProperties": false,
+              "patternProperties": false,
+              "propertyNames": false,
+              "minProperties": false,
+              "maxProperties": false,
+              "items": false,
+              "prefixItems": false,
+              "minItems": false,
+              "maxItems": false,
+              "uniqueItems": false,
+              "identity": false,
+              "ordered": false,
+              "minimum": false,
+              "maximum": false,
+              "exclusiveMinimum": false,
+              "exclusiveMaximum": false,
+              "multipleOf": false,
+              "format": {
+                "enum": [
+                  "date",
+                  "time",
+                  "date-time",
+                  "date-time-local",
+                  "time-local",
+                  "duration",
+                  "uuid",
+                  "uri",
+                  "hostname",
+                  "ipv4",
+                  "ipv6",
+                  "email"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "anyOf": [
+                  {
+                    "const": "integer"
+                  },
+                  {
+                    "type": "array",
+                    "contains": {
+                      "const": "integer"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "properties": false,
+              "required": false,
+              "dependentRequired": false,
+              "additionalProperties": false,
+              "patternProperties": false,
+              "propertyNames": false,
+              "minProperties": false,
+              "maxProperties": false,
+              "items": false,
+              "prefixItems": false,
+              "minItems": false,
+              "maxItems": false,
+              "uniqueItems": false,
+              "identity": false,
+              "ordered": false,
+              "minLength": false,
+              "maxLength": false,
+              "pattern": false,
+              "contentEncoding": false,
+              "format": {
+                "enum": [
+                  "int8",
+                  "int16",
+                  "int32",
+                  "int64",
+                  "uint8",
+                  "uint16",
+                  "uint32",
+                  "uint64"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "anyOf": [
+                  {
+                    "const": "number"
+                  },
+                  {
+                    "type": "array",
+                    "contains": {
+                      "const": "number"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "properties": false,
+              "required": false,
+              "dependentRequired": false,
+              "additionalProperties": false,
+              "patternProperties": false,
+              "propertyNames": false,
+              "minProperties": false,
+              "maxProperties": false,
+              "items": false,
+              "prefixItems": false,
+              "minItems": false,
+              "maxItems": false,
+              "uniqueItems": false,
+              "identity": false,
+              "ordered": false,
+              "minLength": false,
+              "maxLength": false,
+              "pattern": false,
+              "contentEncoding": false,
+              "format": {
+                "enum": [
+                  "float",
+                  "double"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "anyOf": [
+                  {
+                    "const": "boolean"
+                  },
+                  {
+                    "type": "array",
+                    "contains": {
+                      "const": "boolean"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "unit": false,
+              "properties": false,
+              "required": false,
+              "dependentRequired": false,
+              "additionalProperties": false,
+              "patternProperties": false,
+              "propertyNames": false,
+              "minProperties": false,
+              "maxProperties": false,
+              "items": false,
+              "prefixItems": false,
+              "minItems": false,
+              "maxItems": false,
+              "uniqueItems": false,
+              "identity": false,
+              "ordered": false,
+              "minimum": false,
+              "maximum": false,
+              "exclusiveMinimum": false,
+              "exclusiveMaximum": false,
+              "multipleOf": false,
+              "minLength": false,
+              "maxLength": false,
+              "pattern": false,
+              "format": false,
+              "contentEncoding": false,
+              "textual": false
+            }
+          }
+        }
+      ]
+    },
+    "branch": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/choice"
+        },
+        {
+          "$ref": "#/$defs/unionBranch"
+        }
+      ]
+    },
+    "choice": {
+      "type": "object",
+      "properties": {
+        "const": true,
+        "enum": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "minimum": {
+          "type": "number"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "exclusiveMinimum": {
+          "type": "number"
+        },
+        "exclusiveMaximum": {
+          "type": "number"
+        },
+        "multipleOf": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "minLength": {
+          "$ref": "#/$defs/count"
+        },
+        "maxLength": {
+          "$ref": "#/$defs/count"
+        },
+        "pattern": {
+          "type": "string",
+          "format": "regex"
+        }
+      },
+      "additionalProperties": false
+    },
+    "unionBranch": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "object"
+        },
+        "properties": {
+          "$ref": "#/$defs/properties"
+        },
+        "required": {
+          "$ref": "#/$defs/nameList"
+        },
+        "dependentRequired": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/nameList"
+          }
+        },
+        "additionalProperties": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/$defs/schema"
+            }
+          ]
+        },
+        "patternProperties": {
+          "type": "object",
+          "propertyNames": {
+            "format": "regex"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/schema"
+          }
+        },
+        "propertyNames": {
+          "$ref": "#/$defs/propertyNames"
+        },
+        "minProperties": {
+          "$ref": "#/$defs/count"
+        },
+        "maxProperties": {
+          "$ref": "#/$defs/count"
+        },
+        "ordered": {
+          "type": "boolean"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "propertyNames": {
+      "type": "object",
+      "properties": {
+        "pattern": {
+          "type": "string",
+          "format": "regex"
+        },
+        "minLength": {
+          "$ref": "#/$defs/count"
+        },
+        "maxLength": {
+          "$ref": "#/$defs/count"
+        },
+        "enum": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "description": {
+          "type": "string"
+        },
+        "$comment": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "properties": {
+      "type": "object",
+      "propertyNames": {
+        "minLength": 1
+      },
+      "additionalProperties": {
+        "$ref": "#/$defs/schema"
+      }
+    },
+    "type": {
+      "anyOf": [
+        {
+          "enum": [
+            "object",
+            "array",
+            "string",
+            "integer",
+            "number",
+            "boolean"
+          ]
+        },
+        {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "null"
+            ]
+          },
+          "contains": {
+            "const": "null"
+          }
+        }
+      ]
+    },
+    "format": {
+      "enum": [
+        "date",
+        "time",
+        "date-time",
+        "date-time-local",
+        "time-local",
+        "duration",
+        "uuid",
+        "uri",
+        "hostname",
+        "ipv4",
+        "ipv6",
+        "email",
+        "int8",
+        "int16",
+        "int32",
+        "int64",
+        "uint8",
+        "uint16",
+        "uint32",
+        "uint64",
+        "float",
+        "double"
+      ]
+    },
+    "unit": {
+      "enum": [
+        "bit",
+        "byte",
+        "kilobyte",
+        "megabyte",
+        "gigabyte",
+        "terabyte",
+        "kibibyte",
+        "mebibyte",
+        "gibibyte",
+        "tebibyte",
+        "nanosecond",
+        "microsecond",
+        "millisecond",
+        "second",
+        "minute",
+        "hour",
+        "day",
+        "week",
+        "percent",
+        "pixel",
+        "point"
+      ]
+    },
+    "anchor": {
+      "type": "string",
+      "pattern": "^[A-Za-z_][A-Za-z0-9._-]*$"
+    },
+    "title": {
+      "type": "string",
+      "pattern": "^[^\\r\\n]*$"
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "nameList": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "locale": {
+      "type": "string",
+      "pattern": "^[A-Za-z]{2,8}(-[A-Za-z0-9]{1,8})*$"
+    },
+    "groups": {
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/anchor"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "title": {
+            "$ref": "#/$defs/title"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

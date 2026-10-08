@@ -1,0 +1,9 @@
+# INVALID: violates TYP-3 (and KW-2). The registry has no boolean type, and Skemata
+# never assumes how a boolean is encoded. Describe the stored values instead,
+# for example a DWORD labeled enum with 1 and 0.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: registry
+type: object
+properties:
+  ShowHomeButton:
+    type: boolean

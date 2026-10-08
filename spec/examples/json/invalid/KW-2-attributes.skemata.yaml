@@ -1,0 +1,10 @@
+# INVALID: violates KW-2. attributes is allowed only in targets whose nodes have
+# attributes separate from their members (draft-01: xml). A JSON object only
+# has members.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: json
+type: object
+attributes:
+  properties:
+    name:
+      type: string

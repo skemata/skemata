@@ -1,0 +1,11 @@
+# INVALID: violates KW-29. Every name in dependentRequired must be declared in
+# properties; "URL" is not declared here (the member is called "Url").
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: json
+properties:
+  Homepage:
+    properties:
+      Url: { format: uri }
+      Locked: { type: boolean }
+    dependentRequired:
+      Locked: [URL]

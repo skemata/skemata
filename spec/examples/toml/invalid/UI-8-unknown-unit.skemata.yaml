@@ -1,0 +1,8 @@
+# INVALID: violates UI-8. unit must be one of the units listed in 6.9;
+# "minutes" is not ("minute" is).
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: toml
+properties:
+  interval:
+    format: uint16
+    unit: minutes

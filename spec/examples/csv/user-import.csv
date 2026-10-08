@@ -1,0 +1,4 @@
+username,display_name,email,department,quota_mb,enabled
+jdoe,Jane Doe,jane.doe@example.org,Finance,2048,true
+asmith,"Smith, Alex",alex.smith@example.org,IT,,false
+mmueller,Max Müller,max.mueller@example.org,Support,512,1

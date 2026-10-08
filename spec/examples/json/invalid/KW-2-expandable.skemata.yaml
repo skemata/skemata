@@ -1,0 +1,9 @@
+# INVALID: violates KW-2. expandable is allowed only in the registry target in
+# draft-01, where it selects REG_EXPAND_SZ.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: json
+type: object
+properties:
+  logFolder:
+    type: string
+    expandable: true

@@ -1,0 +1,181 @@
+# Skemata draft-01: the single source definition of the generated meta-schemas
+# (spec chapter 9.4). Edit this file, then run the generator:
+#   dotnet run --project tools/Skemata.MetaSchemas -- generate
+# The generator checks the "rows", "typeRows" and "formatExceptions" sections
+# against the matrices in spec/08-target-profiles.md and fails on any mismatch.
+
+version: draft-01
+baseUri: "https://skemata.github.io/skemata/draft-01/"
+
+# Columns of the matrices in 8.4 and 8.5, in order.
+columns: [registry, ini-windows, xml, json, yaml-1.2, toml, sqlite, csv, psd1]
+
+# Target names and the matrix column that defines their allowlist.
+targets:
+  registry: registry
+  ini-windows: ini-windows
+  xml: xml
+  json: json
+  yaml-1.2: yaml-1.2
+  toml: toml
+  sqlite: sqlite
+  csv: csv
+  csv-semicolon: csv
+  csv-tab: csv
+  psd1: psd1
+
+# The keyword x target matrix (8.4), row by row. "cell" is the first cell of the
+# row exactly as in the spec; "allowed" is "all" or a list of columns.
+rows:
+  - cell: "`$schema`, `$id`, `$target`, `$locale`, `groups`, `$defs` (root only)"
+    allowed: all
+  - cell: "`$ref`, `$anchor`, `$comment`"
+    allowed: all
+  - cell: "`title`, `description`, `default`, `examples`, `deprecated`, `readOnly`, `writeOnly`, `unit`, `group`"
+    allowed: all
+  - cell: "`type` (values: 8.5)"
+    allowed: all
+  - cell: "`properties`, `additionalProperties`, `patternProperties`, `propertyNames`, `minProperties`, `maxProperties`"
+    allowed: all
+  - cell: "`required`"
+    allowed: all
+  - cell: "`dependentRequired`"
+    allowed: [registry, ini-windows, xml, json, yaml-1.2, toml, csv, psd1]
+  - cell: "`items`, `minItems`, `maxItems`"
+    allowed: [registry, xml, json, yaml-1.2, toml, sqlite, csv, psd1]
+  - cell: "`prefixItems`"
+    allowed: [json, yaml-1.2, toml, psd1]
+  - cell: "`uniqueItems`"
+    allowed: [registry, xml, json, yaml-1.2, toml, psd1]
+  - cell: "`identity`"
+    allowed: [xml, json, yaml-1.2, toml, sqlite, csv, psd1]
+  - cell: "`ordered` on arrays"
+    allowed: [registry, xml, json, yaml-1.2, toml, csv, psd1]
+  - cell: "`ordered` on objects"
+    allowed: [xml]
+  - cell: "`oneOf` as labeled enum"
+    allowed: all
+  - cell: "`oneOf` as discriminated union"
+    allowed: [xml, json, yaml-1.2, toml, psd1]
+  - cell: "`enum`, `const`"
+    allowed: all
+  - cell: "`minimum`, `maximum`, `exclusiveMinimum`, `exclusiveMaximum`, `multipleOf`"
+    allowed: all
+  - cell: "`minLength`, `maxLength`, `pattern`"
+    allowed: all
+  - cell: "`format` (values: 8.5)"
+    allowed: all
+  - cell: "`contentEncoding`"
+    allowed: all
+  - cell: "`attributes`, `content`, `namespace`"
+    allowed: [xml]
+  - cell: "`textual`"
+    allowed: [registry, json, yaml-1.2, toml, sqlite, psd1]
+  - cell: "`expandable`"
+    allowed: [registry]
+  - cell: "empty member name `\"\"` (MOD-3)"
+    allowed: [registry]
+
+# Rows of the type and format x target matrix (8.5) that decide whether a type
+# value is allowed at all ("—" in the spec means not allowed).
+typeRows:
+  array:
+    cell: "`array`"
+    allowed: [registry, xml, json, yaml-1.2, toml, sqlite, csv, psd1]
+  nestedArrays:
+    cell: "nested arrays (items that are arrays)"
+    allowed: [json, yaml-1.2, toml, psd1]
+  boolean:
+    cell: "`boolean`"
+    allowed: [json, yaml-1.2, toml, psd1]
+  nullable:
+    cell: "nullable (`[T, \"null\"]`)"
+    allowed: [json, yaml-1.2, sqlite, psd1]
+
+# Formats per type (5.9) and the formats a column does not allow (8.5).
+formats:
+  integer: [int8, int16, int32, int64, uint8, uint16, uint32, uint64]
+  number: [float, double]
+  string: [date, time, date-time, date-time-local, time-local, duration, uuid, uri, hostname, ipv4, ipv6, email]
+formatExceptions:
+  uint64:
+    cell: "`integer` with `uint64`"
+    notAllowed: [toml, sqlite, psd1]
+
+# Units (6.9).
+units: [bit, byte, kilobyte, megabyte, gigabyte, terabyte, kibibyte, mebibyte, gibibyte, tebibyte,
+        nanosecond, microsecond, millisecond, second, minute, hour, day, week, percent, pixel, point]
+
+# Member names (MOD-3, XML-3). The empty name is allowed where the row
+# "empty member name" allows it; targets listed here restrict names further.
+namePatterns:
+  xml: "^[A-Za-z_][A-Za-z0-9._-]*$"
+
+# Keywords: the shape of their value and the types they apply to (KW-17).
+# "types" omitted: the keyword applies to every type. In values, "@name"
+# refers to a generated definition (see the generator), "@target" and
+# "@draftUri" are replaced by constants.
+keywords:
+  $schema:              { position: root, value: { const: "@draftUri" } }
+  $id:                  { position: root, value: { type: string, format: uri, pattern: "^[^#]*$" } }
+  $target:              { position: root, value: { const: "@target" } }
+  $locale:              { position: root, value: { $ref: "@locale" } }
+  groups:               { position: root, value: { $ref: "@groups" } }
+  $defs:                { position: root, value: { type: object, additionalProperties: { $ref: "@schema" } } }
+  $ref:                 { value: { type: string, pattern: "^#(/\\$defs/.+|[A-Za-z_][A-Za-z0-9._-]*)$" } }
+  $anchor:              { value: { $ref: "@anchor" } }
+  $comment:             { value: { type: string } }
+  title:                { value: { $ref: "@title" } }
+  description:          { value: { type: string } }
+  default:              { value: true }
+  examples:             { value: { type: array } }
+  deprecated:           { value: { type: boolean } }
+  readOnly:             { value: { type: boolean } }
+  writeOnly:            { value: { type: boolean } }
+  unit:                 { types: [integer, number], value: { $ref: "@unit" } }
+  group:                { value: { $ref: "@anchor" } }
+  type:                 { value: { $ref: "@type" } }
+  properties:           { types: [object], value: { $ref: "@properties" } }
+  required:             { types: [object], value: { $ref: "@nameList" } }
+  dependentRequired:    { types: [object], value: { type: object, additionalProperties: { $ref: "@nameList" } } }
+  additionalProperties: { types: [object], value: { anyOf: [ { type: boolean }, { $ref: "@schema" } ] } }
+  patternProperties:    { types: [object], value: { type: object, propertyNames: { format: regex }, additionalProperties: { $ref: "@schema" } } }
+  propertyNames:        { types: [object], value: { $ref: "@propertyNames" } }
+  minProperties:        { types: [object], value: { $ref: "@count" } }
+  maxProperties:        { types: [object], value: { $ref: "@count" } }
+  items:                { types: [array], value: { anyOf: [ { const: false }, { $ref: "@schema" } ] } }
+  prefixItems:          { types: [array], value: { type: array, minItems: 1, items: { $ref: "@schema" } } }
+  minItems:             { types: [array], value: { $ref: "@count" } }
+  maxItems:             { types: [array], value: { $ref: "@count" } }
+  uniqueItems:          { types: [array], value: { type: boolean } }
+  identity:             { types: [array], value: { type: array, minItems: 1, uniqueItems: true, items: { type: string, minLength: 1 } } }
+  ordered:              { types: [array, object], value: { type: boolean } }
+  oneOf:                { value: { type: array, minItems: 1, items: { $ref: "@branch" } } }
+  enum:                 { types: [string, integer, number, boolean], value: { type: array, minItems: 1, uniqueItems: true } }
+  const:                { types: [string, integer, number, boolean], value: true }
+  minimum:              { types: [integer, number], value: { type: number } }
+  maximum:              { types: [integer, number], value: { type: number } }
+  exclusiveMinimum:     { types: [integer, number], value: { type: number } }
+  exclusiveMaximum:     { types: [integer, number], value: { type: number } }
+  multipleOf:           { types: [integer, number], value: { type: number, exclusiveMinimum: 0 } }
+  minLength:            { types: [string], value: { $ref: "@count" } }
+  maxLength:            { types: [string], value: { $ref: "@count" } }
+  pattern:              { types: [string], value: { type: string, format: regex } }
+  format:               { types: [integer, number, string], value: { $ref: "@format" } }
+  contentEncoding:      { types: [string], value: { const: base64 } }
+  attributes:           { types: [object], value: { $ref: "@attributeSet" } }
+  content:              { types: [object], value: { $ref: "@schema" } }
+  namespace:            { value: { type: string, format: uri } }
+  textual:              { types: [integer, number, string], value: { type: boolean } }
+  expandable:           { types: [string], value: { type: boolean } }
+
+# Keywords allowed at special positions (KW-5, KW-10, KW-14, KW-15, KW-22).
+positions:
+  refSiblings: [$ref, title, description, default, examples, deprecated, readOnly, writeOnly, group, unit, $comment, $anchor, namespace]
+  choice: [const, enum, title, description, deprecated, $anchor, $comment,
+           minimum, maximum, exclusiveMinimum, exclusiveMaximum, multipleOf, minLength, maxLength, pattern]
+  unionBranch: [type, properties, required, dependentRequired, additionalProperties, patternProperties, propertyNames,
+                minProperties, maxProperties, attributes, content, ordered, title, description, deprecated, $anchor, $comment]
+  attributeSet: [type, properties, required, dependentRequired, additionalProperties, patternProperties, propertyNames,
+                 minProperties, maxProperties, $comment]
+  propertyNames: [pattern, minLength, maxLength, enum, description, $comment]

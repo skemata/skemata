@@ -1,0 +1,24 @@
+// Sample data for terminal-settings.skemata.yaml. Comments and trailing commas are syntax (JSN-2).
+{
+    "defaultProfile": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+    "copyOnSelect": false,
+    "profiles": {
+        "defaults": {
+            "colorScheme": "Campbell", // applies to every profile
+        },
+        "list": [
+            {
+                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
+                "name": "Windows PowerShell",
+                "commandline": "powershell.exe",
+                "hidden": false
+            },
+            {
+                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
+                "name": "Command Prompt",
+                "commandline": "cmd.exe",
+                "hidden": false,
+            },
+        ]
+    }
+}

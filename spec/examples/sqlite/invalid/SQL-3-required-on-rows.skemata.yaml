@@ -1,0 +1,18 @@
+# INVALID: violates SQL-3. Every declared column exists in every row, so
+# required has no meaning on row objects. Whether a column may be NULL is
+# declared with a nullable type.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: sqlite
+type: object
+properties:
+  settings:
+    type: array
+    identity: [key]
+    items:
+      type: object
+      required: [key, value]
+      properties:
+        key:
+          type: string
+        value:
+          type: string

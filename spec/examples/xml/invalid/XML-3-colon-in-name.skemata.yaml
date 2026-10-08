@@ -1,0 +1,18 @@
+# INVALID: violates XML-3. Attribute and member names are local names without a
+# prefix. Declare the namespace with the namespace keyword instead (XML-4):
+#   attributes:
+#     properties:
+#       schemaLocation:
+#         type: string
+#         namespace: "http://www.w3.org/2001/XMLSchema-instance"
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: xml
+type: object
+required: [configuration]
+properties:
+  configuration:
+    type: object
+    attributes:
+      properties:
+        "xsi:schemaLocation":
+          type: string

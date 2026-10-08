@@ -1,0 +1,6 @@
+# INVALID: violates PSD-1. A PowerShell data file holds exactly one hashtable,
+# so the root must describe an object.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: psd1
+items:
+  type: string

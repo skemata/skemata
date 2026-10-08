@@ -1,0 +1,15 @@
+# INVALID: violates KW-31. The declared member "*" also matches the pattern ".+",
+# so it would have two subschemas. Make the pattern exclude declared names,
+# for example "^[^*]".
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: json
+properties:
+  ExtensionSettings:
+    properties:
+      "*":
+        properties:
+          installation_mode: { enum: [allowed, blocked] }
+    patternProperties:
+      ".+":
+        properties:
+          install_url: { format: uri }

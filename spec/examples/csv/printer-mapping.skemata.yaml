@@ -1,0 +1,24 @@
+# A semicolon-separated mapping of printers to computers for a fictitious
+# deployment tool. The target csv-semicolon states the delimiter, which the
+# file itself does not reliably reveal (8.2). Shows a two-column identity.
+# Sample data: printer-mapping.csv
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$id: https://skemata.github.io/skemata/examples/csv/printer-mapping
+$target: csv-semicolon
+title: Printer mapping
+identity: [computer, printer]
+ordered: false
+items:
+  properties:
+    computer:
+      pattern: "^[A-Za-z0-9-]{1,15}$"
+      title: Computer name
+    printer:
+      pattern: '^\\\\[^\\]+\\.+$'
+      title: Printer share
+      examples: ['\\print01\HR-Color']
+    default:
+      title: Default printer
+      oneOf:
+        - { enum: ["yes", "1"], title: "Yes" }
+        - { enum: ["no", "0"], title: "No" }

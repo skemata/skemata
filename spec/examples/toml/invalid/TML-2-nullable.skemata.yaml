@@ -1,0 +1,12 @@
+# INVALID: violates TML-2 (and KW-2). TOML has no null value; an optional
+# setting is simply absent, which needs no nullable type.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: toml
+type: object
+properties:
+  general:
+    type: object
+    properties:
+      paused_until:
+        type: [string, "null"]
+        format: date-time-local

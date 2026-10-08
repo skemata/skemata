@@ -1,0 +1,101 @@
+# Configuration of a fictitious backup agent. Shows an array of tables with
+# identity, native TOML local date-time and local time values, a date stored
+# as a TOML string (textual), and a discriminated union (destination).
+# Sample data: backup-agent.toml
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$id: https://skemata.github.io/skemata/examples/toml/backup-agent
+$target: toml
+title: Backup agent configuration
+type: object
+properties:
+  general:
+    type: object
+    title: General
+    properties:
+      enabled:
+        type: boolean
+        title: Backups enabled
+        default: true
+      paused_until:
+        type: string
+        format: date-time-local
+        title: Paused until
+      retention:
+        type: string
+        format: duration
+        title: Keep backups for
+        default: P30D
+      compression_level:
+        type: integer
+        format: uint8
+        title: Compression level
+        minimum: 0
+        exclusiveMaximum: 10
+        default: 6
+  schedule:
+    type: object
+    title: Schedule
+    properties:
+      start:
+        type: string
+        format: time-local
+        title: Start time
+      days:
+        type: array
+        title: Days
+        uniqueItems: true
+        ordered: false
+        minItems: 1
+        maxItems: 7
+        items:
+          type: string
+          oneOf:
+            - { const: mon, title: Monday }
+            - { const: tue, title: Tuesday }
+            - { const: wed, title: Wednesday }
+            - { const: thu, title: Thursday }
+            - { const: fri, title: Friday }
+            - { const: sat, title: Saturday }
+            - { const: sun, title: Sunday }
+  destination:
+    type: object
+    title: Destination
+    oneOf:
+      - title: Local folder
+        properties:
+          kind: { type: string, const: local }
+          path: { type: string, title: Folder }
+        required: [kind, path]
+      - title: Network share
+        properties:
+          kind: { type: string, const: smb }
+          server: { type: string, format: hostname, title: Server }
+          share: { type: string, title: Share }
+        required: [kind, server, share]
+  targets:
+    type: array
+    title: Backup targets
+    identity: [name]
+    maxItems: 20
+    items:
+      type: object
+      required: [name, path]
+      properties:
+        name:
+          type: string
+          title: Name
+        path:
+          type: string
+          title: Folder
+        keep_versions:
+          type: integer
+          format: int32
+          title: Versions to keep
+          minimum: 1
+          default: 7
+        last_success:
+          type: string
+          format: date
+          textual: true
+          title: Last successful backup
+          readOnly: true

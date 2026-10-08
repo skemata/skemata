@@ -1,0 +1,10 @@
+# INVALID: violates MOD-2. Registry value names are compared case-insensitively
+# (REG-9), so these two declared members name the same value.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: registry
+type: object
+properties:
+  HomepageLocation:
+    type: string
+  homepagelocation:
+    type: string

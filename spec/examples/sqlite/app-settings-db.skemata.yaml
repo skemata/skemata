@@ -1,0 +1,69 @@
+# Settings database of a fictitious application. Shows a key/value table, a
+# table identified by two columns, a nullable column, an on/off column stored
+# as an integer, and an integer stored as TEXT (textual).
+# Sample data: app-settings-db.sql
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$id: https://skemata.github.io/skemata/examples/sqlite/app-settings-db
+$target: sqlite
+title: Example App settings database
+type: object
+properties:
+  settings:
+    type: array
+    title: Settings
+    identity: [key]
+    items:
+      type: object
+      properties:
+        key:
+          type: string
+          title: Setting
+          minLength: 1
+        value:
+          type: [string, "null"]
+          title: Value
+  shortcuts:
+    type: array
+    title: Keyboard shortcuts
+    identity: [context, command]
+    items:
+      type: object
+      properties:
+        context:
+          type: string
+          title: Context
+          enum: [global, editor, terminal]
+        command:
+          type: string
+          title: Command
+        keys:
+          type: string
+          title: Key combination
+          pattern: '^((Ctrl|Alt|Shift|Win)\+)*[A-Z0-9]+$'
+        enabled:
+          type: integer
+          title: Enabled
+          oneOf:
+            - { const: 1, title: Enabled }
+            - { const: 0, title: Disabled }
+  sync_state:
+    type: array
+    title: Synchronization state
+    identity: [device_id]
+    items:
+      type: object
+      properties:
+        device_id:
+          type: string
+          format: uuid
+          title: Device
+        last_sync:
+          type: string
+          format: date-time
+          title: Last synchronization
+          readOnly: true
+        revision:
+          type: integer
+          textual: true
+          title: Revision
+          readOnly: true

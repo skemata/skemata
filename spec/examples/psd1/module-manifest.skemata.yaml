@@ -1,0 +1,43 @@
+# PowerShell module manifest (.psd1). Illustrative excerpt: see the PowerShell
+# documentation for all keys. Shows case-insensitive keys, nested hashtables,
+# arrays (a single string is also accepted, PSD-4), and derived titles: most
+# titles come from the key names, but "PowerShellVersion" would become
+# "Power shell version", so it has an explicit title (6.2.1).
+# Sample data: ExampleModule.psd1
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$id: https://skemata.github.io/skemata/examples/psd1/module-manifest
+$target: psd1
+title: PowerShell module manifest (excerpt)
+required: [ModuleVersion]
+properties:
+  RootModule:
+    type: string
+  ModuleVersion:
+    pattern: "^[0-9]+(\\.[0-9]+){1,3}$"
+  GUID:
+    format: uuid
+    title: Module ID
+  Author:
+    type: string
+  Description:
+    type: string
+  PowerShellVersion:
+    pattern: "^[0-9]+\\.[0-9]+$"
+    title: Minimum PowerShell version
+  FunctionsToExport:
+    uniqueItems: true
+    items: { type: string }
+  CmdletsToExport:
+    uniqueItems: true
+    items: { type: string }
+  PrivateData:
+    properties:
+      PSData:
+        title: Gallery data
+        properties:
+          Tags:
+            uniqueItems: true
+            items: { type: string }
+          ProjectUri:
+            format: uri
+            title: Project URI

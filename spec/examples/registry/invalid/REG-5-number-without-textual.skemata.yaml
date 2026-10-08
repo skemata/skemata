@@ -1,0 +1,9 @@
+# INVALID: violates REG-5. The registry has no floating-point value type, so a
+# number can only be stored as REG_SZ text: declare textual: true.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: registry
+properties:
+  ZoomFactor:
+    type: number
+    minimum: 0.25
+    maximum: 5

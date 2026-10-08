@@ -1,0 +1,15 @@
+# INVALID: violates SQL-4. Every table must declare identity, usually its
+# primary key, so that individual rows can be addressed.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: sqlite
+type: object
+properties:
+  settings:
+    type: array
+    items:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string

@@ -1,0 +1,23 @@
+Windows Registry Editor Version 5.00
+
+; Sample data for windows-service.skemata.yaml.
+; ImagePath is REG_EXPAND_SZ (hex(2)), DependOnService is REG_MULTI_SZ (hex(7)),
+; FailureActions is REG_BINARY (hex). The FailureActions bytes, as base64 in the
+; data model, are: gFEBAAAAAAAAAAAAAQAAABQAAAABAAAAYOoAAA==
+
+[HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ExampleSvc]
+"DisplayName"="Example Service"
+"Description"="Collects example data."
+"ImagePath"=hex(2):25,00,50,00,72,00,6f,00,67,00,72,00,61,00,6d,00,46,00,69,\
+  00,6c,00,65,00,73,00,25,00,5c,00,45,00,78,00,61,00,6d,00,70,00,6c,00,65,00,\
+  5c,00,45,00,78,00,61,00,6d,00,70,00,6c,00,65,00,53,00,76,00,63,00,2e,00,65,\
+  00,78,00,65,00,00,00
+"ObjectName"="LocalSystem"
+"Type"=dword:00000010
+"Start"=dword:00000002
+"DelayedAutostart"=dword:00000001
+"ErrorControl"=dword:00000001
+"DependOnService"=hex(7):52,00,70,00,63,00,53,00,73,00,00,00,54,00,63,00,70,\
+  00,69,00,70,00,00,00,00,00
+"FailureActions"=hex:80,51,01,00,00,00,00,00,00,00,00,00,01,00,00,00,14,00,\
+  00,00,01,00,00,00,60,ea,00,00

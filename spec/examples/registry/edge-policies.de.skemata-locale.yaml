@@ -1,0 +1,23 @@
+# German texts for edge-policies.skemata.yaml (chapter 7). Keys are JSON Pointers
+# or $anchor names; texts not listed here fall back to the schema's English texts.
+$schema: https://skemata.github.io/skemata/draft-01/locale
+schema: https://skemata.github.io/skemata/examples/registry/edge-policies
+$locale: de
+texts:
+  "#":
+    title: Microsoft Edge-Richtlinien (Auszug)
+  "#/groups/startup":
+    title: Start
+  "#/groups/privacy":
+    title: Datenschutz
+    description: Einstellungen, die steuern, welche Daten an den Hersteller gesendet werden.
+  "#/properties/HomepageLocation":
+    title: URL der Startseite
+  "#/properties/ShowHomeButton":
+    title: Startseiten-Schaltfläche anzeigen
+  "#/properties/ShowHomeButton/oneOf/0":
+    title: Anzeigen
+  "#home-button-hide":
+    title: Ausblenden
+  "#/properties/RestoreOnStartup":
+    title: Aktion beim Start

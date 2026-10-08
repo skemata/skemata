@@ -1,0 +1,13 @@
+# INVALID: violates CSV-1. Every member of a record is a column holding one text
+# field; a column cannot contain an object. Flatten it into columns such as
+# address_city and address_zip.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: csv
+items:
+  properties:
+    username:
+      type: string
+    address:
+      properties:
+        city: { type: string }
+        zip: { type: string }

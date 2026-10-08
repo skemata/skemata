@@ -1,0 +1,118 @@
+# .NET Framework application configuration file (app.config / <program>.exe.config).
+# Illustrative excerpt. Shows keyed lists of repeated <add> elements identified
+# by an attribute, a list identified by an attribute of a child element
+# (dependentAssembly), and a namespace that child elements inherit
+# (assemblyBinding). Sample data: app.config
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$id: https://skemata.github.io/skemata/examples/xml/dotnet-app-config
+$target: xml
+title: .NET Framework application configuration (excerpt)
+type: object
+required: [configuration]
+properties:
+  configuration:
+    type: object
+    title: Configuration
+    properties:
+      startup:
+        type: object
+        title: Startup
+        properties:
+          supportedRuntime:
+            type: array
+            title: Supported runtimes
+            description: The runtimes the application supports, in order of preference.
+            ordered: true
+            identity: [/attributes/properties/version]
+            items:
+              type: object
+              attributes:
+                required: [version]
+                properties:
+                  version:
+                    type: string
+                    title: Runtime version
+                    enum: [v2.0.50727, v4.0]
+                  sku:
+                    type: string
+                    title: Framework version
+                    examples: ['.NETFramework,Version=v4.8']
+      appSettings:
+        type: object
+        title: Application settings
+        properties:
+          add:
+            type: array
+            title: Settings
+            identity: [/attributes/properties/key]
+            items:
+              type: object
+              attributes:
+                required: [key]
+                properties:
+                  key:
+                    type: string
+                    title: Name
+                    minLength: 1
+                  value:
+                    type: string
+                    title: Value
+      connectionStrings:
+        type: object
+        title: Connection strings
+        properties:
+          add:
+            type: array
+            title: Connections
+            identity: [/attributes/properties/name]
+            items:
+              type: object
+              attributes:
+                required: [name, connectionString]
+                properties:
+                  name:
+                    type: string
+                    title: Name
+                  connectionString:
+                    type: string
+                    title: Connection string
+                    writeOnly: true
+                  providerName:
+                    type: string
+                    title: Provider
+                    examples: [System.Data.SqlClient]
+      runtime:
+        type: object
+        title: Runtime
+        properties:
+          assemblyBinding:
+            type: object
+            title: Assembly binding
+            namespace: "urn:schemas-microsoft-com:asm.v1"
+            properties:
+              dependentAssembly:
+                type: array
+                title: Binding redirects
+                $comment: >-
+                  Each entry is identified by the name attribute of its child element
+                  assemblyIdentity: a nested identity reference (KW-13). Both are
+                  implicitly required.
+                identity: [/properties/assemblyIdentity/attributes/properties/name]
+                items:
+                  type: object
+                  properties:
+                    assemblyIdentity:
+                      type: object
+                      attributes:
+                        properties:
+                          name: { type: string, title: Assembly }
+                          publicKeyToken:
+                            type: string
+                            pattern: "^[0-9a-f]{16}$"
+                          culture: { type: string }
+                    bindingRedirect:
+                      type: object
+                      attributes:
+                        properties:
+                          oldVersion: { type: string, title: Old versions }
+                          newVersion: { type: string, title: New version }

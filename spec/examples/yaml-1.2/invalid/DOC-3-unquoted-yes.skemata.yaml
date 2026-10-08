@@ -1,0 +1,12 @@
+# INVALID: violates DOC-3. Under YAML 1.2 the plain scalars yes and no are
+# strings, but a YAML 1.1 parser reads them as booleans, so the meaning of this
+# schema would depend on the tool. Quote them: const: "yes".
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: yaml-1.2
+type: object
+properties:
+  confirm:
+    type: string
+    oneOf:
+      - { const: yes, title: Ask before deleting }
+      - { const: no, title: Delete without asking }

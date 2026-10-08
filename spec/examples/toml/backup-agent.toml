@@ -1,0 +1,26 @@
+# Sample data for backup-agent.skemata.yaml
+
+[general]
+enabled = true
+paused_until = 2026-12-24T18:00:00   # local date-time (native)
+retention = "P30D"
+compression_level = 9
+
+[schedule]
+start = 02:30:00                     # local time (native)
+days = ["mon", "wed", "fri"]
+
+[destination]
+kind = "smb"                         # selects the "Network share" shape
+server = "nas.example.org"
+share = "backups"
+
+[[targets]]
+name = "documents"
+path = 'C:\Users\Public\Documents'
+keep_versions = 14
+last_success = "2026-10-07"          # a date stored as a string (textual)
+
+[[targets]]
+name = "projects"
+path = 'D:\Projects'

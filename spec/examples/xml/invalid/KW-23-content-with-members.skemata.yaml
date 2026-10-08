@@ -1,0 +1,23 @@
+# INVALID: violates KW-23. A node with content has no members: an element
+# described with content must not also declare child elements (here the
+# member "options"). That would be XML mixed content, which the data model
+# cannot represent.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: xml
+type: object
+required: [setting]
+properties:
+  setting:
+    type: object
+    attributes:
+      properties:
+        name:
+          type: string
+    content:
+      type: string
+    properties:
+      options:
+        type: object
+        properties:
+          mode:
+            type: string

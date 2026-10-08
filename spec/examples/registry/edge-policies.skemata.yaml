@@ -1,0 +1,51 @@
+# Microsoft Edge policies (excerpt), as stored in one registry key such as
+# HKLM\SOFTWARE\Policies\Microsoft\Edge. Illustrative: see the vendor's
+# policy documentation for the authoritative definitions.
+# Sample data: edge-policies.reg. German texts: edge-policies.de.skemata-locale.yaml.
+#
+# Shows implicit rules (4.11): types are inferred, integers without format are
+# REG_DWORD (REG-4), and titles without an explicit title are derived from the
+# names, e.g. "Show home button" and "Disk cache size" (6.2.1).
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$id: https://skemata.github.io/skemata/examples/registry/edge-policies
+$target: registry
+$locale: en
+title: Microsoft Edge policies (excerpt)
+groups:
+  startup: {}
+  privacy:
+    description: Settings that control which data is sent to the vendor.
+properties:
+  HomepageLocation:
+    format: uri
+    title: Home page URL
+    group: startup
+    examples:
+      - "https://intranet.example.org/"
+  ShowHomeButton:
+    group: startup
+    oneOf:
+      - const: 1
+        title: Show
+        $anchor: home-button-show
+      - const: 0
+        title: Hide
+        $anchor: home-button-hide
+  RestoreOnStartup:
+    title: Action on startup
+    group: startup
+    oneOf:
+      - { const: 5, title: Open a new tab }
+      - { const: 1, title: Restore the last session }
+      - { const: 4, title: Open a list of URLs }
+  DiskCacheSize:
+    unit: byte
+    oneOf:
+      - { const: 0, title: Let the browser decide }
+      - { minimum: 1048576, title: Fixed size }
+  MetricsReportingEnabled:
+    title: Send usage and crash data
+    group: privacy
+    oneOf:
+      - { const: 1, title: Allowed }
+      - { const: 0, title: Not allowed }

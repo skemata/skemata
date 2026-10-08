@@ -1,0 +1,13 @@
+# INVALID: violates KW-2. ini-windows does not allow textual: every INI value is
+# already text, so an integer is always stored in its lexical form.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: ini-windows
+type: object
+properties:
+  Network:
+    type: object
+    properties:
+      Port:
+        type: integer
+        format: uint16
+        textual: true

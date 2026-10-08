@@ -1,0 +1,49 @@
+# Folder customization file desktop.ini, as read by Windows Explorer through
+# the Windows profile API. Illustrative excerpt. Sample data: desktop.ini
+# The sample also contains keys this schema does not declare (Mode, Vid):
+# they are undescribed content and remain valid (open content, 3.3.1).
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$id: https://skemata.github.io/skemata/examples/ini-windows/desktop-ini
+$target: ini-windows
+title: Folder customization (desktop.ini)
+type: object
+properties:
+  .ShellClassInfo:
+    type: object
+    title: Folder appearance
+    properties:
+      IconResource:
+        type: string
+        title: Icon
+        description: Path to an icon file or module, a comma, and the icon index.
+        examples: ['C:\Windows\System32\imageres.dll,-3']
+      IconFile:
+        type: string
+        title: Icon file (legacy)
+      IconIndex:
+        type: integer
+        format: int32
+        title: Icon index (legacy)
+      InfoTip:
+        type: string
+        title: Tooltip text
+      ConfirmFileOp:
+        type: integer
+        format: uint8
+        title: Warn when the folder is moved or deleted
+        oneOf:
+          - { const: 1, title: Warn }
+          - { const: 0, title: Do not warn }
+  ViewState:
+    type: object
+    title: View state
+    properties:
+      FolderType:
+        type: string
+        title: Folder template
+        oneOf:
+          - { const: Generic, title: General items }
+          - { const: Documents, title: Documents }
+          - { const: Pictures, title: Pictures }
+          - { const: Music, title: Music }
+          - { const: Videos, title: Videos }

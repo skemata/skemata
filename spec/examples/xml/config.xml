@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Sample data for gui-config.skemata.yaml -->
+<NotepadPlus>
+    <GUIConfigs>
+        <GUIConfig name="ToolBar" visible="yes">standard</GUIConfig>
+        <GUIConfig name="StatusBar">show</GUIConfig>
+        <GUIConfig name="TabBar" dragAndDrop="yes" drawTopBar="yes" />
+    </GUIConfigs>
+</NotepadPlus>

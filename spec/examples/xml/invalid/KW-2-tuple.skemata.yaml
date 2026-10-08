@@ -1,0 +1,12 @@
+# INVALID: violates KW-2. Tuples (prefixItems) are allowed only in targets whose
+# arrays can hold items of different kinds by position: json, yaml-1.2, toml
+# and psd1. XML stores array items as repeated elements of one name.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: xml
+properties:
+  window:
+    properties:
+      position:
+        prefixItems:
+          - { type: integer }
+          - { type: integer }

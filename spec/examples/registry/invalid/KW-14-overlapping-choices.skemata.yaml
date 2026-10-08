@@ -1,0 +1,10 @@
+# INVALID: violates KW-14. Choices must be disjoint: the value 0 belongs to the
+# value choice and to the range choice. Use minimum: 1 for the range choice.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: registry
+properties:
+  DiskCacheSize:
+    unit: byte
+    oneOf:
+      - { const: 0, title: Let the browser decide }
+      - { minimum: 0, title: Fixed size }

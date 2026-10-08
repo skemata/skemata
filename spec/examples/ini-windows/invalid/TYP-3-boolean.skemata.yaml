@@ -1,0 +1,12 @@
+# INVALID: violates TYP-3 (and KW-2). INI values are text; whether "on" is
+# written as yes, 1, true or on cannot be assumed. Use a labeled enum of the
+# stored text values instead.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: ini-windows
+type: object
+properties:
+  Updates:
+    type: object
+    properties:
+      AutoCheck:
+        type: boolean

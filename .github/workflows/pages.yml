@@ -1,0 +1,64 @@
+# Publishes the meta-schemas to https://skemata.github.io/skemata/ (ADR 0027).
+# Repository setting required once: Settings > Pages > Source = "GitHub Actions".
+name: Publish meta-schemas
+
+on:
+  push:
+    branches: [main]
+    paths: ['schemas/**', 'spec/**', 'tools/**', '.github/workflows/pages.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Verify meta-schemas and examples
+        run: dotnet run --project tools/Skemata.MetaSchemas -- verify
+
+      # The $id values have no file extension (…/draft-01/schema), so every file is published twice:
+      # under its $id and under its .json name.
+      - name: Build site
+        run: |
+          mkdir -p _site
+          cp -r schemas/draft-01 _site/draft-01
+          find _site/draft-01 -name '*.json' | while read -r f; do cp "$f" "${f%.json}"; done
+          cat > _site/index.html <<'EOF'
+          <!doctype html>
+          <meta charset="utf-8">
+          <title>Skemata</title>
+          <h1>Skemata</h1>
+          <p>Skemata is a schema language for describing and validating data of any kind.
+          This site hosts the meta-schemas; see the
+          <a href="https://github.com/skemata/skemata">repository</a> for the specification.</p>
+          <ul>
+            <li><a href="draft-01/schema.json">draft-01/schema</a></li>
+            <li><a href="draft-01/locale.json">draft-01/locale</a></li>
+          </ul>
+          EOF
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,5 @@
+# INVALID: violates JSN-1. The root of a json schema must be an object or an
+# array.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: json
+type: string

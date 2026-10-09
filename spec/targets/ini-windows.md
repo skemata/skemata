@@ -81,8 +81,12 @@ file (compared case-insensitively), a data validator MUST report the data as amb
 
 ## 7 Examples
 
-| Example | Shows |
-|---|---|
-| [desktop-ini](../examples/ini-windows/desktop-ini.skemata.yaml) | sections, a `1`/`0` enum, an integer, a choice enum |
-| [example-app](../examples/ini-windows/example-app.skemata.yaml) | `yes`/`no` enum, integer and number ranges, dynamic keys |
-| [invalid/](../examples/ini-windows/invalid/) | global key, array in a section, boolean type, `textual` |
+| Example | Sample data | Shows |
+|---|---|---|
+| [desktop-ini](../examples/ini-windows/desktop-ini.skemata.yaml) | [desktop.ini](../examples/ini-windows/desktop.ini) | sections, a `1`/`0` enum, an integer, a choice enum, undescribed keys |
+| [example-app](../examples/ini-windows/example-app.skemata.yaml) | [example-app.ini](../examples/ini-windows/example-app.ini) | an on/off value with several spellings, integer and number ranges, units, a deprecated choice, dynamic keys, implicit types and titles |
+
+Invalid: [INI-1](../examples/ini-windows/invalid/INI-1-global-key.skemata.yaml) global key,
+[INI-2](../examples/ini-windows/invalid/INI-2-array-in-section.skemata.yaml) array in a section,
+[TYP-3](../examples/ini-windows/invalid/TYP-3-boolean.skemata.yaml) boolean,
+[KW-2](../examples/ini-windows/invalid/KW-2-textual.skemata.yaml) `textual`.

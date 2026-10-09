@@ -2,7 +2,9 @@
 
 Schemas are written in one **source language**. Translations live in separate **locale files**, so anyone
 can add a language without changing the schema. This follows the model of Windows administrative templates
-(ADMX for structure, ADML for language resources).
+(ADMX for structure, ADML for language resources). Texts are neither maps of languages inline, which would
+change the meaning of JSON Schema's `title` and `description`, nor message keys, which would make schemas
+unreadable without their resources.
 
 ## 7.1 Source language and identity
 

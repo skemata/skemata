@@ -67,13 +67,15 @@ does not describe ([3.3.1](03-data-model.md#331-open-content)).
 The checks in chapters 2–8 are published as JSON Schema 2020-12 **meta-schemas**, so that editors can
 offer completion and validation for Skemata documents, and validators can perform the structural checks with
 existing JSON Schema libraries. This section fixes their architecture. In this repository, the meta-schemas
-are in [`schemas/draft-01/`](../schemas/draft-01/), generated from
-[`schemas/source/draft-01.yaml`](../schemas/source/draft-01.yaml) by `tools/Skemata.MetaSchemas`.
+are generated from [`schemas/source/draft-01.yaml`](../schemas/source/draft-01.yaml) by
+`tools/Skemata.MetaSchemas` and published at their URIs; the generated files are not committed.
 
 1. **One source, generated output.** The meta-schemas are generated from a single source definition of the
    keywords and the matrices in chapter 8. They are not maintained by hand.
-2. **One meta-schema per target**, for example `https://skemata.github.io/skemata/draft-01/targets/registry`. Each one is
-   self-contained and enforces that target's allowlist recursively, at every subschema position.
+2. **One meta-schema per column of the matrices**, for example
+   `https://skemata.github.io/skemata/draft-01/targets/registry`. Targets that share a column share its
+   meta-schema: `…/targets/csv` serves `csv`, `csv-semicolon` and `csv-tab`. Each one is self-contained and
+   enforces the allowlist recursively, at every subschema position.
 3. **A dispatching meta-schema** at the version URI (`https://skemata.github.io/skemata/draft-01/schema`) selects the
    per-target meta-schema by the value of `$target`. It refers to the per-target meta-schemas by their URIs.
    A **bundled** copy at `https://skemata.github.io/skemata/draft-01/schema.bundled` contains all of them, for

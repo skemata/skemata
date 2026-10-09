@@ -65,7 +65,8 @@ item. Data files commonly write one-element lists that way, for example `Functio
 
 ## 6 Examples
 
-| Example | Shows |
-|---|---|
-| [module-manifest](../examples/psd1/module-manifest.skemata.yaml) | case-insensitive keys, nested hashtables, arrays, derived and explicit titles |
-| [invalid/](../examples/psd1/invalid/) | an array as root |
+| Example | Sample data | Shows |
+|---|---|---|
+| [module-manifest](../examples/psd1/module-manifest.skemata.yaml) | [ExampleModule.psd1](../examples/psd1/ExampleModule.psd1) | case-insensitive keys, nested hashtables, arrays, derived and explicit titles |
+
+Invalid: [PSD-1](../examples/psd1/invalid/PSD-1-array-root.skemata.yaml) array as root.

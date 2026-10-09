@@ -29,7 +29,9 @@ public static class Verifier
         // The target meta-schemas go into a local registry first, so that the dispatcher's references to them
         // resolve to the generated files, not to the published site.
         var build = new BuildOptions { SchemaRegistry = new SchemaRegistry() };
-        var perTarget = source.Targets.ToDictionary(t => t.Target, t => JsonSchema.FromText(outputs[$"targets/{t.Target}.json"], build));
+        var perColumn = source.Targets.Select(t => t.Column).Distinct()
+            .ToDictionary(c => c, c => JsonSchema.FromText(outputs[$"targets/{c}.json"], build));
+        var columnOf = source.Targets.ToDictionary(t => t.Target, t => t.Column);
         var dispatcher = JsonSchema.FromText(outputs["schema.json"], build);
         var bundled = JsonSchema.FromText(outputs["schema.bundled.json"], build);
         var locale = JsonSchema.FromText(outputs["locale.json"], build);
@@ -48,10 +50,10 @@ public static class Verifier
                 ok = false;
                 Console.WriteLine($"INCONSISTENT {relative}: schema.json and schema.bundled.json disagree");
             }
-            if (target != null && perTarget.TryGetValue(target, out var targetSchema) && Evaluate(targetSchema, data).IsValid != result.IsValid)
+            if (target != null && columnOf.TryGetValue(target, out var column) && Evaluate(perColumn[column], data).IsValid != result.IsValid)
             {
                 ok = false;
-                Console.WriteLine($"INCONSISTENT {relative}: dispatcher and targets/{target}.json disagree");
+                Console.WriteLine($"INCONSISTENT {relative}: dispatcher and targets/{column}.json disagree");
             }
 
             if (!relative.Contains("/invalid/"))

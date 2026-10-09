@@ -79,8 +79,9 @@ the data invalid.
 
 ## 7 Examples
 
-| Example | Shows |
-|---|---|
-| [user-import](../examples/csv/user-import.skemata.yaml) | `csv`: keyed records, type inference, empty fields as absent values, a spelling-tolerant on/off column, a unit |
-| [printer-mapping](../examples/csv/printer-mapping.skemata.yaml) | `csv-semicolon`: a two-column identity, unordered records |
-| [invalid/](../examples/csv/invalid/) | a nested object in a record |
+| Example | Sample data | Shows |
+|---|---|---|
+| [user-import](../examples/csv/user-import.skemata.yaml) | [user-import.csv](../examples/csv/user-import.csv) | `csv`: keyed records, type inference, empty fields as absent values, a spelling-tolerant on/off column, a unit |
+| [printer-mapping](../examples/csv/printer-mapping.skemata.yaml) | [printer-mapping.csv](../examples/csv/printer-mapping.csv) | `csv-semicolon`: the delimiter stated by the target, a two-column identity, unordered records |
+
+Invalid: [CSV-1](../examples/csv/invalid/CSV-1-nested-column.skemata.yaml) nested column.

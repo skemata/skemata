@@ -28,29 +28,32 @@ public static class Generator
     {
         var files = new SortedDictionary<string, string>(StringComparer.Ordinal);
         var bundle = new JsonObject();
-        foreach (var (target, column) in s.Targets)
+        // One meta-schema per matrix column: targets that share a column (csv, csv-semicolon, csv-tab) share it.
+        foreach (var column in s.Targets.Select(t => t.Column).Distinct())
         {
+            var targets = s.Targets.Where(t => t.Column == column).Select(t => t.Target).ToList();
             var targetSchema = new JsonObject
             {
                 ["$schema"] = JsonSchemaDialect,
-                ["$id"] = s.TargetUri(target),
-                ["title"] = $"Skemata {s.Version} schema document, target {target}",
+                ["$id"] = s.TargetUri(column),
+                ["title"] = $"Skemata {s.Version} schema document, target {string.Join(", ", targets)}",
                 ["description"] = $"Generated from schemas/source/{s.Version}.yaml. Do not edit.",
                 ["$ref"] = "#/$defs/root",
-                ["$defs"] = new TargetBuilder(s, target, column, prefix: "").Build(),
+                ["$defs"] = new TargetBuilder(s, targets, column, prefix: "").Build(),
             };
-            files[$"targets/{target}.json"] = Serialize(targetSchema);
-            foreach (var (name, def) in new TargetBuilder(s, target, column, prefix: target + ".").Build())
-                bundle[target + "." + name] = def!.DeepClone();
+            files[$"targets/{column}.json"] = Serialize(targetSchema);
+            foreach (var (name, def) in new TargetBuilder(s, targets, column, prefix: column + ".").Build())
+                bundle[column + "." + name] = def!.DeepClone();
         }
 
         // The dispatcher refers to the target meta-schemas by their $id, relative to its own (9.4 item 3). The
         // bundled dispatcher contains them, for editors and validators that work without network access.
+        string ColumnOf(string target) => s.Targets.Single(t => t.Target == target).Column;
         files["schema.json"] = Serialize(Dispatcher(s, s.SchemaUri, $"Skemata {s.Version} schema document",
-            "Selects the meta-schema of the document's $target from targets/.", target => $"targets/{target}", defs: null));
+            "Selects the meta-schema of the document's $target from targets/.", target => $"targets/{ColumnOf(target)}", defs: null));
         files["schema.bundled.json"] = Serialize(Dispatcher(s, s.BundleUri, $"Skemata {s.Version} schema document (bundled)",
             "Selects the meta-schema of the document's $target. Same as schema, with all target meta-schemas included.",
-            target => $"#/$defs/{target}.root", bundle));
+            target => $"#/$defs/{ColumnOf(target)}.root", bundle));
 
         files["locale.json"] = Serialize(new JsonObject
         {
@@ -84,7 +87,7 @@ public static class Generator
     }
 
     /// <summary>Builds the definitions of one target's meta-schema, with references prefixed for bundling.</summary>
-    sealed class TargetBuilder(SourceDefinition s, string target, string column, string prefix)
+    sealed class TargetBuilder(SourceDefinition s, List<string> targets, string column, string prefix)
     {
         // A subschema position: its layout entry, the types allowed there, and within one alternative the
         // keywords of that alternative.
@@ -507,8 +510,7 @@ public static class Generator
         JsonNode KeywordValue(string name, Context? c) =>
             Resolve(Keyword(name).Value, c) is { } value && !(value is JsonValue v && v.TryGetValue<bool>(out var b) && b) ? value : new JsonObject();
 
-        // Replaces "@name" references with the definition for this position, and the constants "@draftUri"
-        // and "@target".
+        // Replaces "@name" references with the definition for this position, and the constant "@draftUri".
         JsonNode? Resolve(JsonNode? template, Context? c)
         {
             switch (template)
@@ -522,7 +524,6 @@ public static class Generator
                             ? JsonValue.Create(constant switch
                             {
                                 "@draftUri" => s.SchemaUri,
-                                "@target" => target,
                                 _ => throw new InvalidDataException($"unknown constant {constant}"),
                             })
                             : Resolve(v, c);
@@ -556,6 +557,7 @@ public static class Generator
                     var (choice, union) => choice ?? union ?? throw new InvalidDataException("oneOf without branches"),
                 },
                 "attributeSet" or "propertyNames" => Def(name),
+                "targets" => Enum(targets),
                 _ => R(name),
             };
         }

@@ -66,6 +66,9 @@ items:
   pattern: "^[a-p]{32}(;https?://.+)?$"
 ```
 
+A root object with `propertyNames` could describe the same values, but it would lose the list: UIs would show
+a table of names and values instead of a list of items.
+
 **[REG-3]** If the root is an array, its items MUST be scalars of the kinds allowed for values (section 5):
 strings with or without `format` (REG_SZ), `expandable` strings (REG_EXPAND_SZ), binary strings (REG_BINARY),
 integers (REG-4) or textual numbers. Item *n* is stored as the value named by the decimal number *n* (`1`,
@@ -133,10 +136,15 @@ special characters or look like numbers ([DOC-3](../02-document-structure.md#211
 
 ## 8 Examples
 
-| Example | Shows |
-|---|---|
-| [edge-policies](../examples/registry/edge-policies.skemata.yaml) | DWORD on/off and choice enums, a URL, groups, a locale file |
-| [edge-extension-install-forcelist](../examples/registry/edge-extension-install-forcelist.skemata.yaml) | a root array stored as numbered values |
-| [windows-service](../examples/registry/windows-service.skemata.yaml) | REG_EXPAND_SZ, REG_MULTI_SZ, REG_BINARY, DWORD enums |
-| [file-type-association](../examples/registry/file-type-association.skemata.yaml) | the `(Default)` value as member `""` |
-| [invalid/](../examples/registry/invalid/) | nested object, boolean type, integer without format, case-insensitive name clash |
+| Example | Sample data | Shows |
+|---|---|---|
+| [edge-policies](../examples/registry/edge-policies.skemata.yaml) | [.reg](../examples/registry/edge-policies.reg) | implicit types, `uint32` and titles; DWORD on/off and choice enums; a special value next to a range; a URL; a unit; groups; a [German locale file](../examples/registry/edge-policies.de.skemata-locale.yaml) |
+| [edge-extension-install-forcelist](../examples/registry/edge-extension-install-forcelist.skemata.yaml) | [.reg](../examples/registry/edge-extension-install-forcelist.reg) | a root array stored as numbered values |
+| [windows-service](../examples/registry/windows-service.skemata.yaml) | [.reg](../examples/registry/windows-service.reg) | REG_EXPAND_SZ, REG_MULTI_SZ, REG_BINARY, DWORD enums, `$comment` |
+| [file-type-association](../examples/registry/file-type-association.skemata.yaml) | [.reg](../examples/registry/file-type-association.reg) | the `(Default)` value as member `""` |
+
+Invalid: [REG-2](../examples/registry/invalid/REG-2-nested-object.skemata.yaml) nested object,
+[TYP-3](../examples/registry/invalid/TYP-3-boolean.skemata.yaml) boolean,
+[REG-5](../examples/registry/invalid/REG-5-number-without-textual.skemata.yaml) number without `textual`,
+[MOD-2](../examples/registry/invalid/MOD-2-case-insensitive-clash.skemata.yaml) case-insensitive name clash,
+[KW-14](../examples/registry/invalid/KW-14-overlapping-choices.skemata.yaml) overlapping choices.

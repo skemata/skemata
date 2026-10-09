@@ -68,7 +68,8 @@ targets.
 
 > The project's own identifiers are hosted on GitHub Pages under `https://skemata.github.io/skemata/`.
 > Meta-schemas for editor support are published under the same URIs
-> ([9.4](09-versioning-and-conformance.md#94-meta-schema-architecture)).
+> ([9.4](09-versioning-and-conformance.md#94-meta-schema-architecture)). These URIs are permanent; moving to
+> another domain would need new URIs in a new version.
 
 ## 2.4 References
 

@@ -160,8 +160,14 @@ with undeclared names, and `propertyNames` constrains the local names of all chi
 
 ## 9 Examples
 
-| Example | Shows |
-|---|---|
-| [dotnet-app-config](../examples/xml/dotnet-app-config.skemata.yaml) | keyed lists of `<add>` elements identified by an attribute, nested sections, an inherited namespace |
-| [gui-config](../examples/xml/gui-config.skemata.yaml) | attributes together with content, open attributes |
-| [invalid/](../examples/xml/invalid/) | content next to members, two document elements, a pattern for further document elements, an array as attribute, a colon in a name |
+| Example | Sample data | Shows |
+|---|---|---|
+| [dotnet-app-config](../examples/xml/dotnet-app-config.skemata.yaml) | [app.config](../examples/xml/app.config) | keyed lists of `<add>` elements identified by an attribute, a nested identity, nested sections, an inherited namespace |
+| [gui-config](../examples/xml/gui-config.skemata.yaml) | [config.xml](../examples/xml/config.xml) | attributes together with content, an open attribute set |
+
+Invalid: [KW-23](../examples/xml/invalid/KW-23-content-with-members.skemata.yaml) content next to members,
+[XML-1](../examples/xml/invalid/XML-1-two-document-elements.skemata.yaml) two document elements,
+[XML-1](../examples/xml/invalid/XML-1-pattern-at-root.skemata.yaml) a pattern for further document elements,
+[KW-22](../examples/xml/invalid/KW-22-array-attribute.skemata.yaml) array as attribute,
+[XML-3](../examples/xml/invalid/XML-3-colon-in-name.skemata.yaml) colon in a name,
+[KW-2](../examples/xml/invalid/KW-2-tuple.skemata.yaml) tuple.

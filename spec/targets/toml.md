@@ -52,6 +52,9 @@ NaN that TOML floats allow are outside the Skemata data model ([TYP-2](../05-typ
 
 ## 5 Examples
 
-| Example | Shows |
-|---|---|
-| [backup-agent](../examples/toml/backup-agent.skemata.yaml) | an array of tables with identity, native local date-time and local time, a textual date |
+| Example | Sample data | Shows |
+|---|---|---|
+| [backup-agent](../examples/toml/backup-agent.skemata.yaml) | [.toml](../examples/toml/backup-agent.toml) | an array of tables with identity, native local date-time and local time, a textual date, a discriminated union |
+
+Invalid: [TML-2](../examples/toml/invalid/TML-2-nullable.skemata.yaml) nullable type,
+[UI-8](../examples/toml/invalid/UI-8-unknown-unit.skemata.yaml) unknown unit.

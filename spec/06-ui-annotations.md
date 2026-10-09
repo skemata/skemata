@@ -156,7 +156,8 @@ MUST write it in the declared unit.
 **[UI-8]** `unit` MUST be one of the values in this table and MUST only be used on subschemas of type
 `integer` or `number` (including textual ones).
 
-Further units can be added by later versions of this specification.
+Further units can be added by later versions of this specification. Strings that carry their unit, such as
+`"5min"` or `"1Gi"`, are not covered; they would need a `format` of their own.
 
 ## 6.10 Presentation order
 

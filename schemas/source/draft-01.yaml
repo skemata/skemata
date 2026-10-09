@@ -222,12 +222,13 @@ layouts:
 # items of the current position), "@properties", "@type", "@format" and
 # "@branch" are generated for the current position, "@items" is "@item", or
 # false as well next to prefixItems (KW-11), and "@literal" is a literal value
-# of the current type (2.5; null only next to a nullable type). "@target" and
-# "@draftUri" are replaced by constants.
+# of the current type (2.5; null only next to a nullable type). "@targets" is
+# the target names of the meta-schema's column (one meta-schema serves csv,
+# csv-semicolon and csv-tab), and the constant "@draftUri" the version URI.
 keywords:
   $schema:              { position: root, value: { const: "@draftUri" } }
   $id:                  { position: root, value: { type: string, format: uri, pattern: "^[^#]*$" } }
-  $target:              { position: root, value: { const: "@target" } }
+  $target:              { position: root, value: { $ref: "@targets" } }
   $locale:              { position: root, value: { $ref: "@locale" } }
   groups:               { position: root, value: { $ref: "@groups" } }
   $defs:                { position: root, value: { type: object, additionalProperties: { $ref: "@schema" } } }

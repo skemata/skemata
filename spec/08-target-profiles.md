@@ -133,10 +133,12 @@ A new target is added by a revision of this specification:
    name that describes the concept, never the format. Existing targets do not gain the new keyword
    automatically: their columns in 8.4 stay — unless deliberately changed.
 4. Add worked examples, including negative examples, under `spec/examples/<target>/`.
+5. Add the column and the target's positions (its layout) to the source definition of the meta-schemas
+   ([9.4](09-versioning-and-conformance.md#94-meta-schema-architecture)).
 
 ## 8.7 Candidate targets (non-normative)
 
 Possible future targets include `plist` (Apple property lists and configuration profiles), `yaml-1.1`,
 further INI variants (for example systemd unit files, Git configuration, or INI files with keys before the
-first section), Java `.properties` and `.env` files, HCL, KDL, and `dconf`. Their known needs are recorded in
-the [design decisions](../decisions/README.md).
+first section), Java `.properties` and `.env` files, HCL, KDL, nginx configuration, `dconf`, and CSV files with
+locale-specific number forms such as a decimal comma.

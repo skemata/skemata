@@ -80,7 +80,10 @@ INTEGER-affinity column, for example, describes data that SQLite may convert whe
 
 ## 6 Examples
 
-| Example | Shows |
-|---|---|
-| [app-settings-db](../examples/sqlite/app-settings-db.skemata.yaml) | a key/value table, a table with a two-column key, nullable and textual columns |
-| [invalid/](../examples/sqlite/invalid/) | a boolean column, `required` on rows, a table without identity |
+| Example | Sample data | Shows |
+|---|---|---|
+| [app-settings-db](../examples/sqlite/app-settings-db.skemata.yaml) | [.sql](../examples/sqlite/app-settings-db.sql) | a key/value table, a table with a two-column key, nullable and textual columns |
+
+Invalid: [TYP-3](../examples/sqlite/invalid/TYP-3-boolean-column.skemata.yaml) boolean column,
+[SQL-3](../examples/sqlite/invalid/SQL-3-required-on-rows.skemata.yaml) `required` on rows,
+[SQL-4](../examples/sqlite/invalid/SQL-4-table-without-identity.skemata.yaml) table without identity.

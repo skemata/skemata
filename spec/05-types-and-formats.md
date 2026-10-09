@@ -45,7 +45,8 @@ A `float` value MUST lie within the finite range of binary32.
 ## 5.4 Booleans
 
 Stores without a native boolean encode on/off values in many ways: `1`/`0`, `yes`/`no`, `true`/`false`,
-`on`/`off`, `Y`/`N`, `enabled`/`disabled`, and more. No encoding can be assumed reliably.
+`on`/`off`, `Y`/`N`, `enabled`/`disabled`, and more. No encoding can be assumed reliably. Numbers differ: their
+lexical form (5.8) is canonical, so a number stored as text is still described as a number.
 
 **[TYP-3]** `type: boolean` MUST only be used where the target has a native boolean (`json`,
 `yaml-1.2`, `toml`, `psd1`). Elsewhere, an on/off value is described by its actual stored values, using a

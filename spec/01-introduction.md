@@ -24,7 +24,8 @@ data of any kind in one storage format**. It is written in YAML or JSON and look
    documentation and UIs can be generated from them.
 6. **Concise.** What follows from the structure is implied: types, titles derived from names, and the
    presence of identity values. Only what is not obvious needs to be written.
-7. **Open.** Skemata is a public specification. Anyone can write schemas for any data.
+7. **Open.** Skemata is a public, vendor-neutral specification: no rule or text assumes a particular product
+   that consumes schemas. Anyone can write schemas for any data.
 
 ## 1.3 Non-goals
 
@@ -37,7 +38,9 @@ Skemata describes structure. It does **not** describe:
 - **Secrets handling:** where sensitive values are stored. A schema can only mark them (`writeOnly`).
 - **Syntax and formatting:** comments, whitespace, quoting style and member order where it carries no meaning.
 
-These concerns belong to the tools that use Skemata schemas.
+These concerns belong to the tools that use Skemata schemas. They change at a different pace and are decided
+by different people than the structure of the data; leaving them out lets one schema serve every location,
+for example the same registry key under `HKLM` and `HKCU`.
 
 ## 1.4 Conventions
 
@@ -77,9 +80,13 @@ Skemata is **styled after** JSON Schema 2020-12, but it is its own language:
   ([4.10](04-keywords.md#410-excluded-json-schema-keywords)).
 - It adds keywords that JSON Schema lacks, with generic names: `$target`, `identity`, `ordered`, `attributes`,
   `textual`, `expandable` and others.
-- Every schema has exactly one target, which limits the usable keywords and types.
+- Every schema has exactly one target, which limits the usable keywords and types. There is no
+  format-independent schema: the details that matter, such as a REG_DWORD or an XML attribute, belong to one
+  format, and mappings between formats would be ambiguous. Data stored in two formats needs two schemas.
 
 As a result, a typical Skemata schema for a `json` target looks almost exactly like the equivalent JSON Schema.
+Skemata schemas are nevertheless not JSON Schemas: their targets are mostly not JSON, so JSON Schema validators
+cannot validate the data they describe.
 
 ## 1.7 Prior art
 
@@ -95,8 +102,11 @@ Skemata builds on ideas from several existing technologies:
 | **Kubernetes structural schemas** | a structural subset of JSON Schema; list types and list-map keys as precedent for `identity` and set semantics |
 | **PowerShell DSC v3** | JSON Schema used to describe resources, with documents written in YAML or JSON |
 
-Why Skemata does not simply adopt one of these is recorded in the
-[design decisions](../decisions/0003-json-schema-style-own-language.md).
+None of them is adopted directly. XSD is centred on XML, so the concepts of other formats would end up in
+`xs:appinfo`. ASN.1 is a notation of its own whose encodings cover binary, XML and JSON, but not maps, item
+identity or UI annotations. JSON Schema extended with prefixed keywords (`x-…`, `xml:…`) would grow a
+vocabulary per format. A new notation would need its own parsers and editor support. Skemata keeps the syntax
+and meaning of JSON Schema and adds generic keywords instead (1.6).
 
 ## 1.8 How to read this specification
 

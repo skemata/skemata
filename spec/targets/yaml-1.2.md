@@ -44,6 +44,9 @@ schema; a data validator MUST treat `<<` as an ordinary key.
 
 ## 5 Examples
 
-| Example | Shows |
-|---|---|
-| [dependabot](../examples/yaml-1.2/dependabot.skemata.yaml) | a keyed list with a two-member identity, enums, nested objects |
+| Example | Sample data | Shows |
+|---|---|---|
+| [dependabot](../examples/yaml-1.2/dependabot.skemata.yaml) | [dependabot.yml](../examples/yaml-1.2/dependabot.yml) | a keyed list with a two-member identity, enums, nested objects |
+
+Invalid: [DOC-3](../examples/yaml-1.2/invalid/DOC-3-unquoted-yes.skemata.yaml) unquoted `yes`/`no`,
+[KW-16](../examples/yaml-1.2/invalid/KW-16-type-not-inferable.skemata.yaml) type not inferable.

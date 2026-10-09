@@ -14,7 +14,7 @@
 5. **Document keywords start with `$`.** As in JSON Schema, keywords that concern the schema document itself
    (its version, identity, target, language, references and notes) start with `$`: `$schema`, `$id`,
    `$target`, `$locale`, `$defs`, `$ref`, `$anchor` and `$comment`. Keywords without `$` describe the data
-   and how it is presented.
+   and how it is presented; `groups` is one of them, although it appears only at the root.
 6. **Implicit where obvious.** What follows from the structure need not be written: types are inferred,
    identity values are required, titles are derived from names. Every implicit rule is defined exactly, all
    processors apply it in the same way, and explicit keywords always take precedence (4.11).
@@ -137,6 +137,9 @@ Homepage:
     Locked: [URL]                # locking the home page requires a URL
 ```
 
+Unlike `if`/`then` and `dependentSchemas` (4.10), `dependentRequired` changes neither the node kind nor the set
+of members, so a schema stays readable without data.
+
 **[KW-29]** Every name in `dependentRequired`, whether a key or an entry of a list, MUST be declared in
 `properties` of the same subschema, and the names in each list MUST be unique. Inside `attributes`, the names
 refer to attributes.
@@ -226,6 +229,9 @@ string:
 - A reference that starts with `/` is a JSON Pointer (RFC 6901) evaluated against the item subschema, the
   subschema that describes the item. It can address a member (`/properties/name`), an attribute
   (`/attributes/properties/key`), or a value nested in either, at any depth.
+
+Pointers address members, attributes and nested values alike, unambiguously at any depth, with the syntax
+that `$ref` and locale keys use as well.
 
 The values at the references are implicitly required: they must be present in every item, whether or not
 they are listed in `required`.

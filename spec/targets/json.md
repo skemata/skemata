@@ -58,8 +58,16 @@ object, a data validator MUST report the data as ambiguous.
 
 ## 6 Examples
 
-| Example | Shows |
-|---|---|
-| [firefox-policies](../examples/json/firefox-policies.skemata.yaml) | nested objects, native booleans, a dynamic-key map, a labeled enum |
-| [terminal-settings](../examples/json/terminal-settings.skemata.yaml) | a keyed list with GUID identity, `$ref`; sample data with comments and trailing commas |
-| [invalid/](../examples/json/invalid/) | scalar root, empty member name, `attributes`, `expandable` |
+| Example | Sample data | Shows |
+|---|---|---|
+| [firefox-policies](../examples/json/firefox-policies.skemata.yaml) | [policies.json](../examples/json/policies.json) | native booleans, nested objects, a dynamic-key map, `patternProperties`, `dependentRequired`, a labeled enum, recursive bookmark folders |
+| [terminal-settings](../examples/json/terminal-settings.skemata.yaml) | [terminal-settings.json](../examples/json/terminal-settings.json) | a keyed list with GUID identity, `$ref`; data with comments and trailing commas |
+| [geojson-linestring](../examples/json/geojson-linestring.skemata.yaml) | [geojson-linestring.json](../examples/json/geojson-linestring.json) | tuples inside a nested array (not settings data) |
+
+Invalid: [KW-31](../examples/json/invalid/KW-31-declared-name-matches-pattern.skemata.yaml) declared name matches a pattern,
+[JSN-1](../examples/json/invalid/JSN-1-scalar-root.skemata.yaml) scalar root,
+[MOD-3](../examples/json/invalid/MOD-3-empty-name.skemata.yaml) empty name,
+[KW-2](../examples/json/invalid/KW-2-attributes.skemata.yaml) `attributes`,
+[KW-2](../examples/json/invalid/KW-2-expandable.skemata.yaml) `expandable`,
+[KW-6](../examples/json/invalid/KW-6-endless-recursion.skemata.yaml) endless recursion,
+[KW-29](../examples/json/invalid/KW-29-undeclared-dependency.skemata.yaml) undeclared dependency.

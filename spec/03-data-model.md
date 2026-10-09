@@ -137,7 +137,9 @@ content:
 ```
 
 Only targets whose profile allows them use `attributes` and `content`; in draft-01 that is `xml`
-([4.7](04-keywords.md#47-attributes-and-content)).
+([4.7](04-keywords.md#47-attributes-and-content)). Attributes are a separate set rather than members marked
+with a keyword such as `placement: attribute`: one shared set of names could not describe an attribute and a
+member of the same name, nor open attributes next to closed members.
 
 The registry `(Default)` value is not content. The registry stores it as an ordinary value of the key, next
 to the other values, that happens to have no name. Skemata therefore describes it as the member with the empty

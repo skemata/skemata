@@ -54,46 +54,20 @@ format, and how to present them (titles, descriptions, labeled values, groups, t
 Skemata does **not** describe where data lives (file paths, registry key paths), nor how data is created,
 changed or removed. Tools that use Skemata schemas handle those concerns.
 
-## Targets in Draft 01
+## Targets and specification
 
-| Target | Describes |
-|---|---|
-| `registry` | the values of one Windows Registry key |
-| `ini-windows` | an INI file as read by the Windows profile API |
-| `xml` | an XML 1.0 document |
-| `json` | JSON, with or without comments |
-| `sqlite` | rows of tables in a SQLite database |
-| `yaml-1.2` | a YAML 1.2 document |
-| `toml` | a TOML 1.0 / 1.1 document |
-| `csv`, `csv-semicolon`, `csv-tab` | a CSV file with a header row, separated by commas, semicolons or tabs |
-| `psd1` | a PowerShell data file |
-
-## Reading the specification
-
-| | |
-|---|---|
-| [1 Introduction](spec/01-introduction.md) | goals, non-goals, terminology, prior art |
-| [2 Document structure](spec/02-document-structure.md) | file format, root keywords, references |
-| [3 Data model](spec/03-data-model.md) | nodes, members, identity, attributes and content |
-| [4 Keywords](spec/04-keywords.md) | every keyword and its rules |
-| [5 Types and formats](spec/05-types-and-formats.md) | scalar types, formats, lexical forms |
-| [6 UI annotations](spec/06-ui-annotations.md) | titles, labeled enums, groups |
-| [7 Localization](spec/07-localization.md) | locale files |
-| [8 Target profiles](spec/08-target-profiles.md) | keyword and type matrices per target |
-| [9 Versioning and conformance](spec/09-versioning-and-conformance.md) | compatibility, conformance, meta-schemas |
-| [Targets](spec/targets/) | one chapter per target |
-| [Examples](spec/examples/) | worked examples, including invalid ones |
-
-To write a schema, start with [chapter 3](spec/03-data-model.md), then read the chapter of your target and
-its examples.
+Draft 01 describes the Windows Registry, INI files read by the Windows profile API, XML, JSON, YAML 1.2,
+TOML, SQLite databases, CSV files and PowerShell data files; table [8.3](spec/08-target-profiles.md#83-draft-01-targets)
+lists the target names. The specification starts with the [introduction](spec/01-introduction.md), whose
+section 1.8 lists the chapters. To write a schema, start with [chapter 3](spec/03-data-model.md), then read
+the chapter of your target and its examples.
 
 ## Repository layout
 
 ```
 spec/          the specification: core chapters, targets/, examples/
-schemas/       meta-schemas for Skemata documents (generated) and their source definition
+schemas/       the source definition of the meta-schemas, and their generated output (not committed)
 tools/         Skemata.MetaSchemas: generates and verifies the meta-schemas
-decisions/     design decisions (architecture decision records)
 ```
 
 ## Roadmap
@@ -101,7 +75,8 @@ decisions/     design decisions (architecture decision records)
 1. **Specification** (Draft 01)
 2. **Meta-schemas** for editor support and schema validation ([schemas/](schemas/))
 3. Conformance test suite
-4. Reference validator and CLI in .NET
+4. Reference validator and CLI in .NET. The specification does not depend on .NET; implementations in other
+   languages are welcome.
 
 ## Name
 

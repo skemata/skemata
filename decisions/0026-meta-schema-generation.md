@@ -1,6 +1,6 @@
 # ADR 0026: Meta-schemas generated from a YAML source checked against the spec
 
-- Status: Accepted
+- Status: Accepted; the bundled dispatcher is superseded by ADR 0029
 - Date: 2026-10-08
 
 ## Context

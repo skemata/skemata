@@ -6,10 +6,25 @@
   "$ref": "#/$defs/root",
   "$defs": {
     "root": {
+      "$comment": "PSD-1",
+      "anyOf": [
+        {
+          "$ref": "#/$defs/root.ref"
+        },
+        {
+          "$ref": "#/$defs/root.object.1"
+        },
+        {
+          "$ref": "#/$defs/root.object.2"
+        }
+      ]
+    },
+    "root.ref": {
       "type": "object",
       "required": [
         "$schema",
-        "$target"
+        "$target",
+        "$ref"
       ],
       "properties": {
         "$schema": {
@@ -51,9 +66,99 @@
         "description": {
           "type": "string"
         },
-        "default": true,
+        "default": {
+          "type": "object"
+        },
         "examples": {
-          "type": "array"
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$comment": "UI-3",
+          "if": {
+            "required": [
+              "readOnly"
+            ],
+            "properties": {
+              "readOnly": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "writeOnly": {
+                "const": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    "root.object.1": {
+      "type": "object",
+      "required": [
+        "$schema",
+        "$target"
+      ],
+      "properties": {
+        "$schema": {
+          "const": "https://skemata.github.io/skemata/draft-01/schema"
+        },
+        "$id": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^[^#]*$"
+        },
+        "$target": {
+          "const": "psd1"
+        },
+        "$locale": {
+          "$ref": "#/$defs/locale"
+        },
+        "groups": {
+          "$ref": "#/$defs/groups"
+        },
+        "$defs": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/schema"
+          }
+        },
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": "object"
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
         },
         "deprecated": {
           "type": "boolean"
@@ -64,17 +169,19 @@
         "writeOnly": {
           "type": "boolean"
         },
-        "unit": {
-          "$ref": "#/$defs/unit"
-        },
-        "group": {
-          "$ref": "#/$defs/anchor"
-        },
         "type": {
-          "$ref": "#/$defs/type"
+          "enum": [
+            "object"
+          ]
         },
         "properties": {
-          "$ref": "#/$defs/properties"
+          "type": "object",
+          "propertyNames": {
+            "minLength": 1
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/schema"
+          }
         },
         "required": {
           "$ref": "#/$defs/nameList"
@@ -112,459 +219,245 @@
         },
         "maxProperties": {
           "$ref": "#/$defs/count"
-        },
-        "items": {
-          "anyOf": [
-            {
-              "const": false
-            },
-            {
-              "$ref": "#/$defs/schema"
-            }
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
           ]
         },
-        "prefixItems": {
-          "type": "array",
-          "minItems": 1,
-          "items": {
+        {
+          "required": [
+            "properties"
+          ]
+        },
+        {
+          "required": [
+            "required"
+          ]
+        },
+        {
+          "required": [
+            "dependentRequired"
+          ]
+        },
+        {
+          "required": [
+            "additionalProperties"
+          ]
+        },
+        {
+          "required": [
+            "patternProperties"
+          ]
+        },
+        {
+          "required": [
+            "propertyNames"
+          ]
+        },
+        {
+          "required": [
+            "minProperties"
+          ]
+        },
+        {
+          "required": [
+            "maxProperties"
+          ]
+        }
+      ],
+      "allOf": [
+        {
+          "$comment": "UI-3",
+          "if": {
+            "required": [
+              "readOnly"
+            ],
+            "properties": {
+              "readOnly": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "writeOnly": {
+                "const": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    "root.object.2": {
+      "type": "object",
+      "required": [
+        "$schema",
+        "$target"
+      ],
+      "properties": {
+        "$schema": {
+          "const": "https://skemata.github.io/skemata/draft-01/schema"
+        },
+        "$id": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^[^#]*$"
+        },
+        "$target": {
+          "const": "psd1"
+        },
+        "$locale": {
+          "$ref": "#/$defs/locale"
+        },
+        "groups": {
+          "$ref": "#/$defs/groups"
+        },
+        "$defs": {
+          "type": "object",
+          "additionalProperties": {
             "$ref": "#/$defs/schema"
           }
         },
-        "minItems": {
-          "$ref": "#/$defs/count"
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
         },
-        "maxItems": {
-          "$ref": "#/$defs/count"
+        "$comment": {
+          "type": "string"
         },
-        "uniqueItems": {
-          "type": "boolean"
+        "title": {
+          "$ref": "#/$defs/title"
         },
-        "identity": {
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": "object"
+        },
+        "examples": {
           "type": "array",
-          "minItems": 1,
-          "uniqueItems": true,
           "items": {
-            "type": "string",
-            "minLength": 1
+            "type": "object"
           }
         },
-        "ordered": {
+        "deprecated": {
           "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "type": {
+          "enum": [
+            "object"
+          ]
         },
         "oneOf": {
           "type": "array",
           "minItems": 1,
           "items": {
-            "$ref": "#/$defs/branch"
+            "$ref": "#/$defs/unionBranch"
           }
-        },
-        "enum": {
-          "type": "array",
-          "minItems": 1,
-          "uniqueItems": true
-        },
-        "const": true,
-        "minimum": {
-          "type": "number"
-        },
-        "maximum": {
-          "type": "number"
-        },
-        "exclusiveMinimum": {
-          "type": "number"
-        },
-        "exclusiveMaximum": {
-          "type": "number"
-        },
-        "multipleOf": {
-          "type": "number",
-          "exclusiveMinimum": 0
-        },
-        "minLength": {
-          "$ref": "#/$defs/count"
-        },
-        "maxLength": {
-          "$ref": "#/$defs/count"
-        },
-        "pattern": {
-          "type": "string",
-          "format": "regex"
-        },
-        "format": {
-          "$ref": "#/$defs/format"
-        },
-        "contentEncoding": {
-          "const": "base64"
-        },
-        "textual": {
-          "type": "boolean"
         }
       },
       "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "oneOf"
+          ]
+        }
+      ],
       "allOf": [
         {
+          "$comment": "UI-3",
           "if": {
             "required": [
-              "$ref"
-            ]
-          },
-          "then": {
-            "properties": {
-              "type": false,
-              "properties": false,
-              "required": false,
-              "dependentRequired": false,
-              "additionalProperties": false,
-              "patternProperties": false,
-              "propertyNames": false,
-              "minProperties": false,
-              "maxProperties": false,
-              "items": false,
-              "prefixItems": false,
-              "minItems": false,
-              "maxItems": false,
-              "uniqueItems": false,
-              "identity": false,
-              "ordered": false,
-              "oneOf": false,
-              "enum": false,
-              "const": false,
-              "minimum": false,
-              "maximum": false,
-              "exclusiveMinimum": false,
-              "exclusiveMaximum": false,
-              "multipleOf": false,
-              "minLength": false,
-              "maxLength": false,
-              "pattern": false,
-              "format": false,
-              "contentEncoding": false,
-              "textual": false
-            }
-          }
-        },
-        {
-          "if": {
-            "required": [
-              "type"
+              "readOnly"
             ],
             "properties": {
-              "type": {
-                "anyOf": [
-                  {
-                    "const": "object"
-                  },
-                  {
-                    "type": "array",
-                    "contains": {
-                      "const": "object"
-                    }
-                  }
-                ]
+              "readOnly": {
+                "const": true
               }
             }
           },
           "then": {
             "properties": {
-              "unit": false,
-              "items": false,
-              "prefixItems": false,
-              "minItems": false,
-              "maxItems": false,
-              "uniqueItems": false,
-              "identity": false,
-              "enum": false,
-              "const": false,
-              "minimum": false,
-              "maximum": false,
-              "exclusiveMinimum": false,
-              "exclusiveMaximum": false,
-              "multipleOf": false,
-              "minLength": false,
-              "maxLength": false,
-              "pattern": false,
-              "format": false,
-              "contentEncoding": false,
-              "textual": false,
-              "ordered": false
-            }
-          }
-        },
-        {
-          "if": {
-            "required": [
-              "type"
-            ],
-            "properties": {
-              "type": {
-                "anyOf": [
-                  {
-                    "const": "array"
-                  },
-                  {
-                    "type": "array",
-                    "contains": {
-                      "const": "array"
-                    }
-                  }
-                ]
+              "writeOnly": {
+                "const": false
               }
-            }
-          },
-          "then": {
-            "properties": {
-              "unit": false,
-              "properties": false,
-              "required": false,
-              "dependentRequired": false,
-              "additionalProperties": false,
-              "patternProperties": false,
-              "propertyNames": false,
-              "minProperties": false,
-              "maxProperties": false,
-              "enum": false,
-              "const": false,
-              "minimum": false,
-              "maximum": false,
-              "exclusiveMinimum": false,
-              "exclusiveMaximum": false,
-              "multipleOf": false,
-              "minLength": false,
-              "maxLength": false,
-              "pattern": false,
-              "format": false,
-              "contentEncoding": false,
-              "textual": false
-            }
-          }
-        },
-        {
-          "if": {
-            "required": [
-              "type"
-            ],
-            "properties": {
-              "type": {
-                "anyOf": [
-                  {
-                    "const": "string"
-                  },
-                  {
-                    "type": "array",
-                    "contains": {
-                      "const": "string"
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "unit": false,
-              "properties": false,
-              "required": false,
-              "dependentRequired": false,
-              "additionalProperties": false,
-              "patternProperties": false,
-              "propertyNames": false,
-              "minProperties": false,
-              "maxProperties": false,
-              "items": false,
-              "prefixItems": false,
-              "minItems": false,
-              "maxItems": false,
-              "uniqueItems": false,
-              "identity": false,
-              "ordered": false,
-              "minimum": false,
-              "maximum": false,
-              "exclusiveMinimum": false,
-              "exclusiveMaximum": false,
-              "multipleOf": false,
-              "format": {
-                "enum": [
-                  "date",
-                  "time",
-                  "date-time",
-                  "date-time-local",
-                  "time-local",
-                  "duration",
-                  "uuid",
-                  "uri",
-                  "hostname",
-                  "ipv4",
-                  "ipv6",
-                  "email"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "required": [
-              "type"
-            ],
-            "properties": {
-              "type": {
-                "anyOf": [
-                  {
-                    "const": "integer"
-                  },
-                  {
-                    "type": "array",
-                    "contains": {
-                      "const": "integer"
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "properties": false,
-              "required": false,
-              "dependentRequired": false,
-              "additionalProperties": false,
-              "patternProperties": false,
-              "propertyNames": false,
-              "minProperties": false,
-              "maxProperties": false,
-              "items": false,
-              "prefixItems": false,
-              "minItems": false,
-              "maxItems": false,
-              "uniqueItems": false,
-              "identity": false,
-              "ordered": false,
-              "minLength": false,
-              "maxLength": false,
-              "pattern": false,
-              "contentEncoding": false,
-              "format": {
-                "enum": [
-                  "int8",
-                  "int16",
-                  "int32",
-                  "int64",
-                  "uint8",
-                  "uint16",
-                  "uint32"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "required": [
-              "type"
-            ],
-            "properties": {
-              "type": {
-                "anyOf": [
-                  {
-                    "const": "number"
-                  },
-                  {
-                    "type": "array",
-                    "contains": {
-                      "const": "number"
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "properties": false,
-              "required": false,
-              "dependentRequired": false,
-              "additionalProperties": false,
-              "patternProperties": false,
-              "propertyNames": false,
-              "minProperties": false,
-              "maxProperties": false,
-              "items": false,
-              "prefixItems": false,
-              "minItems": false,
-              "maxItems": false,
-              "uniqueItems": false,
-              "identity": false,
-              "ordered": false,
-              "minLength": false,
-              "maxLength": false,
-              "pattern": false,
-              "contentEncoding": false,
-              "format": {
-                "enum": [
-                  "float",
-                  "double"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "required": [
-              "type"
-            ],
-            "properties": {
-              "type": {
-                "anyOf": [
-                  {
-                    "const": "boolean"
-                  },
-                  {
-                    "type": "array",
-                    "contains": {
-                      "const": "boolean"
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "unit": false,
-              "properties": false,
-              "required": false,
-              "dependentRequired": false,
-              "additionalProperties": false,
-              "patternProperties": false,
-              "propertyNames": false,
-              "minProperties": false,
-              "maxProperties": false,
-              "items": false,
-              "prefixItems": false,
-              "minItems": false,
-              "maxItems": false,
-              "uniqueItems": false,
-              "identity": false,
-              "ordered": false,
-              "minimum": false,
-              "maximum": false,
-              "exclusiveMinimum": false,
-              "exclusiveMaximum": false,
-              "multipleOf": false,
-              "minLength": false,
-              "maxLength": false,
-              "pattern": false,
-              "format": false,
-              "contentEncoding": false,
-              "textual": false
             }
           }
         }
       ]
     },
     "schema": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/schema.ref"
+        },
+        {
+          "$ref": "#/$defs/schema.object.1"
+        },
+        {
+          "$ref": "#/$defs/schema.object.2"
+        },
+        {
+          "$ref": "#/$defs/schema.array.1"
+        },
+        {
+          "$ref": "#/$defs/schema.array.2"
+        },
+        {
+          "$ref": "#/$defs/schema.array.3"
+        },
+        {
+          "$ref": "#/$defs/schema.string.1"
+        },
+        {
+          "$ref": "#/$defs/schema.string.2"
+        },
+        {
+          "$ref": "#/$defs/schema.string.3"
+        },
+        {
+          "$ref": "#/$defs/schema.string.4"
+        },
+        {
+          "$ref": "#/$defs/schema.integer.1"
+        },
+        {
+          "$ref": "#/$defs/schema.integer.2"
+        },
+        {
+          "$ref": "#/$defs/schema.number.1"
+        },
+        {
+          "$ref": "#/$defs/schema.number.2"
+        },
+        {
+          "$ref": "#/$defs/schema.boolean.1"
+        },
+        {
+          "$ref": "#/$defs/schema.boolean.2"
+        }
+      ]
+    },
+    "schema.ref": {
       "type": "object",
+      "required": [
+        "$ref"
+      ],
       "properties": {
         "$ref": {
           "type": "string",
@@ -582,9 +475,30 @@
         "description": {
           "type": "string"
         },
-        "default": true,
+        "default": {
+          "type": [
+            "object",
+            "array",
+            "string",
+            "integer",
+            "number",
+            "boolean",
+            "null"
+          ]
+        },
         "examples": {
-          "type": "array"
+          "type": "array",
+          "items": {
+            "type": [
+              "object",
+              "array",
+              "string",
+              "integer",
+              "number",
+              "boolean",
+              "null"
+            ]
+          }
         },
         "deprecated": {
           "type": "boolean"
@@ -600,12 +514,81 @@
         },
         "group": {
           "$ref": "#/$defs/anchor"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$comment": "UI-3",
+          "if": {
+            "required": [
+              "readOnly"
+            ],
+            "properties": {
+              "readOnly": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "writeOnly": {
+                "const": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    "schema.object.1": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": "object"
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "group": {
+          "$ref": "#/$defs/anchor"
         },
         "type": {
-          "$ref": "#/$defs/type"
+          "enum": [
+            "object"
+          ]
         },
         "properties": {
-          "$ref": "#/$defs/properties"
+          "type": "object",
+          "propertyNames": {
+            "minLength": 1
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/schema"
+          }
         },
         "required": {
           "$ref": "#/$defs/nameList"
@@ -643,6 +626,246 @@
         },
         "maxProperties": {
           "$ref": "#/$defs/count"
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "properties"
+          ]
+        },
+        {
+          "required": [
+            "required"
+          ]
+        },
+        {
+          "required": [
+            "dependentRequired"
+          ]
+        },
+        {
+          "required": [
+            "additionalProperties"
+          ]
+        },
+        {
+          "required": [
+            "patternProperties"
+          ]
+        },
+        {
+          "required": [
+            "propertyNames"
+          ]
+        },
+        {
+          "required": [
+            "minProperties"
+          ]
+        },
+        {
+          "required": [
+            "maxProperties"
+          ]
+        }
+      ],
+      "allOf": [
+        {
+          "$comment": "UI-3",
+          "if": {
+            "required": [
+              "readOnly"
+            ],
+            "properties": {
+              "readOnly": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "writeOnly": {
+                "const": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    "schema.object.2": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": "object"
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "group": {
+          "$ref": "#/$defs/anchor"
+        },
+        "type": {
+          "enum": [
+            "object"
+          ]
+        },
+        "oneOf": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/unionBranch"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "oneOf"
+          ]
+        }
+      ],
+      "allOf": [
+        {
+          "$comment": "UI-3",
+          "if": {
+            "required": [
+              "readOnly"
+            ],
+            "properties": {
+              "readOnly": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "writeOnly": {
+                "const": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    "schema.array.1.rules": {
+      "allOf": [
+        {
+          "$comment": "KW-11",
+          "if": {
+            "required": [
+              "items"
+            ],
+            "properties": {
+              "items": {
+                "const": false
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "prefixItems"
+            ]
+          }
+        },
+        {
+          "$comment": "UI-3",
+          "if": {
+            "required": [
+              "readOnly"
+            ],
+            "properties": {
+              "readOnly": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "writeOnly": {
+                "const": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    "schema.array.1": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": "array"
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": "array"
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "group": {
+          "$ref": "#/$defs/anchor"
+        },
+        "type": {
+          "enum": [
+            "array"
+          ]
         },
         "items": {
           "anyOf": [
@@ -666,9 +889,239 @@
         },
         "maxItems": {
           "$ref": "#/$defs/count"
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "items"
+          ]
+        },
+        {
+          "required": [
+            "prefixItems"
+          ]
+        },
+        {
+          "required": [
+            "minItems"
+          ]
+        },
+        {
+          "required": [
+            "maxItems"
+          ]
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.array.1.rules"
+        }
+      ]
+    },
+    "schema.array.2.rules": {
+      "allOf": [
+        {
+          "$comment": "KW-11",
+          "if": {
+            "required": [
+              "items"
+            ],
+            "properties": {
+              "items": {
+                "const": false
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "prefixItems"
+            ]
+          }
+        },
+        {
+          "$comment": "KW-12",
+          "if": {
+            "required": [
+              "uniqueItems"
+            ]
+          },
+          "then": {
+            "properties": {
+              "items": {
+                "$ref": "#/$defs/scalar"
+              }
+            }
+          }
+        },
+        {
+          "$comment": "UI-3",
+          "if": {
+            "required": [
+              "readOnly"
+            ],
+            "properties": {
+              "readOnly": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "writeOnly": {
+                "const": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    "schema.array.2": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": "array"
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": "array"
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "group": {
+          "$ref": "#/$defs/anchor"
+        },
+        "type": {
+          "enum": [
+            "array"
+          ]
+        },
+        "items": {
+          "$ref": "#/$defs/schema"
+        },
+        "minItems": {
+          "$ref": "#/$defs/count"
+        },
+        "maxItems": {
+          "$ref": "#/$defs/count"
         },
         "uniqueItems": {
           "type": "boolean"
+        },
+        "ordered": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "items"
+          ]
+        },
+        {
+          "required": [
+            "minItems"
+          ]
+        },
+        {
+          "required": [
+            "maxItems"
+          ]
+        },
+        {
+          "required": [
+            "uniqueItems"
+          ]
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.array.2.rules"
+        }
+      ]
+    },
+    "schema.array.3": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": "array"
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": "array"
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "group": {
+          "$ref": "#/$defs/anchor"
+        },
+        "type": {
+          "enum": [
+            "array"
+          ]
+        },
+        "items": {
+          "$ref": "#/$defs/schema"
+        },
+        "minItems": {
+          "$ref": "#/$defs/count"
+        },
+        "maxItems": {
+          "$ref": "#/$defs/count"
         },
         "identity": {
           "type": "array",
@@ -681,35 +1134,185 @@
         },
         "ordered": {
           "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "items"
+          ]
+        },
+        {
+          "required": [
+            "minItems"
+          ]
+        },
+        {
+          "required": [
+            "maxItems"
+          ]
+        },
+        {
+          "required": [
+            "identity"
+          ]
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.array.1.rules"
+        }
+      ]
+    },
+    "schema.string.1.rules": {
+      "allOf": [
+        {
+          "$comment": "KW-14",
+          "if": {
+            "required": [
+              "oneOf"
+            ]
+          },
+          "then": {
+            "properties": {
+              "oneOf": {
+                "contains": {
+                  "properties": {
+                    "const": false,
+                    "enum": false
+                  }
+                },
+                "minContains": 0,
+                "maxContains": 1
+              }
+            }
+          }
+        },
+        {
+          "$comment": "UI-3",
+          "if": {
+            "required": [
+              "readOnly"
+            ],
+            "properties": {
+              "readOnly": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "writeOnly": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "$comment": "KW-8, KW-18",
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "array"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "default": {
+                "type": "string"
+              },
+              "examples": {
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "schema.string.1": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "group": {
+          "$ref": "#/$defs/anchor"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "string"
+              ]
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "string",
+                  "null"
+                ]
+              },
+              "contains": {
+                "const": "null"
+              }
+            }
+          ]
         },
         "oneOf": {
           "type": "array",
           "minItems": 1,
           "items": {
-            "$ref": "#/$defs/branch"
+            "$ref": "#/$defs/choice.string"
           }
-        },
-        "enum": {
-          "type": "array",
-          "minItems": 1,
-          "uniqueItems": true
-        },
-        "const": true,
-        "minimum": {
-          "type": "number"
-        },
-        "maximum": {
-          "type": "number"
-        },
-        "exclusiveMinimum": {
-          "type": "number"
-        },
-        "exclusiveMaximum": {
-          "type": "number"
-        },
-        "multipleOf": {
-          "type": "number",
-          "exclusiveMinimum": 0
         },
         "minLength": {
           "$ref": "#/$defs/count"
@@ -722,396 +1325,178 @@
           "format": "regex"
         },
         "format": {
-          "$ref": "#/$defs/format"
-        },
-        "contentEncoding": {
-          "const": "base64"
-        },
-        "textual": {
-          "type": "boolean"
+          "enum": [
+            "date",
+            "time",
+            "date-time",
+            "date-time-local",
+            "time-local",
+            "duration",
+            "uuid",
+            "uri",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "email"
+          ]
         }
       },
       "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "format"
+          ]
+        },
+        {
+          "required": [
+            "minLength"
+          ]
+        },
+        {
+          "required": [
+            "maxLength"
+          ]
+        },
+        {
+          "required": [
+            "pattern"
+          ]
+        },
+        {
+          "required": [
+            "oneOf"
+          ],
+          "properties": {
+            "oneOf": {
+              "contains": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "const"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "enum"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
       "allOf": [
         {
+          "$ref": "#/$defs/schema.string.1.rules"
+        }
+      ]
+    },
+    "schema.string.2.rules": {
+      "allOf": [
+        {
+          "$comment": "KW-14",
           "if": {
             "required": [
-              "$ref"
+              "oneOf"
             ]
           },
           "then": {
             "properties": {
-              "type": false,
-              "properties": false,
-              "required": false,
-              "dependentRequired": false,
-              "additionalProperties": false,
-              "patternProperties": false,
-              "propertyNames": false,
-              "minProperties": false,
-              "maxProperties": false,
-              "items": false,
-              "prefixItems": false,
-              "minItems": false,
-              "maxItems": false,
-              "uniqueItems": false,
-              "identity": false,
-              "ordered": false,
-              "oneOf": false,
-              "enum": false,
-              "const": false,
-              "minimum": false,
-              "maximum": false,
-              "exclusiveMinimum": false,
-              "exclusiveMaximum": false,
-              "multipleOf": false,
-              "minLength": false,
-              "maxLength": false,
-              "pattern": false,
-              "format": false,
-              "contentEncoding": false,
-              "textual": false
+              "oneOf": {
+                "contains": {
+                  "properties": {
+                    "const": false,
+                    "enum": false
+                  }
+                },
+                "minContains": 0,
+                "maxContains": 1
+              }
             }
           }
         },
         {
+          "$comment": "TYP-5",
+          "if": {
+            "required": [
+              "contentEncoding"
+            ]
+          },
+          "then": {
+            "properties": {
+              "default": {
+                "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+              },
+              "examples": {
+                "items": {
+                  "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "UI-3",
+          "if": {
+            "required": [
+              "readOnly"
+            ],
+            "properties": {
+              "readOnly": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "writeOnly": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "$comment": "KW-8, KW-18",
           "if": {
             "required": [
               "type"
             ],
             "properties": {
               "type": {
-                "anyOf": [
-                  {
-                    "const": "object"
-                  },
-                  {
-                    "type": "array",
-                    "contains": {
-                      "const": "object"
-                    }
-                  }
-                ]
+                "type": "array"
               }
             }
           },
-          "then": {
+          "else": {
             "properties": {
-              "unit": false,
-              "items": false,
-              "prefixItems": false,
-              "minItems": false,
-              "maxItems": false,
-              "uniqueItems": false,
-              "identity": false,
-              "enum": false,
-              "const": false,
-              "minimum": false,
-              "maximum": false,
-              "exclusiveMinimum": false,
-              "exclusiveMaximum": false,
-              "multipleOf": false,
-              "minLength": false,
-              "maxLength": false,
-              "pattern": false,
-              "format": false,
-              "contentEncoding": false,
-              "textual": false,
-              "ordered": false
-            }
-          }
-        },
-        {
-          "if": {
-            "required": [
-              "type"
-            ],
-            "properties": {
-              "type": {
-                "anyOf": [
-                  {
-                    "const": "array"
-                  },
-                  {
-                    "type": "array",
-                    "contains": {
-                      "const": "array"
-                    }
-                  }
-                ]
+              "default": {
+                "type": "string"
+              },
+              "examples": {
+                "items": {
+                  "type": "string"
+                }
               }
-            }
-          },
-          "then": {
-            "properties": {
-              "unit": false,
-              "properties": false,
-              "required": false,
-              "dependentRequired": false,
-              "additionalProperties": false,
-              "patternProperties": false,
-              "propertyNames": false,
-              "minProperties": false,
-              "maxProperties": false,
-              "enum": false,
-              "const": false,
-              "minimum": false,
-              "maximum": false,
-              "exclusiveMinimum": false,
-              "exclusiveMaximum": false,
-              "multipleOf": false,
-              "minLength": false,
-              "maxLength": false,
-              "pattern": false,
-              "format": false,
-              "contentEncoding": false,
-              "textual": false
-            }
-          }
-        },
-        {
-          "if": {
-            "required": [
-              "type"
-            ],
-            "properties": {
-              "type": {
-                "anyOf": [
-                  {
-                    "const": "string"
-                  },
-                  {
-                    "type": "array",
-                    "contains": {
-                      "const": "string"
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "unit": false,
-              "properties": false,
-              "required": false,
-              "dependentRequired": false,
-              "additionalProperties": false,
-              "patternProperties": false,
-              "propertyNames": false,
-              "minProperties": false,
-              "maxProperties": false,
-              "items": false,
-              "prefixItems": false,
-              "minItems": false,
-              "maxItems": false,
-              "uniqueItems": false,
-              "identity": false,
-              "ordered": false,
-              "minimum": false,
-              "maximum": false,
-              "exclusiveMinimum": false,
-              "exclusiveMaximum": false,
-              "multipleOf": false,
-              "format": {
-                "enum": [
-                  "date",
-                  "time",
-                  "date-time",
-                  "date-time-local",
-                  "time-local",
-                  "duration",
-                  "uuid",
-                  "uri",
-                  "hostname",
-                  "ipv4",
-                  "ipv6",
-                  "email"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "required": [
-              "type"
-            ],
-            "properties": {
-              "type": {
-                "anyOf": [
-                  {
-                    "const": "integer"
-                  },
-                  {
-                    "type": "array",
-                    "contains": {
-                      "const": "integer"
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "properties": false,
-              "required": false,
-              "dependentRequired": false,
-              "additionalProperties": false,
-              "patternProperties": false,
-              "propertyNames": false,
-              "minProperties": false,
-              "maxProperties": false,
-              "items": false,
-              "prefixItems": false,
-              "minItems": false,
-              "maxItems": false,
-              "uniqueItems": false,
-              "identity": false,
-              "ordered": false,
-              "minLength": false,
-              "maxLength": false,
-              "pattern": false,
-              "contentEncoding": false,
-              "format": {
-                "enum": [
-                  "int8",
-                  "int16",
-                  "int32",
-                  "int64",
-                  "uint8",
-                  "uint16",
-                  "uint32"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "required": [
-              "type"
-            ],
-            "properties": {
-              "type": {
-                "anyOf": [
-                  {
-                    "const": "number"
-                  },
-                  {
-                    "type": "array",
-                    "contains": {
-                      "const": "number"
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "properties": false,
-              "required": false,
-              "dependentRequired": false,
-              "additionalProperties": false,
-              "patternProperties": false,
-              "propertyNames": false,
-              "minProperties": false,
-              "maxProperties": false,
-              "items": false,
-              "prefixItems": false,
-              "minItems": false,
-              "maxItems": false,
-              "uniqueItems": false,
-              "identity": false,
-              "ordered": false,
-              "minLength": false,
-              "maxLength": false,
-              "pattern": false,
-              "contentEncoding": false,
-              "format": {
-                "enum": [
-                  "float",
-                  "double"
-                ]
-              }
-            }
-          }
-        },
-        {
-          "if": {
-            "required": [
-              "type"
-            ],
-            "properties": {
-              "type": {
-                "anyOf": [
-                  {
-                    "const": "boolean"
-                  },
-                  {
-                    "type": "array",
-                    "contains": {
-                      "const": "boolean"
-                    }
-                  }
-                ]
-              }
-            }
-          },
-          "then": {
-            "properties": {
-              "unit": false,
-              "properties": false,
-              "required": false,
-              "dependentRequired": false,
-              "additionalProperties": false,
-              "patternProperties": false,
-              "propertyNames": false,
-              "minProperties": false,
-              "maxProperties": false,
-              "items": false,
-              "prefixItems": false,
-              "minItems": false,
-              "maxItems": false,
-              "uniqueItems": false,
-              "identity": false,
-              "ordered": false,
-              "minimum": false,
-              "maximum": false,
-              "exclusiveMinimum": false,
-              "exclusiveMaximum": false,
-              "multipleOf": false,
-              "minLength": false,
-              "maxLength": false,
-              "pattern": false,
-              "format": false,
-              "contentEncoding": false,
-              "textual": false
             }
           }
         }
       ]
     },
-    "branch": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/choice"
-        },
-        {
-          "$ref": "#/$defs/unionBranch"
-        }
-      ]
-    },
-    "choice": {
+    "schema.string.2": {
       "type": "object",
       "properties": {
-        "const": true,
-        "enum": {
-          "type": "array",
-          "minItems": 1,
-          "uniqueItems": true
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
         },
         "title": {
           "$ref": "#/$defs/title"
@@ -1119,14 +1504,1057 @@
         "description": {
           "type": "string"
         },
+        "default": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
         "deprecated": {
           "type": "boolean"
         },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "group": {
+          "$ref": "#/$defs/anchor"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "string"
+              ]
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "string",
+                  "null"
+                ]
+              },
+              "contains": {
+                "const": "null"
+              }
+            }
+          ]
+        },
+        "oneOf": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/choice.string"
+          }
+        },
+        "minLength": {
+          "$ref": "#/$defs/count"
+        },
+        "maxLength": {
+          "$ref": "#/$defs/count"
+        },
+        "pattern": {
+          "type": "string",
+          "format": "regex"
+        },
+        "contentEncoding": {
+          "const": "base64"
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "minLength"
+          ]
+        },
+        {
+          "required": [
+            "maxLength"
+          ]
+        },
+        {
+          "required": [
+            "pattern"
+          ]
+        },
+        {
+          "required": [
+            "contentEncoding"
+          ]
+        },
+        {
+          "required": [
+            "oneOf"
+          ],
+          "properties": {
+            "oneOf": {
+              "contains": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "const"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "enum"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.string.2.rules"
+        }
+      ]
+    },
+    "schema.string.3.rules": {
+      "allOf": [
+        {
+          "$comment": "UI-3",
+          "if": {
+            "required": [
+              "readOnly"
+            ],
+            "properties": {
+              "readOnly": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "writeOnly": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "$comment": "KW-8, KW-18",
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "array"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "const": {
+                "type": "string"
+              },
+              "default": {
+                "type": "string"
+              },
+              "enum": {
+                "items": {
+                  "type": "string"
+                }
+              },
+              "examples": {
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "schema.string.3": {
+      "type": "object",
+      "properties": {
         "$anchor": {
           "$ref": "#/$defs/anchor"
         },
         "$comment": {
           "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "group": {
+          "$ref": "#/$defs/anchor"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "string"
+              ]
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "string",
+                  "null"
+                ]
+              },
+              "contains": {
+                "const": "null"
+              }
+            }
+          ]
+        },
+        "enum": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "const": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "minLength": {
+          "$ref": "#/$defs/count"
+        },
+        "maxLength": {
+          "$ref": "#/$defs/count"
+        },
+        "pattern": {
+          "type": "string",
+          "format": "regex"
+        },
+        "format": {
+          "enum": [
+            "date",
+            "time",
+            "date-time",
+            "date-time-local",
+            "time-local",
+            "duration",
+            "uuid",
+            "uri",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "email"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "format"
+          ]
+        },
+        {
+          "required": [
+            "minLength"
+          ]
+        },
+        {
+          "required": [
+            "maxLength"
+          ]
+        },
+        {
+          "required": [
+            "pattern"
+          ]
+        },
+        {
+          "required": [
+            "const"
+          ]
+        },
+        {
+          "required": [
+            "enum"
+          ]
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.string.3.rules"
+        }
+      ]
+    },
+    "schema.string.4.rules": {
+      "allOf": [
+        {
+          "$comment": "TYP-5",
+          "if": {
+            "required": [
+              "contentEncoding"
+            ]
+          },
+          "then": {
+            "properties": {
+              "const": {
+                "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+              },
+              "default": {
+                "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+              },
+              "enum": {
+                "items": {
+                  "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+                }
+              },
+              "examples": {
+                "items": {
+                  "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "UI-3",
+          "if": {
+            "required": [
+              "readOnly"
+            ],
+            "properties": {
+              "readOnly": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "writeOnly": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "$comment": "KW-8, KW-18",
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "array"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "const": {
+                "type": "string"
+              },
+              "default": {
+                "type": "string"
+              },
+              "enum": {
+                "items": {
+                  "type": "string"
+                }
+              },
+              "examples": {
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "schema.string.4": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "group": {
+          "$ref": "#/$defs/anchor"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "string"
+              ]
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "string",
+                  "null"
+                ]
+              },
+              "contains": {
+                "const": "null"
+              }
+            }
+          ]
+        },
+        "enum": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "const": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "minLength": {
+          "$ref": "#/$defs/count"
+        },
+        "maxLength": {
+          "$ref": "#/$defs/count"
+        },
+        "pattern": {
+          "type": "string",
+          "format": "regex"
+        },
+        "contentEncoding": {
+          "const": "base64"
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "minLength"
+          ]
+        },
+        {
+          "required": [
+            "maxLength"
+          ]
+        },
+        {
+          "required": [
+            "pattern"
+          ]
+        },
+        {
+          "required": [
+            "contentEncoding"
+          ]
+        },
+        {
+          "required": [
+            "const"
+          ]
+        },
+        {
+          "required": [
+            "enum"
+          ]
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.string.4.rules"
+        }
+      ]
+    },
+    "schema.integer.1.rules": {
+      "allOf": [
+        {
+          "$comment": "KW-14",
+          "if": {
+            "required": [
+              "oneOf"
+            ]
+          },
+          "then": {
+            "properties": {
+              "oneOf": {
+                "contains": {
+                  "properties": {
+                    "const": false,
+                    "enum": false
+                  }
+                },
+                "minContains": 0,
+                "maxContains": 1
+              }
+            }
+          }
+        },
+        {
+          "$comment": "UI-3",
+          "if": {
+            "required": [
+              "readOnly"
+            ],
+            "properties": {
+              "readOnly": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "writeOnly": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "$comment": "KW-8, KW-18",
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "array"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "default": {
+                "type": "integer"
+              },
+              "examples": {
+                "items": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "TYP-1, KW-19",
+          "if": {
+            "required": [
+              "format"
+            ],
+            "properties": {
+              "format": {
+                "const": "int8"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "default": {
+                "minimum": -128,
+                "maximum": 127
+              },
+              "minimum": {
+                "minimum": -128,
+                "maximum": 127
+              },
+              "maximum": {
+                "minimum": -128,
+                "maximum": 127
+              },
+              "exclusiveMinimum": {
+                "minimum": -128,
+                "maximum": 127
+              },
+              "exclusiveMaximum": {
+                "minimum": -128,
+                "maximum": 127
+              },
+              "examples": {
+                "items": {
+                  "minimum": -128,
+                  "maximum": 127
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "TYP-1, KW-19",
+          "if": {
+            "required": [
+              "format"
+            ],
+            "properties": {
+              "format": {
+                "const": "int16"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "default": {
+                "minimum": -32768,
+                "maximum": 32767
+              },
+              "minimum": {
+                "minimum": -32768,
+                "maximum": 32767
+              },
+              "maximum": {
+                "minimum": -32768,
+                "maximum": 32767
+              },
+              "exclusiveMinimum": {
+                "minimum": -32768,
+                "maximum": 32767
+              },
+              "exclusiveMaximum": {
+                "minimum": -32768,
+                "maximum": 32767
+              },
+              "examples": {
+                "items": {
+                  "minimum": -32768,
+                  "maximum": 32767
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "TYP-1, KW-19",
+          "if": {
+            "required": [
+              "format"
+            ],
+            "properties": {
+              "format": {
+                "const": "int32"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "default": {
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "minimum": {
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "maximum": {
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "exclusiveMinimum": {
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "exclusiveMaximum": {
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "examples": {
+                "items": {
+                  "minimum": -2147483648,
+                  "maximum": 2147483647
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "TYP-1, KW-19",
+          "if": {
+            "required": [
+              "format"
+            ],
+            "properties": {
+              "format": {
+                "const": "int64"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "default": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "minimum": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "maximum": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "exclusiveMinimum": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "exclusiveMaximum": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "examples": {
+                "items": {
+                  "minimum": -9223372036854775808,
+                  "maximum": 9223372036854775807
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "TYP-1, KW-19",
+          "if": {
+            "required": [
+              "format"
+            ],
+            "properties": {
+              "format": {
+                "const": "uint8"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "default": {
+                "minimum": 0,
+                "maximum": 255
+              },
+              "minimum": {
+                "minimum": 0,
+                "maximum": 255
+              },
+              "maximum": {
+                "minimum": 0,
+                "maximum": 255
+              },
+              "exclusiveMinimum": {
+                "minimum": 0,
+                "maximum": 255
+              },
+              "exclusiveMaximum": {
+                "minimum": 0,
+                "maximum": 255
+              },
+              "examples": {
+                "items": {
+                  "minimum": 0,
+                  "maximum": 255
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "TYP-1, KW-19",
+          "if": {
+            "required": [
+              "format"
+            ],
+            "properties": {
+              "format": {
+                "const": "uint16"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "default": {
+                "minimum": 0,
+                "maximum": 65535
+              },
+              "minimum": {
+                "minimum": 0,
+                "maximum": 65535
+              },
+              "maximum": {
+                "minimum": 0,
+                "maximum": 65535
+              },
+              "exclusiveMinimum": {
+                "minimum": 0,
+                "maximum": 65535
+              },
+              "exclusiveMaximum": {
+                "minimum": 0,
+                "maximum": 65535
+              },
+              "examples": {
+                "items": {
+                  "minimum": 0,
+                  "maximum": 65535
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "TYP-1, KW-19",
+          "if": {
+            "required": [
+              "format"
+            ],
+            "properties": {
+              "format": {
+                "const": "uint32"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "default": {
+                "minimum": 0,
+                "maximum": 4294967295
+              },
+              "minimum": {
+                "minimum": 0,
+                "maximum": 4294967295
+              },
+              "maximum": {
+                "minimum": 0,
+                "maximum": 4294967295
+              },
+              "exclusiveMinimum": {
+                "minimum": 0,
+                "maximum": 4294967295
+              },
+              "exclusiveMaximum": {
+                "minimum": 0,
+                "maximum": 4294967295
+              },
+              "examples": {
+                "items": {
+                  "minimum": 0,
+                  "maximum": 4294967295
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "TYP-1, KW-19",
+          "if": {
+            "properties": {
+              "format": false
+            }
+          },
+          "then": {
+            "properties": {
+              "default": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "minimum": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "maximum": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "exclusiveMinimum": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "exclusiveMaximum": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "examples": {
+                "items": {
+                  "minimum": -9223372036854775808,
+                  "maximum": 9223372036854775807
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "schema.integer.1": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "unit": {
+          "$ref": "#/$defs/unit"
+        },
+        "group": {
+          "$ref": "#/$defs/anchor"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "integer"
+              ]
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "contains": {
+                "const": "null"
+              }
+            }
+          ]
+        },
+        "oneOf": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/choice.integer"
+          }
         },
         "minimum": {
           "type": "number"
@@ -1144,67 +2572,547 @@
           "type": "number",
           "exclusiveMinimum": 0
         },
-        "minLength": {
-          "$ref": "#/$defs/count"
-        },
-        "maxLength": {
-          "$ref": "#/$defs/count"
-        },
-        "pattern": {
-          "type": "string",
-          "format": "regex"
-        }
-      },
-      "additionalProperties": false
-    },
-    "unionBranch": {
-      "type": "object",
-      "properties": {
-        "type": {
-          "const": "object"
-        },
-        "properties": {
-          "$ref": "#/$defs/properties"
-        },
-        "required": {
-          "$ref": "#/$defs/nameList"
-        },
-        "dependentRequired": {
-          "type": "object",
-          "additionalProperties": {
-            "$ref": "#/$defs/nameList"
-          }
-        },
-        "additionalProperties": {
-          "anyOf": [
-            {
-              "type": "boolean"
-            },
-            {
-              "$ref": "#/$defs/schema"
-            }
+        "format": {
+          "enum": [
+            "int8",
+            "int16",
+            "int32",
+            "int64",
+            "uint8",
+            "uint16",
+            "uint32"
           ]
         },
-        "patternProperties": {
-          "type": "object",
-          "propertyNames": {
-            "format": "regex"
+        "textual": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "format"
+          ]
+        },
+        {
+          "required": [
+            "oneOf"
+          ],
+          "properties": {
+            "oneOf": {
+              "contains": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "const"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "enum"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.integer.1.rules"
+        }
+      ]
+    },
+    "schema.integer.2.rules": {
+      "allOf": [
+        {
+          "$comment": "UI-3",
+          "if": {
+            "required": [
+              "readOnly"
+            ],
+            "properties": {
+              "readOnly": {
+                "const": true
+              }
+            }
           },
-          "additionalProperties": {
-            "$ref": "#/$defs/schema"
+          "then": {
+            "properties": {
+              "writeOnly": {
+                "const": false
+              }
+            }
           }
         },
-        "propertyNames": {
-          "$ref": "#/$defs/propertyNames"
+        {
+          "$comment": "KW-8, KW-18",
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "array"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "const": {
+                "type": "integer"
+              },
+              "default": {
+                "type": "integer"
+              },
+              "enum": {
+                "items": {
+                  "type": "integer"
+                }
+              },
+              "examples": {
+                "items": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
         },
-        "minProperties": {
-          "$ref": "#/$defs/count"
+        {
+          "$comment": "TYP-1, KW-19",
+          "if": {
+            "required": [
+              "format"
+            ],
+            "properties": {
+              "format": {
+                "const": "int8"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "const": {
+                "minimum": -128,
+                "maximum": 127
+              },
+              "default": {
+                "minimum": -128,
+                "maximum": 127
+              },
+              "minimum": {
+                "minimum": -128,
+                "maximum": 127
+              },
+              "maximum": {
+                "minimum": -128,
+                "maximum": 127
+              },
+              "exclusiveMinimum": {
+                "minimum": -128,
+                "maximum": 127
+              },
+              "exclusiveMaximum": {
+                "minimum": -128,
+                "maximum": 127
+              },
+              "enum": {
+                "items": {
+                  "minimum": -128,
+                  "maximum": 127
+                }
+              },
+              "examples": {
+                "items": {
+                  "minimum": -128,
+                  "maximum": 127
+                }
+              }
+            }
+          }
         },
-        "maxProperties": {
-          "$ref": "#/$defs/count"
+        {
+          "$comment": "TYP-1, KW-19",
+          "if": {
+            "required": [
+              "format"
+            ],
+            "properties": {
+              "format": {
+                "const": "int16"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "const": {
+                "minimum": -32768,
+                "maximum": 32767
+              },
+              "default": {
+                "minimum": -32768,
+                "maximum": 32767
+              },
+              "minimum": {
+                "minimum": -32768,
+                "maximum": 32767
+              },
+              "maximum": {
+                "minimum": -32768,
+                "maximum": 32767
+              },
+              "exclusiveMinimum": {
+                "minimum": -32768,
+                "maximum": 32767
+              },
+              "exclusiveMaximum": {
+                "minimum": -32768,
+                "maximum": 32767
+              },
+              "enum": {
+                "items": {
+                  "minimum": -32768,
+                  "maximum": 32767
+                }
+              },
+              "examples": {
+                "items": {
+                  "minimum": -32768,
+                  "maximum": 32767
+                }
+              }
+            }
+          }
         },
-        "ordered": {
-          "type": "boolean"
+        {
+          "$comment": "TYP-1, KW-19",
+          "if": {
+            "required": [
+              "format"
+            ],
+            "properties": {
+              "format": {
+                "const": "int32"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "const": {
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "default": {
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "minimum": {
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "maximum": {
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "exclusiveMinimum": {
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "exclusiveMaximum": {
+                "minimum": -2147483648,
+                "maximum": 2147483647
+              },
+              "enum": {
+                "items": {
+                  "minimum": -2147483648,
+                  "maximum": 2147483647
+                }
+              },
+              "examples": {
+                "items": {
+                  "minimum": -2147483648,
+                  "maximum": 2147483647
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "TYP-1, KW-19",
+          "if": {
+            "required": [
+              "format"
+            ],
+            "properties": {
+              "format": {
+                "const": "int64"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "const": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "default": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "minimum": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "maximum": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "exclusiveMinimum": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "exclusiveMaximum": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "enum": {
+                "items": {
+                  "minimum": -9223372036854775808,
+                  "maximum": 9223372036854775807
+                }
+              },
+              "examples": {
+                "items": {
+                  "minimum": -9223372036854775808,
+                  "maximum": 9223372036854775807
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "TYP-1, KW-19",
+          "if": {
+            "required": [
+              "format"
+            ],
+            "properties": {
+              "format": {
+                "const": "uint8"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "const": {
+                "minimum": 0,
+                "maximum": 255
+              },
+              "default": {
+                "minimum": 0,
+                "maximum": 255
+              },
+              "minimum": {
+                "minimum": 0,
+                "maximum": 255
+              },
+              "maximum": {
+                "minimum": 0,
+                "maximum": 255
+              },
+              "exclusiveMinimum": {
+                "minimum": 0,
+                "maximum": 255
+              },
+              "exclusiveMaximum": {
+                "minimum": 0,
+                "maximum": 255
+              },
+              "enum": {
+                "items": {
+                  "minimum": 0,
+                  "maximum": 255
+                }
+              },
+              "examples": {
+                "items": {
+                  "minimum": 0,
+                  "maximum": 255
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "TYP-1, KW-19",
+          "if": {
+            "required": [
+              "format"
+            ],
+            "properties": {
+              "format": {
+                "const": "uint16"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "const": {
+                "minimum": 0,
+                "maximum": 65535
+              },
+              "default": {
+                "minimum": 0,
+                "maximum": 65535
+              },
+              "minimum": {
+                "minimum": 0,
+                "maximum": 65535
+              },
+              "maximum": {
+                "minimum": 0,
+                "maximum": 65535
+              },
+              "exclusiveMinimum": {
+                "minimum": 0,
+                "maximum": 65535
+              },
+              "exclusiveMaximum": {
+                "minimum": 0,
+                "maximum": 65535
+              },
+              "enum": {
+                "items": {
+                  "minimum": 0,
+                  "maximum": 65535
+                }
+              },
+              "examples": {
+                "items": {
+                  "minimum": 0,
+                  "maximum": 65535
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "TYP-1, KW-19",
+          "if": {
+            "required": [
+              "format"
+            ],
+            "properties": {
+              "format": {
+                "const": "uint32"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "const": {
+                "minimum": 0,
+                "maximum": 4294967295
+              },
+              "default": {
+                "minimum": 0,
+                "maximum": 4294967295
+              },
+              "minimum": {
+                "minimum": 0,
+                "maximum": 4294967295
+              },
+              "maximum": {
+                "minimum": 0,
+                "maximum": 4294967295
+              },
+              "exclusiveMinimum": {
+                "minimum": 0,
+                "maximum": 4294967295
+              },
+              "exclusiveMaximum": {
+                "minimum": 0,
+                "maximum": 4294967295
+              },
+              "enum": {
+                "items": {
+                  "minimum": 0,
+                  "maximum": 4294967295
+                }
+              },
+              "examples": {
+                "items": {
+                  "minimum": 0,
+                  "maximum": 4294967295
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "TYP-1, KW-19",
+          "if": {
+            "properties": {
+              "format": false
+            }
+          },
+          "then": {
+            "properties": {
+              "const": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "default": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "minimum": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "maximum": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "exclusiveMinimum": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "exclusiveMaximum": {
+                "minimum": -9223372036854775808,
+                "maximum": 9223372036854775807
+              },
+              "enum": {
+                "items": {
+                  "minimum": -9223372036854775808,
+                  "maximum": 9223372036854775807
+                }
+              },
+              "examples": {
+                "items": {
+                  "minimum": -9223372036854775808,
+                  "maximum": 9223372036854775807
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "schema.integer.2": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
         },
         "title": {
           "$ref": "#/$defs/title"
@@ -1212,17 +3120,1024 @@
         "description": {
           "type": "string"
         },
+        "default": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
         "deprecated": {
           "type": "boolean"
         },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "unit": {
+          "$ref": "#/$defs/unit"
+        },
+        "group": {
+          "$ref": "#/$defs/anchor"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "integer"
+              ]
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "contains": {
+                "const": "null"
+              }
+            }
+          ]
+        },
+        "enum": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "const": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "minimum": {
+          "type": "number"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "exclusiveMinimum": {
+          "type": "number"
+        },
+        "exclusiveMaximum": {
+          "type": "number"
+        },
+        "multipleOf": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "format": {
+          "enum": [
+            "int8",
+            "int16",
+            "int32",
+            "int64",
+            "uint8",
+            "uint16",
+            "uint32"
+          ]
+        },
+        "textual": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "format"
+          ]
+        },
+        {
+          "required": [
+            "const"
+          ]
+        },
+        {
+          "required": [
+            "enum"
+          ]
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.integer.2.rules"
+        }
+      ]
+    },
+    "schema.number.1.rules": {
+      "allOf": [
+        {
+          "$comment": "KW-14",
+          "if": {
+            "required": [
+              "oneOf"
+            ]
+          },
+          "then": {
+            "properties": {
+              "oneOf": {
+                "contains": {
+                  "properties": {
+                    "const": false,
+                    "enum": false
+                  }
+                },
+                "minContains": 0,
+                "maxContains": 1
+              }
+            }
+          }
+        },
+        {
+          "$comment": "UI-3",
+          "if": {
+            "required": [
+              "readOnly"
+            ],
+            "properties": {
+              "readOnly": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "writeOnly": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "$comment": "KW-8, KW-18",
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "array"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "default": {
+                "type": "number"
+              },
+              "examples": {
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "TYP-2, KW-19",
+          "if": {
+            "required": [
+              "format"
+            ],
+            "properties": {
+              "format": {
+                "const": "float"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "default": {
+                "minimum": -3.4028234663852886E+38,
+                "maximum": 3.4028234663852886E+38
+              },
+              "minimum": {
+                "minimum": -3.4028234663852886E+38,
+                "maximum": 3.4028234663852886E+38
+              },
+              "maximum": {
+                "minimum": -3.4028234663852886E+38,
+                "maximum": 3.4028234663852886E+38
+              },
+              "exclusiveMinimum": {
+                "minimum": -3.4028234663852886E+38,
+                "maximum": 3.4028234663852886E+38
+              },
+              "exclusiveMaximum": {
+                "minimum": -3.4028234663852886E+38,
+                "maximum": 3.4028234663852886E+38
+              },
+              "examples": {
+                "items": {
+                  "minimum": -3.4028234663852886E+38,
+                  "maximum": 3.4028234663852886E+38
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "schema.number.1": {
+      "type": "object",
+      "properties": {
         "$anchor": {
           "$ref": "#/$defs/anchor"
         },
         "$comment": {
           "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "unit": {
+          "$ref": "#/$defs/unit"
+        },
+        "group": {
+          "$ref": "#/$defs/anchor"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "number"
+              ]
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "number",
+                  "null"
+                ]
+              },
+              "contains": {
+                "const": "null"
+              }
+            }
+          ]
+        },
+        "oneOf": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/choice.number"
+          }
+        },
+        "minimum": {
+          "type": "number"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "exclusiveMinimum": {
+          "type": "number"
+        },
+        "exclusiveMaximum": {
+          "type": "number"
+        },
+        "multipleOf": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "format": {
+          "enum": [
+            "float",
+            "double"
+          ]
+        },
+        "textual": {
+          "type": "boolean"
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "format"
+          ]
+        },
+        {
+          "required": [
+            "oneOf"
+          ],
+          "properties": {
+            "oneOf": {
+              "contains": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "const"
+                    ],
+                    "properties": {
+                      "const": {
+                        "not": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "required": [
+                      "enum"
+                    ],
+                    "properties": {
+                      "enum": {
+                        "contains": {
+                          "not": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.number.1.rules"
+        }
+      ]
+    },
+    "schema.number.2.rules": {
+      "allOf": [
+        {
+          "$comment": "UI-3",
+          "if": {
+            "required": [
+              "readOnly"
+            ],
+            "properties": {
+              "readOnly": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "writeOnly": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "$comment": "KW-8, KW-18",
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "array"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "const": {
+                "type": "number"
+              },
+              "default": {
+                "type": "number"
+              },
+              "enum": {
+                "items": {
+                  "type": "number"
+                }
+              },
+              "examples": {
+                "items": {
+                  "type": "number"
+                }
+              }
+            }
+          }
+        },
+        {
+          "$comment": "TYP-2, KW-19",
+          "if": {
+            "required": [
+              "format"
+            ],
+            "properties": {
+              "format": {
+                "const": "float"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "const": {
+                "minimum": -3.4028234663852886E+38,
+                "maximum": 3.4028234663852886E+38
+              },
+              "default": {
+                "minimum": -3.4028234663852886E+38,
+                "maximum": 3.4028234663852886E+38
+              },
+              "minimum": {
+                "minimum": -3.4028234663852886E+38,
+                "maximum": 3.4028234663852886E+38
+              },
+              "maximum": {
+                "minimum": -3.4028234663852886E+38,
+                "maximum": 3.4028234663852886E+38
+              },
+              "exclusiveMinimum": {
+                "minimum": -3.4028234663852886E+38,
+                "maximum": 3.4028234663852886E+38
+              },
+              "exclusiveMaximum": {
+                "minimum": -3.4028234663852886E+38,
+                "maximum": 3.4028234663852886E+38
+              },
+              "enum": {
+                "items": {
+                  "minimum": -3.4028234663852886E+38,
+                  "maximum": 3.4028234663852886E+38
+                }
+              },
+              "examples": {
+                "items": {
+                  "minimum": -3.4028234663852886E+38,
+                  "maximum": 3.4028234663852886E+38
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "schema.number.2": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "unit": {
+          "$ref": "#/$defs/unit"
+        },
+        "group": {
+          "$ref": "#/$defs/anchor"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "number"
+              ]
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "number",
+                  "null"
+                ]
+              },
+              "contains": {
+                "const": "null"
+              }
+            }
+          ]
+        },
+        "enum": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        },
+        "const": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "minimum": {
+          "type": "number"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "exclusiveMinimum": {
+          "type": "number"
+        },
+        "exclusiveMaximum": {
+          "type": "number"
+        },
+        "multipleOf": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "format": {
+          "enum": [
+            "float",
+            "double"
+          ]
+        },
+        "textual": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "format"
+          ]
+        },
+        {
+          "required": [
+            "const"
+          ],
+          "properties": {
+            "const": {
+              "not": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        {
+          "required": [
+            "enum"
+          ],
+          "properties": {
+            "enum": {
+              "contains": {
+                "not": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.number.2.rules"
+        }
+      ]
+    },
+    "schema.boolean.1.rules": {
+      "allOf": [
+        {
+          "$comment": "KW-14",
+          "if": {
+            "required": [
+              "oneOf"
+            ]
+          },
+          "then": {
+            "properties": {
+              "oneOf": {
+                "contains": {
+                  "properties": {
+                    "const": false,
+                    "enum": false
+                  }
+                },
+                "minContains": 0,
+                "maxContains": 1
+              }
+            }
+          }
+        },
+        {
+          "$comment": "UI-3",
+          "if": {
+            "required": [
+              "readOnly"
+            ],
+            "properties": {
+              "readOnly": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "writeOnly": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "$comment": "KW-8, KW-18",
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "array"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "default": {
+                "type": "boolean"
+              },
+              "examples": {
+                "items": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "schema.boolean.1": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "group": {
+          "$ref": "#/$defs/anchor"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "boolean"
+              ]
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "contains": {
+                "const": "null"
+              }
+            }
+          ]
+        },
+        "oneOf": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/choice.boolean"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "oneOf"
+          ],
+          "properties": {
+            "oneOf": {
+              "contains": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "const"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "enum"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.boolean.1.rules"
+        }
+      ]
+    },
+    "schema.boolean.2.rules": {
+      "allOf": [
+        {
+          "$comment": "UI-3",
+          "if": {
+            "required": [
+              "readOnly"
+            ],
+            "properties": {
+              "readOnly": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "writeOnly": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "$comment": "KW-8, KW-18",
+          "if": {
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "type": {
+                "type": "array"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "const": {
+                "type": "boolean"
+              },
+              "default": {
+                "type": "boolean"
+              },
+              "enum": {
+                "items": {
+                  "type": "boolean"
+                }
+              },
+              "examples": {
+                "items": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "schema.boolean.2": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "group": {
+          "$ref": "#/$defs/anchor"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "boolean"
+              ]
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "contains": {
+                "const": "null"
+              }
+            }
+          ]
+        },
+        "enum": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "const": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "const"
+          ]
+        },
+        {
+          "required": [
+            "enum"
+          ]
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.boolean.2.rules"
+        }
+      ]
     },
     "propertyNames": {
       "type": "object",
@@ -1254,71 +4169,2059 @@
       },
       "additionalProperties": false
     },
-    "properties": {
+    "unionBranch": {
       "type": "object",
-      "propertyNames": {
-        "minLength": 1
+      "properties": {
+        "type": {
+          "enum": [
+            "object"
+          ]
+        },
+        "properties": {
+          "type": "object",
+          "propertyNames": {
+            "minLength": 1
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/schema"
+          }
+        },
+        "required": {
+          "$ref": "#/$defs/nameList"
+        },
+        "dependentRequired": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/$defs/nameList"
+          }
+        },
+        "additionalProperties": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "$ref": "#/$defs/schema"
+            }
+          ]
+        },
+        "patternProperties": {
+          "type": "object",
+          "propertyNames": {
+            "format": "regex"
+          },
+          "additionalProperties": {
+            "$ref": "#/$defs/schema"
+          }
+        },
+        "propertyNames": {
+          "$ref": "#/$defs/propertyNames"
+        },
+        "minProperties": {
+          "$ref": "#/$defs/count"
+        },
+        "maxProperties": {
+          "$ref": "#/$defs/count"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        }
       },
-      "additionalProperties": {
-        "$ref": "#/$defs/schema"
-      }
-    },
-    "type": {
+      "additionalProperties": false,
       "anyOf": [
         {
-          "enum": [
-            "object",
-            "array",
-            "string",
-            "integer",
-            "number",
-            "boolean"
+          "required": [
+            "type"
           ]
         },
         {
+          "required": [
+            "properties"
+          ]
+        },
+        {
+          "required": [
+            "required"
+          ]
+        },
+        {
+          "required": [
+            "dependentRequired"
+          ]
+        },
+        {
+          "required": [
+            "additionalProperties"
+          ]
+        },
+        {
+          "required": [
+            "patternProperties"
+          ]
+        },
+        {
+          "required": [
+            "propertyNames"
+          ]
+        },
+        {
+          "required": [
+            "minProperties"
+          ]
+        },
+        {
+          "required": [
+            "maxProperties"
+          ]
+        }
+      ]
+    },
+    "scalar": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/scalar.ref"
+        },
+        {
+          "$ref": "#/$defs/scalar.string.1"
+        },
+        {
+          "$ref": "#/$defs/scalar.string.2"
+        },
+        {
+          "$ref": "#/$defs/scalar.string.3"
+        },
+        {
+          "$ref": "#/$defs/scalar.string.4"
+        },
+        {
+          "$ref": "#/$defs/scalar.integer.1"
+        },
+        {
+          "$ref": "#/$defs/scalar.integer.2"
+        },
+        {
+          "$ref": "#/$defs/scalar.number.1"
+        },
+        {
+          "$ref": "#/$defs/scalar.number.2"
+        },
+        {
+          "$ref": "#/$defs/scalar.boolean.1"
+        },
+        {
+          "$ref": "#/$defs/scalar.boolean.2"
+        }
+      ]
+    },
+    "scalar.ref": {
+      "type": "object",
+      "required": [
+        "$ref"
+      ],
+      "properties": {
+        "$ref": {
+          "type": "string",
+          "pattern": "^#(/\\$defs/.+|[A-Za-z_][A-Za-z0-9._-]*)$"
+        },
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": [
+            "string",
+            "integer",
+            "number",
+            "boolean",
+            "null"
+          ]
+        },
+        "examples": {
           "type": "array",
-          "minItems": 2,
-          "maxItems": 2,
-          "uniqueItems": true,
           "items": {
-            "enum": [
+            "type": [
               "string",
               "integer",
               "number",
               "boolean",
               "null"
             ]
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "unit": {
+          "$ref": "#/$defs/unit"
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "$comment": "UI-3",
+          "if": {
+            "required": [
+              "readOnly"
+            ],
+            "properties": {
+              "readOnly": {
+                "const": true
+              }
+            }
           },
-          "contains": {
-            "const": "null"
+          "then": {
+            "properties": {
+              "writeOnly": {
+                "const": false
+              }
+            }
           }
         }
       ]
     },
-    "format": {
-      "enum": [
-        "date",
-        "time",
-        "date-time",
-        "date-time-local",
-        "time-local",
-        "duration",
-        "uuid",
-        "uri",
-        "hostname",
-        "ipv4",
-        "ipv6",
-        "email",
-        "int8",
-        "int16",
-        "int32",
-        "int64",
-        "uint8",
-        "uint16",
-        "uint32",
-        "float",
-        "double"
+    "scalar.string.1": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "string"
+              ]
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "string",
+                  "null"
+                ]
+              },
+              "contains": {
+                "const": "null"
+              }
+            }
+          ]
+        },
+        "oneOf": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/choice.string"
+          }
+        },
+        "minLength": {
+          "$ref": "#/$defs/count"
+        },
+        "maxLength": {
+          "$ref": "#/$defs/count"
+        },
+        "pattern": {
+          "type": "string",
+          "format": "regex"
+        },
+        "format": {
+          "enum": [
+            "date",
+            "time",
+            "date-time",
+            "date-time-local",
+            "time-local",
+            "duration",
+            "uuid",
+            "uri",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "email"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "format"
+          ]
+        },
+        {
+          "required": [
+            "minLength"
+          ]
+        },
+        {
+          "required": [
+            "maxLength"
+          ]
+        },
+        {
+          "required": [
+            "pattern"
+          ]
+        },
+        {
+          "required": [
+            "oneOf"
+          ],
+          "properties": {
+            "oneOf": {
+              "contains": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "const"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "enum"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.string.1.rules"
+        }
       ]
+    },
+    "scalar.string.2": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "string"
+              ]
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "string",
+                  "null"
+                ]
+              },
+              "contains": {
+                "const": "null"
+              }
+            }
+          ]
+        },
+        "oneOf": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/choice.string"
+          }
+        },
+        "minLength": {
+          "$ref": "#/$defs/count"
+        },
+        "maxLength": {
+          "$ref": "#/$defs/count"
+        },
+        "pattern": {
+          "type": "string",
+          "format": "regex"
+        },
+        "contentEncoding": {
+          "const": "base64"
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "minLength"
+          ]
+        },
+        {
+          "required": [
+            "maxLength"
+          ]
+        },
+        {
+          "required": [
+            "pattern"
+          ]
+        },
+        {
+          "required": [
+            "contentEncoding"
+          ]
+        },
+        {
+          "required": [
+            "oneOf"
+          ],
+          "properties": {
+            "oneOf": {
+              "contains": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "const"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "enum"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.string.2.rules"
+        }
+      ]
+    },
+    "scalar.string.3": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "string"
+              ]
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "string",
+                  "null"
+                ]
+              },
+              "contains": {
+                "const": "null"
+              }
+            }
+          ]
+        },
+        "enum": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "const": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "minLength": {
+          "$ref": "#/$defs/count"
+        },
+        "maxLength": {
+          "$ref": "#/$defs/count"
+        },
+        "pattern": {
+          "type": "string",
+          "format": "regex"
+        },
+        "format": {
+          "enum": [
+            "date",
+            "time",
+            "date-time",
+            "date-time-local",
+            "time-local",
+            "duration",
+            "uuid",
+            "uri",
+            "hostname",
+            "ipv4",
+            "ipv6",
+            "email"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "format"
+          ]
+        },
+        {
+          "required": [
+            "minLength"
+          ]
+        },
+        {
+          "required": [
+            "maxLength"
+          ]
+        },
+        {
+          "required": [
+            "pattern"
+          ]
+        },
+        {
+          "required": [
+            "const"
+          ]
+        },
+        {
+          "required": [
+            "enum"
+          ]
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.string.3.rules"
+        }
+      ]
+    },
+    "scalar.string.4": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "string"
+              ]
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "string",
+                  "null"
+                ]
+              },
+              "contains": {
+                "const": "null"
+              }
+            }
+          ]
+        },
+        "enum": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "const": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "minLength": {
+          "$ref": "#/$defs/count"
+        },
+        "maxLength": {
+          "$ref": "#/$defs/count"
+        },
+        "pattern": {
+          "type": "string",
+          "format": "regex"
+        },
+        "contentEncoding": {
+          "const": "base64"
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "minLength"
+          ]
+        },
+        {
+          "required": [
+            "maxLength"
+          ]
+        },
+        {
+          "required": [
+            "pattern"
+          ]
+        },
+        {
+          "required": [
+            "contentEncoding"
+          ]
+        },
+        {
+          "required": [
+            "const"
+          ]
+        },
+        {
+          "required": [
+            "enum"
+          ]
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.string.4.rules"
+        }
+      ]
+    },
+    "scalar.integer.1": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "unit": {
+          "$ref": "#/$defs/unit"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "integer"
+              ]
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "contains": {
+                "const": "null"
+              }
+            }
+          ]
+        },
+        "oneOf": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/choice.integer"
+          }
+        },
+        "minimum": {
+          "type": "number"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "exclusiveMinimum": {
+          "type": "number"
+        },
+        "exclusiveMaximum": {
+          "type": "number"
+        },
+        "multipleOf": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "format": {
+          "enum": [
+            "int8",
+            "int16",
+            "int32",
+            "int64",
+            "uint8",
+            "uint16",
+            "uint32"
+          ]
+        },
+        "textual": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "format"
+          ]
+        },
+        {
+          "required": [
+            "oneOf"
+          ],
+          "properties": {
+            "oneOf": {
+              "contains": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "const"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "enum"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.integer.1.rules"
+        }
+      ]
+    },
+    "scalar.integer.2": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "unit": {
+          "$ref": "#/$defs/unit"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "integer"
+              ]
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "contains": {
+                "const": "null"
+              }
+            }
+          ]
+        },
+        "enum": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "const": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "minimum": {
+          "type": "number"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "exclusiveMinimum": {
+          "type": "number"
+        },
+        "exclusiveMaximum": {
+          "type": "number"
+        },
+        "multipleOf": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "format": {
+          "enum": [
+            "int8",
+            "int16",
+            "int32",
+            "int64",
+            "uint8",
+            "uint16",
+            "uint32"
+          ]
+        },
+        "textual": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "format"
+          ]
+        },
+        {
+          "required": [
+            "const"
+          ]
+        },
+        {
+          "required": [
+            "enum"
+          ]
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.integer.2.rules"
+        }
+      ]
+    },
+    "scalar.number.1": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "unit": {
+          "$ref": "#/$defs/unit"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "number"
+              ]
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "number",
+                  "null"
+                ]
+              },
+              "contains": {
+                "const": "null"
+              }
+            }
+          ]
+        },
+        "oneOf": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/choice.number"
+          }
+        },
+        "minimum": {
+          "type": "number"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "exclusiveMinimum": {
+          "type": "number"
+        },
+        "exclusiveMaximum": {
+          "type": "number"
+        },
+        "multipleOf": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "format": {
+          "enum": [
+            "float",
+            "double"
+          ]
+        },
+        "textual": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "format"
+          ]
+        },
+        {
+          "required": [
+            "oneOf"
+          ],
+          "properties": {
+            "oneOf": {
+              "contains": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "const"
+                    ],
+                    "properties": {
+                      "const": {
+                        "not": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  },
+                  {
+                    "required": [
+                      "enum"
+                    ],
+                    "properties": {
+                      "enum": {
+                        "contains": {
+                          "not": {
+                            "type": "integer"
+                          }
+                        }
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.number.1.rules"
+        }
+      ]
+    },
+    "scalar.number.2": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "unit": {
+          "$ref": "#/$defs/unit"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "number"
+              ]
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "number",
+                  "null"
+                ]
+              },
+              "contains": {
+                "const": "null"
+              }
+            }
+          ]
+        },
+        "enum": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        },
+        "const": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "minimum": {
+          "type": "number"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "exclusiveMinimum": {
+          "type": "number"
+        },
+        "exclusiveMaximum": {
+          "type": "number"
+        },
+        "multipleOf": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "format": {
+          "enum": [
+            "float",
+            "double"
+          ]
+        },
+        "textual": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "format"
+          ]
+        },
+        {
+          "required": [
+            "const"
+          ],
+          "properties": {
+            "const": {
+              "not": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        {
+          "required": [
+            "enum"
+          ],
+          "properties": {
+            "enum": {
+              "contains": {
+                "not": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.number.2.rules"
+        }
+      ]
+    },
+    "scalar.boolean.1": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "boolean"
+              ]
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "contains": {
+                "const": "null"
+              }
+            }
+          ]
+        },
+        "oneOf": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/choice.boolean"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "oneOf"
+          ],
+          "properties": {
+            "oneOf": {
+              "contains": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "const"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "enum"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.boolean.1.rules"
+        }
+      ]
+    },
+    "scalar.boolean.2": {
+      "type": "object",
+      "properties": {
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "default": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "examples": {
+          "type": "array",
+          "items": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "readOnly": {
+          "type": "boolean"
+        },
+        "writeOnly": {
+          "type": "boolean"
+        },
+        "type": {
+          "anyOf": [
+            {
+              "enum": [
+                "boolean"
+              ]
+            },
+            {
+              "type": "array",
+              "minItems": 2,
+              "maxItems": 2,
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "contains": {
+                "const": "null"
+              }
+            }
+          ]
+        },
+        "enum": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "const": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "type"
+          ]
+        },
+        {
+          "required": [
+            "const"
+          ]
+        },
+        {
+          "required": [
+            "enum"
+          ]
+        }
+      ],
+      "allOf": [
+        {
+          "$ref": "#/$defs/schema.boolean.2.rules"
+        }
+      ]
+    },
+    "choice.string": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/choice.string.1"
+        },
+        {
+          "$ref": "#/$defs/choice.string.2"
+        },
+        {
+          "$ref": "#/$defs/choice.string.3"
+        }
+      ]
+    },
+    "choice.string.1": {
+      "type": "object",
+      "required": [
+        "const"
+      ],
+      "properties": {
+        "const": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "choice.string.2": {
+      "type": "object",
+      "required": [
+        "enum"
+      ],
+      "properties": {
+        "enum": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "choice.string.3": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "minLength": {
+          "$ref": "#/$defs/count"
+        },
+        "maxLength": {
+          "$ref": "#/$defs/count"
+        },
+        "pattern": {
+          "type": "string",
+          "format": "regex"
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "minLength"
+          ]
+        },
+        {
+          "required": [
+            "maxLength"
+          ]
+        },
+        {
+          "required": [
+            "pattern"
+          ]
+        }
+      ]
+    },
+    "choice.integer": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/choice.integer.1"
+        },
+        {
+          "$ref": "#/$defs/choice.integer.2"
+        },
+        {
+          "$ref": "#/$defs/choice.integer.3"
+        }
+      ]
+    },
+    "choice.integer.1": {
+      "type": "object",
+      "required": [
+        "const"
+      ],
+      "properties": {
+        "const": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "choice.integer.2": {
+      "type": "object",
+      "required": [
+        "enum"
+      ],
+      "properties": {
+        "enum": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          }
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "choice.integer.3": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        },
+        "minimum": {
+          "type": "number"
+        },
+        "maximum": {
+          "type": "number"
+        },
+        "exclusiveMinimum": {
+          "type": "number"
+        },
+        "exclusiveMaximum": {
+          "type": "number"
+        },
+        "multipleOf": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "required": [
+            "minimum"
+          ]
+        },
+        {
+          "required": [
+            "maximum"
+          ]
+        },
+        {
+          "required": [
+            "exclusiveMinimum"
+          ]
+        },
+        {
+          "required": [
+            "exclusiveMaximum"
+          ]
+        },
+        {
+          "required": [
+            "multipleOf"
+          ]
+        }
+      ]
+    },
+    "choice.number": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/choice.number.1"
+        },
+        {
+          "$ref": "#/$defs/choice.number.2"
+        },
+        {
+          "$ref": "#/$defs/choice.integer.3"
+        }
+      ]
+    },
+    "choice.number.1": {
+      "type": "object",
+      "required": [
+        "const"
+      ],
+      "properties": {
+        "const": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "choice.number.2": {
+      "type": "object",
+      "required": [
+        "enum"
+      ],
+      "properties": {
+        "enum": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "choice.boolean": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/choice.boolean.1"
+        },
+        {
+          "$ref": "#/$defs/choice.boolean.2"
+        }
+      ]
+    },
+    "choice.boolean.1": {
+      "type": "object",
+      "required": [
+        "const"
+      ],
+      "properties": {
+        "const": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "choice.boolean.2": {
+      "type": "object",
+      "required": [
+        "enum"
+      ],
+      "properties": {
+        "enum": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": [
+              "boolean",
+              "null"
+            ]
+          }
+        },
+        "title": {
+          "$ref": "#/$defs/title"
+        },
+        "description": {
+          "type": "string"
+        },
+        "deprecated": {
+          "type": "boolean"
+        },
+        "$anchor": {
+          "$ref": "#/$defs/anchor"
+        },
+        "$comment": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
     },
     "unit": {
       "enum": [

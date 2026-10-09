@@ -23,6 +23,11 @@ JSON Schema 2020-12 lets keywords apply to any instance type and silently ignore
 Skemata tightens this: a keyword appears only where it is meaningful (rule KW-17 and the rules in 4.7 and 4.8).
 This keeps schemas unambiguous for UIs and for target mappings.
 
+A keyword is **used** when it is present in a subschema, whatever its value. Rules that restrict where a
+keyword may be used, or with which other keywords, therefore also apply when its value equals its default:
+`textual: false` on a string without a natively stored format violates KW-25, and `ordered: true` next to
+`prefixItems` violates KW-27.
+
 ## 4.2 Keyword summary
 
 | Keyword | Origin | Applies to | Section |

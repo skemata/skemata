@@ -24,8 +24,9 @@ The order of child elements is significant in XML, although much software that r
 
 **[XML-1]** The root schema MUST describe an object with exactly one member in `properties`. This member is
 the document element. It MUST be an object and is implicitly required: a document always has its document
-element. The root MUST NOT contain `additionalProperties`, `propertyNames`, `minProperties`, `maxProperties`,
-`attributes` or `content`.
+element. The root MUST NOT contain `additionalProperties`, `patternProperties`, `propertyNames`,
+`minProperties`, `maxProperties`, `attributes` or `content`: a document has no other members than its
+document element.
 
 **[XML-2]** A declared member that is an object or a scalar MUST occur at most once among the child elements
 of its parent element. If it occurs more than once, the data is invalid; repeated elements are described as
@@ -163,4 +164,4 @@ with undeclared names, and `propertyNames` constrains the local names of all chi
 |---|---|
 | [dotnet-app-config](../examples/xml/dotnet-app-config.skemata.yaml) | keyed lists of `<add>` elements identified by an attribute, nested sections, an inherited namespace |
 | [gui-config](../examples/xml/gui-config.skemata.yaml) | attributes together with content, open attributes |
-| [invalid/](../examples/xml/invalid/) | content next to members, two document elements, an array as attribute, a colon in a name |
+| [invalid/](../examples/xml/invalid/) | content next to members, two document elements, a pattern for further document elements, an array as attribute, a colon in a name |

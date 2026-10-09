@@ -1,6 +1,6 @@
 # ADR 0019: Implicit rules and the normalized form
 
-- Status: Accepted
+- Status: Accepted; the consequence on the authored form is superseded by ADR 0030
 - Date: 2026-10-08
 
 ## Context

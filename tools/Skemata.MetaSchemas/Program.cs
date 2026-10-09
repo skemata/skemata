@@ -4,7 +4,8 @@
 //   dotnet run --project tools/Skemata.MetaSchemas -- verify     checks that the files are up to date and
 //                                                             validates spec/examples against them
 //
-// Both commands first check the source definition against the matrices in spec/08-target-profiles.md.
+// Both commands first check the source definition against the tables of spec/05-types-and-formats.md and
+// spec/08-target-profiles.md.
 
 using Skemata.MetaSchemas;
 
@@ -17,14 +18,14 @@ if (repo == null)
 }
 
 var source = SourceDefinition.Load(Path.Combine(repo, "schemas", "source", "draft-01.yaml"));
-var specErrors = SpecCheck.Run(source, Path.Combine(repo, "spec", "08-target-profiles.md"));
+var specErrors = SpecCheck.Run(source, Path.Combine(repo, "spec"));
 if (specErrors.Count > 0)
 {
-    Console.Error.WriteLine("The source definition does not match spec/08-target-profiles.md:");
+    Console.Error.WriteLine("The source definition does not match the spec:");
     foreach (var e in specErrors) Console.Error.WriteLine("  " + e);
     return 1;
 }
-Console.WriteLine("Source definition matches the matrices in spec/08-target-profiles.md.");
+Console.WriteLine("Source definition matches the tables of the spec (5.2, 8.3, 8.4, 8.5).");
 
 var outputs = Generator.Generate(source);
 var outputDir = Path.Combine(repo, "schemas", source.Version);

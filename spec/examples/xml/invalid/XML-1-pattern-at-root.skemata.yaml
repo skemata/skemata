@@ -1,0 +1,12 @@
+# INVALID: violates XML-1. A document has exactly one document element, the
+# root's single member. patternProperties at the root would describe further
+# document elements, which no document can contain.
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$target: xml
+type: object
+properties:
+  configuration:
+    type: object
+patternProperties:
+  "^config":
+    type: object

@@ -75,14 +75,27 @@ are in [`schemas/draft-01/`](../schemas/draft-01/), generated from
 2. **One meta-schema per target**, for example `https://skemata.github.io/skemata/draft-01/targets/registry`. Each one is
    self-contained and enforces that target's allowlist recursively, at every subschema position.
 3. **A dispatching meta-schema** at the version URI (`https://skemata.github.io/skemata/draft-01/schema`) selects the
-   per-target meta-schema by the value of `$target`.
+   per-target meta-schema by the value of `$target`. It refers to the per-target meta-schemas by their URIs.
+   A **bundled** copy at `https://skemata.github.io/skemata/draft-01/schema.bundled` contains all of them, for
+   tools that load a single file or work without network access. Both accept the same documents.
 4. **A locale meta-schema** at `https://skemata.github.io/skemata/draft-01/locale` checks locale files.
-5. **Editor compatibility.** Generated meta-schemas use only plain `$ref` and `additionalProperties: false`
-   (no `$dynamicRef`, no `unevaluatedProperties`), so that editors with partial 2020-12 support work too.
-6. **Authored form.** Meta-schemas check schemas as written, not their normalized form
-   ([4.11](04-keywords.md#411-implicit-rules-and-the-normalized-form)). Where `type` is written, they select
-   the allowlist for that type. Where `type` is inferred, they check only the keywords allowed for any type,
-   and the schema validator performs the type-specific checks (KW-17) on the normalized form.
+5. **Editor compatibility.** Generated meta-schemas use only keywords of JSON Schema 2020-12, no
+   editor-specific extensions, and of those only plain `$ref` and `additionalProperties: false` to close
+   objects (no `$dynamicRef`, no `unevaluatedProperties`), so that editors with partial 2020-12 support work
+   too.
+6. **Type inference.** Meta-schemas check schemas as written and infer types as
+   [4.11.1](04-keywords.md#4111-type-inference) does. At every position, a subschema must match one of a set of
+   closed alternatives: one for `$ref` (KW-5), and for each node kind allowed there, alternatives that list only
+   the keywords allowed together for that kind and require `type` or a keyword that implies the kind (KW-16,
+   KW-17). Keywords that exclude each other, such as `prefixItems` and `uniqueItems`, are in separate
+   alternatives. Editors that offer the keywords of the alternatives that still match therefore offer only
+   keywords that are valid together. The other implicit rules of 4.11 are applied by the schema validator.
+7. **Positions.** A target's chapter fixes which node kinds may appear where: the root of a `csv` schema is an
+   array of records, and the members of a record are scalars. Each per-target meta-schema has a definition for
+   every position with rules of its own (for example the root, records and fields of `csv`, or the tables,
+   rows and columns of `sqlite`) and allows there only the node kinds, keywords and member names valid at that
+   position. A subschema in `$defs` can be referenced from any position, so the meta-schemas check it against
+   the rules of any position (9.4.1).
 
 ### 9.4.1 Checks beyond meta-schemas
 
@@ -90,20 +103,24 @@ Some rules cannot be expressed in JSON Schema. A schema validator MUST check the
 
 | Rule | Check |
 |---|---|
+| DOC-1, DOC-2, DOC-3 | the document is JSON or YAML 1.2 without tags, anchors, aliases or merge keys, and quotes strings that YAML 1.1 reads differently (checks on the text, before it is read as data) |
 | MOD-2 | declared member names unique under the target's name comparison |
 | KW-4, KW-6 | `$ref` resolves locally; every recursion can end |
 | KW-7 | `$anchor` values unique |
 | KW-9, KW-29 | names in `required` and `dependentRequired` declared in `properties` |
 | KW-13 | identity references resolve through members and attributes to non-nullable scalars |
-| KW-14, KW-15, KW-30 | `oneOf` form recognisable; labeled-enum choices disjoint, at most one range choice; exactly one union discriminator, with distinct values |
-| KW-16, KW-17 | type determinable (written or inferred); value keywords match the normalized type |
-| KW-18, KW-19, UI-1 | `enum`, `const`, `default`, `examples` and bounds valid against their subschema |
-| KW-22, KW-23 | attributes are scalars; no members next to `content` |
-| KW-27 | `prefixItems` not combined with `uniqueItems`, `identity` or `ordered` |
+| KW-14, KW-15 | labeled-enum choices disjoint; exactly one union discriminator, with distinct values |
+| KW-17 | annotations next to `$ref`, such as `unit`, match the type of the referenced subschema |
+| KW-18, KW-19, UI-1 | `enum`, `const`, `default`, `examples` and the values of choices meet the other constraints of their subschema (`pattern`, lengths, bounds, string formats); choice values and bounds lie within the range of the format |
 | KW-31 | `patternProperties` keys are valid patterns; no declared name matches a pattern |
-| UI-5, UI-8 | `group` values refer to existing groups; `unit` values from the list |
+| UI-5, KW-24 | `group` values refer to existing groups; `group` and `namespace` only on values of `properties` |
 | LOC-3 | locale file keys resolve |
-| target rules | position-specific rules of each target chapter |
+
+The meta-schemas check the rules of each position (9.4 item 7) where a subschema is written in place. A
+subschema in `$defs` can be referenced from any position, so for every `$ref`, a schema validator MUST check
+that the referenced subschema meets the rules of the position where it is used: the node kinds and keywords
+that the target chapter allows there (for example CSV-1, INI-1, REG-2, SQL-2 to SQL-4, XML-1), nested arrays
+(KW-11), the items of sets (KW-12), and attributes and content (KW-22, KW-23).
 
 ## 9.5 Rule identifiers
 

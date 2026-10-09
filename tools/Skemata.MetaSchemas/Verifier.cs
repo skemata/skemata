@@ -1,13 +1,14 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using Json.Schema;
 
 namespace Skemata.MetaSchemas;
 
 /// <summary>
 /// Checks that the generated files are up to date and validates the worked examples against them.
-/// Valid examples must pass. Invalid examples are reported as caught by the meta-schemas or as left to the
-/// rules that only a schema validator can check (spec 9.4.1).
+/// Valid examples must pass. Invalid examples must be caught by the meta-schemas, unless the rule they break
+/// (the start of their file name) is one that spec 9.4.1 leaves to a schema validator.
 /// </summary>
 public static class Verifier
 {
@@ -25,9 +26,14 @@ public static class Verifier
             }
         }
 
-        var dispatcher = JsonSchema.FromText(outputs["schema.json"]);
-        var perTarget = source.Targets.ToDictionary(t => t.Target, t => JsonSchema.FromText(outputs[$"targets/{t.Target}.json"]));
-        var locale = JsonSchema.FromText(outputs["locale.json"]);
+        // The target meta-schemas go into a local registry first, so that the dispatcher's references to them
+        // resolve to the generated files, not to the published site.
+        var build = new BuildOptions { SchemaRegistry = new SchemaRegistry() };
+        var perTarget = source.Targets.ToDictionary(t => t.Target, t => JsonSchema.FromText(outputs[$"targets/{t.Target}.json"], build));
+        var dispatcher = JsonSchema.FromText(outputs["schema.json"], build);
+        var bundled = JsonSchema.FromText(outputs["schema.bundled.json"], build);
+        var locale = JsonSchema.FromText(outputs["locale.json"], build);
+        var delegated = SpecCheck.DelegatedRules(Path.Combine(repo, "spec", "09-versioning-and-conformance.md"));
 
         var examples = Path.Combine(repo, "spec", "examples");
         int valid = 0, caught = 0, semantic = 0;
@@ -37,6 +43,11 @@ public static class Verifier
             var data = YamlLoader.Load(file);
             var result = Evaluate(dispatcher, data);
             var target = data?["$target"]?.GetValue<string>();
+            if (Evaluate(bundled, data).IsValid != result.IsValid)
+            {
+                ok = false;
+                Console.WriteLine($"INCONSISTENT {relative}: schema.json and schema.bundled.json disagree");
+            }
             if (target != null && perTarget.TryGetValue(target, out var targetSchema) && Evaluate(targetSchema, data).IsValid != result.IsValid)
             {
                 ok = false;
@@ -49,7 +60,16 @@ public static class Verifier
                 else { ok = false; Console.WriteLine($"FAIL   {relative}"); PrintErrors(result); }
             }
             else if (!result.IsValid) { caught++; Console.WriteLine($"CAUGHT {relative}"); }
-            else { semantic++; Console.WriteLine($"LEFT   {relative} (rule beyond the meta-schemas, 9.4.1)"); }
+            else if (Regex.Match(Path.GetFileName(file), @"^[A-Z]+-\d+").Value is var rule && delegated.Contains(rule))
+            {
+                semantic++;
+                Console.WriteLine($"LEFT   {relative} ({rule} is left to the schema validator, 9.4.1)");
+            }
+            else
+            {
+                ok = false;
+                Console.WriteLine($"MISSED {relative}: 9.4.1 does not leave {(rule.Length > 0 ? rule : "its rule")} to the schema validator, so the meta-schemas must catch it");
+            }
         }
 
         foreach (var file in Directory.GetFiles(examples, "*.skemata-locale.yaml", SearchOption.AllDirectories))

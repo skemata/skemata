@@ -1,8 +1,10 @@
 # Skemata draft-01: the single source definition of the generated meta-schemas
 # (spec chapter 9.4). Edit this file, then run the generator:
 #   dotnet run --project tools/Skemata.MetaSchemas -- generate
-# The generator checks the "rows", "typeRows" and "formatExceptions" sections
-# against the matrices in spec/08-target-profiles.md and fails on any mismatch.
+# The generator checks the "rows", "typeRows", "formatExceptions" and
+# "textualFormats" sections against the matrices in spec/08-target-profiles.md,
+# the root of every layout against its table 8.3, and "formatRanges" against
+# table 5.2 of spec/05-types-and-formats.md, and fails on any mismatch.
 
 version: draft-01
 baseUri: "https://skemata.github.io/skemata/draft-01/"
@@ -25,7 +27,8 @@ targets:
   psd1: psd1
 
 # The keyword x target matrix (8.4), row by row. "cell" is the first cell of the
-# row exactly as in the spec; "allowed" is "all" or a list of columns.
+# row exactly as in the spec; "allowed" is "all" or a list of columns. "types"
+# names the types that the row allows the keyword on.
 rows:
   - cell: "`$schema`, `$id`, `$target`, `$locale`, `groups`, `$defs` (root only)"
     allowed: all
@@ -51,12 +54,16 @@ rows:
     allowed: [xml, json, yaml-1.2, toml, sqlite, csv, psd1]
   - cell: "`ordered` on arrays"
     allowed: [registry, xml, json, yaml-1.2, toml, csv, psd1]
+    types: [array]
   - cell: "`ordered` on objects"
     allowed: [xml]
+    types: [object]
   - cell: "`oneOf` as labeled enum"
     allowed: all
+    types: [string, integer, number, boolean]
   - cell: "`oneOf` as discriminated union"
     allowed: [xml, json, yaml-1.2, toml, psd1]
+    types: [object]
   - cell: "`enum`, `const`"
     allowed: all
   - cell: "`minimum`, `maximum`, `exclusiveMinimum`, `exclusiveMaximum`, `multipleOf`"
@@ -77,7 +84,8 @@ rows:
     allowed: [registry]
 
 # Rows of the type and format x target matrix (8.5) that decide whether a type
-# value is allowed at all ("—" in the spec means not allowed).
+# value is allowed at all ("—" in the spec means not allowed, "— unless
+# `textual`" means allowed only with textual: true).
 typeRows:
   array:
     cell: "`array`"
@@ -88,6 +96,10 @@ typeRows:
   boolean:
     cell: "`boolean`"
     allowed: [json, yaml-1.2, toml, psd1]
+  number:
+    cell: "`number` (`float`, `double`)"
+    allowed: [ini-windows, xml, json, yaml-1.2, toml, sqlite, csv, psd1]
+    textualOnly: [registry]
   nullable:
     cell: "nullable (`[T, \"null\"]`)"
     allowed: [json, yaml-1.2, sqlite, psd1]
@@ -102,18 +114,115 @@ formatExceptions:
     cell: "`integer` with `uint64`"
     notAllowed: [toml, sqlite, psd1]
 
+# The row of 8.5 that allows textual: true on strings with these formats (KW-25).
+# Elsewhere, textual applies to integers and numbers only.
+textualFormats:
+  cell: "`date-time`, `date-time-local`, `date`, `time-local` with `textual: true`"
+  allowed: [toml]
+  formats: [date-time, date-time-local, date, time-local]
+
+# The smallest and largest value of each format with a range (5.2, compared with
+# the spec; 5.3 for float). An integer without format has the range of
+# "integerDefault" (TYP-1), or the one of its column in "implicitFormats" unless
+# it declares textual: true (REG-4).
+formatRanges:
+  int8: [-128, 127]
+  int16: [-32768, 32767]
+  int32: [-2147483648, 2147483647]
+  int64: [-9223372036854775808, 9223372036854775807]
+  uint8: [0, 255]
+  uint16: [0, 65535]
+  uint32: [0, 4294967295]
+  uint64: [0, 18446744073709551615]
+  float: [-3.4028234663852886e38, 3.4028234663852886e38]
+integerDefault: int64
+implicitFormats:
+  registry: uint32
+
+# Type inference (4.11.1): the keywords from which each type is inferred where
+# `type` is not written. A subschema of a node must contain `type` or one of
+# these (KW-16). For integer and number, `const`, `enum` and value choices
+# count by their values: integers only mean integer, any non-integral value
+# means number.
+inference:
+  object: [properties, required, dependentRequired, additionalProperties, patternProperties, propertyNames,
+           minProperties, maxProperties, attributes, content, oneOf]
+  array: [items, prefixItems, minItems, maxItems, uniqueItems, identity]
+  string: [format, minLength, maxLength, pattern, contentEncoding, expandable, const, enum, oneOf]
+  integer: [format, const, enum, oneOf]
+  number: [format, const, enum, oneOf]
+  boolean: [const, enum, oneOf]
+
 # Units (6.9).
 units: [bit, byte, kilobyte, megabyte, gigabyte, terabyte, kibibyte, mebibyte, gibibyte, tebibyte,
         nanosecond, microsecond, millisecond, second, minute, hour, day, week, percent, pixel, point]
 
-# Member names (MOD-3, XML-3). The empty name is allowed where the row
-# "empty member name" allows it; targets listed here restrict names further.
+# Member names (MOD-3, XML-3, INI-4). The empty name is allowed where the row
+# "empty member name" allows it; columns listed here restrict names further.
+# Patterns use only \uXXXX escapes, so that they work in .NET and in ECMA-262
+# with and without the u flag. xml: an NCName by the productions of XML 1.0
+# (fifth edition), section 2.3, without the colon; characters beyond U+FFFF
+# match as a surrogate pair, or as one code point with the u flag.
 namePatterns:
-  xml: "^[A-Za-z_][A-Za-z0-9._-]*$"
+  xml: '^(?:[A-Z_a-zÀ-ÖØ-öø-˿Ͱ-ͽͿ-῿‌‍⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�]|[\uD800-\uDB7F][\uDC00-\uDFFF]|[^\x00-￿])(?:[-.0-9A-Z_a-z·À-ÖØ-öø-ͽͿ-῿‌‍‿⁀⁰-↏Ⰰ-⿯、-퟿豈-﷏ﷰ-�]|[\uD800-\uDB7F][\uDC00-\uDFFF]|[^\x00-￿])*$'
+  ini-windows: '^[^\s](?:[^\r\n]*[^\s])?$'
+
+# The subschema positions of each matrix column (target chapters). "root" is the
+# root schema. "kinds" are the node kinds allowed there (object, array, scalar,
+# or single types). "members" and "items" name the positions of the values of
+# properties, additionalProperties and patternProperties, and of items and
+# prefixItems; they default to "schema". "names" restricts the names of members
+# at the position. "absent" keywords are not allowed, "present" ones must be
+# written unless the subschema is a $ref, "values" restricts keyword values, and
+# "memberCount" fixes the number of declared members.
+# Every column also has the positions "schema" (any subschema: every kind the
+# target allows; also $defs entries), "item" (where nested arrays are not
+# allowed, items of "schema" arrays: every kind but array) and "scalar"
+# (attributes, content and the items of sets).
+layouts:
+  registry:
+    root:        { rule: REG-1, kinds: [object, array], members: value, items: listItem }
+    value:       { rule: REG-2, kinds: [scalar, array], items: multiString }
+    listItem:    { rule: REG-3, kinds: [scalar] }
+    multiString: { rule: REG-7, kinds: [string], absent: [expandable, contentEncoding, textual] }
+  ini-windows:
+    root:    { rule: INI-1, kinds: [object], members: section }
+    section: { rule: "INI-1, INI-4", kinds: [object], members: key, names: '^[^\s\]](?:[^\r\n\]]*[^\s\]])?$' }
+    key:     { rule: "INI-2, INI-4", kinds: [scalar], names: '^[^\s=;\[](?:[^\r\n=]*[^\s=])?$' }
+  xml:
+    # The root's single member is the document element. A union is impossible at
+    # the root: it would exclude the member in properties (KW-15).
+    root:     { rule: XML-1, kinds: [object], members: document, memberCount: 1, present: [properties],
+                absent: [additionalProperties, patternProperties, propertyNames, minProperties, maxProperties, attributes, content, oneOf] }
+    document: { rule: XML-1, kinds: [object] }
+  json:
+    root: { rule: JSN-1, kinds: [object, array] }
+  yaml-1.2:
+    root: { rule: YML-1, kinds: [object, array] }
+  toml:
+    root: { rule: TML-1, kinds: [object] }
+  sqlite:
+    root:   { rule: SQL-1, kinds: [object], members: table, absent: [patternProperties, propertyNames],
+              values: { additionalProperties: { type: boolean } } }
+    table:  { rule: "SQL-2, SQL-4", kinds: [array], items: row, present: [identity, items] }
+    row:    { rule: "SQL-2, SQL-3", kinds: [object], members: column, absent: [required] }
+    column: { rule: SQL-2, kinds: [scalar] }
+  csv:
+    root:   { rule: CSV-1, kinds: [array], items: record, present: [items] }
+    record: { rule: CSV-1, kinds: [object], members: field }
+    field:  { rule: CSV-1, kinds: [scalar] }
+  psd1:
+    root: { rule: PSD-1, kinds: [object] }
 
 # Keywords: the shape of their value and the types they apply to (KW-17).
-# "types" omitted: the keyword applies to every type. In values, "@name"
-# refers to a generated definition (see the generator), "@target" and
+# "types" omitted: the keyword applies to every type. "position": root-only
+# keywords (KW-3), and keywords only on declared members (UI-5, KW-24). In
+# values, "@name" refers to a generated definition: "@schema", "@scalar",
+# "@member" and "@item" are positions (the latter two those of the members and
+# items of the current position), "@properties", "@type", "@format" and
+# "@branch" are generated for the current position, "@items" is "@item", or
+# false as well next to prefixItems (KW-11), and "@literal" is a literal value
+# of the current type (2.5; null only next to a nullable type). "@target" and
 # "@draftUri" are replaced by constants.
 keywords:
   $schema:              { position: root, value: { const: "@draftUri" } }
@@ -127,32 +236,32 @@ keywords:
   $comment:             { value: { type: string } }
   title:                { value: { $ref: "@title" } }
   description:          { value: { type: string } }
-  default:              { value: true }
-  examples:             { value: { type: array } }
+  default:              { value: { $ref: "@literal" } }
+  examples:             { value: { type: array, items: { $ref: "@literal" } } }
   deprecated:           { value: { type: boolean } }
   readOnly:             { value: { type: boolean } }
   writeOnly:            { value: { type: boolean } }
   unit:                 { types: [integer, number], value: { $ref: "@unit" } }
-  group:                { value: { $ref: "@anchor" } }
+  group:                { position: member, value: { $ref: "@anchor" } }
   type:                 { value: { $ref: "@type" } }
   properties:           { types: [object], value: { $ref: "@properties" } }
   required:             { types: [object], value: { $ref: "@nameList" } }
   dependentRequired:    { types: [object], value: { type: object, additionalProperties: { $ref: "@nameList" } } }
-  additionalProperties: { types: [object], value: { anyOf: [ { type: boolean }, { $ref: "@schema" } ] } }
-  patternProperties:    { types: [object], value: { type: object, propertyNames: { format: regex }, additionalProperties: { $ref: "@schema" } } }
+  additionalProperties: { types: [object], value: { anyOf: [ { type: boolean }, { $ref: "@member" } ] } }
+  patternProperties:    { types: [object], value: { type: object, propertyNames: { format: regex }, additionalProperties: { $ref: "@member" } } }
   propertyNames:        { types: [object], value: { $ref: "@propertyNames" } }
   minProperties:        { types: [object], value: { $ref: "@count" } }
   maxProperties:        { types: [object], value: { $ref: "@count" } }
-  items:                { types: [array], value: { anyOf: [ { const: false }, { $ref: "@schema" } ] } }
-  prefixItems:          { types: [array], value: { type: array, minItems: 1, items: { $ref: "@schema" } } }
+  items:                { types: [array], value: { $ref: "@items" } }
+  prefixItems:          { types: [array], value: { type: array, minItems: 1, items: { $ref: "@item" } } }
   minItems:             { types: [array], value: { $ref: "@count" } }
   maxItems:             { types: [array], value: { $ref: "@count" } }
   uniqueItems:          { types: [array], value: { type: boolean } }
   identity:             { types: [array], value: { type: array, minItems: 1, uniqueItems: true, items: { type: string, minLength: 1 } } }
   ordered:              { types: [array, object], value: { type: boolean } }
   oneOf:                { value: { type: array, minItems: 1, items: { $ref: "@branch" } } }
-  enum:                 { types: [string, integer, number, boolean], value: { type: array, minItems: 1, uniqueItems: true } }
-  const:                { types: [string, integer, number, boolean], value: true }
+  enum:                 { types: [string, integer, number, boolean], value: { type: array, minItems: 1, uniqueItems: true, items: { $ref: "@literal" } } }
+  const:                { types: [string, integer, number, boolean], value: { $ref: "@literal" } }
   minimum:              { types: [integer, number], value: { type: number } }
   maximum:              { types: [integer, number], value: { type: number } }
   exclusiveMinimum:     { types: [integer, number], value: { type: number } }
@@ -164,18 +273,62 @@ keywords:
   format:               { types: [integer, number, string], value: { $ref: "@format" } }
   contentEncoding:      { types: [string], value: { const: base64 } }
   attributes:           { types: [object], value: { $ref: "@attributeSet" } }
-  content:              { types: [object], value: { $ref: "@schema" } }
-  namespace:            { value: { type: string, format: uri } }
+  content:              { types: [object], value: { $ref: "@scalar" } }
+  namespace:            { position: member, value: { type: string, format: uri } }
   textual:              { types: [integer, number, string], value: { type: boolean } }
   expandable:           { types: [string], value: { type: boolean } }
 
-# Keywords allowed at special positions (KW-5, KW-10, KW-14, KW-15, KW-22).
+# Rules between the keywords of one subschema. Where the "if" keywords are
+# present (with the given values, if any), "absent" keywords must be missing,
+# "present" keywords must be written, and "values" restricts keyword values.
+# A rule applies wherever its "if" keywords are allowed; "in" limits it to a
+# special position, "kinds" to subschemas of these types. Keywords that
+# exclude each other ("if" without values, "absent") are never offered
+# together: the generator emits one closed alternative per set of keywords
+# that are allowed together.
+rules:
+  - { id: KW-11, if: { items: false }, present: [prefixItems] }
+  - { id: KW-12, if: [uniqueItems], values: { items: { $ref: "@scalar" } } }
+  - { id: KW-13, if: [identity], absent: [uniqueItems] }
+  - { id: "KW-14, KW-15", if: [oneOf],
+      absent: [enum, const, properties, required, dependentRequired, additionalProperties, patternProperties, propertyNames,
+               minProperties, maxProperties, attributes, content, items, prefixItems, minItems, maxItems, uniqueItems, identity] }
+  - { id: KW-14, in: choice, if: [const],
+      absent: [enum, minimum, maximum, exclusiveMinimum, exclusiveMaximum, multipleOf, minLength, maxLength, pattern] }
+  - { id: KW-14, in: choice, if: [enum],
+      absent: [minimum, maximum, exclusiveMinimum, exclusiveMaximum, multipleOf, minLength, maxLength, pattern] }
+  - { id: KW-14, if: [oneOf], kinds: [string, integer, number, boolean],
+      values: { oneOf: { contains: { properties: { const: false, enum: false } }, minContains: 0, maxContains: 1 } } }
+  - { id: KW-21, if: [contentEncoding], absent: [format] }
+  - id: TYP-5
+    if: [contentEncoding]
+    values:
+      const: { pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$" }
+      default: { pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$" }
+      enum: { items: { pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$" } }
+      examples: { items: { pattern: "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$" } }
+  - { id: KW-23, if: [content], absent: [properties, required, dependentRequired, patternProperties, propertyNames, minProperties, maxProperties],
+      values: { additionalProperties: false } }
+  - { id: "KW-26, REG-6", if: [expandable], absent: [format, contentEncoding, textual] }
+  - { id: KW-27, if: [prefixItems], absent: [uniqueItems, identity, ordered] }
+  - { id: UI-3, if: { readOnly: true }, values: { writeOnly: false } }
+
+# Keywords allowed at special positions (KW-5, KW-10, KW-14, KW-15, KW-22), and
+# those of which a position needs at least one: a choice has a value or a range
+# (KW-14), and a union branch describes an object (KW-30).
 positions:
   refSiblings: [$ref, title, description, default, examples, deprecated, readOnly, writeOnly, group, unit, $comment, $anchor, namespace]
-  choice: [const, enum, title, description, deprecated, $anchor, $comment,
-           minimum, maximum, exclusiveMinimum, exclusiveMaximum, multipleOf, minLength, maxLength, pattern]
-  unionBranch: [type, properties, required, dependentRequired, additionalProperties, patternProperties, propertyNames,
-                minProperties, maxProperties, attributes, content, ordered, title, description, deprecated, $anchor, $comment]
-  attributeSet: [type, properties, required, dependentRequired, additionalProperties, patternProperties, propertyNames,
-                 minProperties, maxProperties, $comment]
-  propertyNames: [pattern, minLength, maxLength, enum, description, $comment]
+  choice:
+    keywords: [const, enum, title, description, deprecated, $anchor, $comment,
+               minimum, maximum, exclusiveMinimum, exclusiveMaximum, multipleOf, minLength, maxLength, pattern]
+    requireAny: [const, enum, minimum, maximum, exclusiveMinimum, exclusiveMaximum, multipleOf, minLength, maxLength, pattern]
+  unionBranch:
+    keywords: [type, properties, required, dependentRequired, additionalProperties, patternProperties, propertyNames,
+               minProperties, maxProperties, attributes, content, ordered, title, description, deprecated, $anchor, $comment]
+    requireAny: [type, properties, required, dependentRequired, additionalProperties, patternProperties, propertyNames,
+                 minProperties, maxProperties, attributes, content]
+  attributeSet:
+    keywords: [type, properties, required, dependentRequired, additionalProperties, patternProperties, propertyNames,
+               minProperties, maxProperties, $comment]
+  propertyNames:
+    keywords: [pattern, minLength, maxLength, enum, description, $comment]

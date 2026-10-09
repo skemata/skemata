@@ -50,6 +50,7 @@ jobs:
           <a href="https://github.com/skemata/skemata">repository</a> for the specification.</p>
           <ul>
             <li><a href="draft-01/schema.json">draft-01/schema</a></li>
+            <li><a href="draft-01/schema.bundled.json">draft-01/schema.bundled</a> (all targets in one file)</li>
             <li><a href="draft-01/locale.json">draft-01/locale</a></li>
           </ul>
           EOF

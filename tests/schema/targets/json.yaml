@@ -1,0 +1,43 @@
+- description: scalar root
+  valid: false
+  rules: [JSN-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    type: string
+
+- description: "scalar root (inferred from format)"
+  valid: false
+  rules: [JSN-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    format: uri
+
+- description: array root with nested arrays and tuples
+  valid: true
+  rules: [JSN-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    items:
+      items:
+        prefixItems:
+        - type: number
+        - type: number
+
+- description: root discriminated union
+  valid: true
+  rules: [JSN-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    oneOf:
+    - properties:
+        kind:
+          const: a
+    - type: object
+      properties:
+        kind:
+          const: b
+

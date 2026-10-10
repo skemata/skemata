@@ -1,0 +1,29 @@
+- description: "array root (inferred)"
+  valid: false
+  rules: [PSD-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: psd1
+    items:
+      type: string
+
+- description: nested arrays and a union in a psd1 hashtable
+  valid: true
+  rules: [PSD-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: psd1
+    properties:
+      m:
+        items:
+          items:
+            type: integer
+      u:
+        oneOf:
+        - properties:
+            k:
+              const: a
+        - properties:
+            k:
+              const: b
+

@@ -10,8 +10,8 @@ Each folder contains, for one target:
   the header notes that KW-2 is violated as well.
 
 The examples illustrate the specification. They are modeled on publicly documented data of well-known
-software, or on fictitious applications. They are not authoritative descriptions of those products, and they
-are not a conformance test suite.
+software, or on fictitious applications. They are not authoritative descriptions of those products. The
+conformance test suite is in [`tests/`](../../tests/).
 
 Several examples rely on implicit rules ([4.11](../04-keywords.md#411-implicit-rules-and-the-normalized-form)):
 types are inferred, titles are derived from names, and identity values are required without being listed.

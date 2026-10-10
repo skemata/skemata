@@ -1,0 +1,209 @@
+- description: readOnly and writeOnly both true
+  valid: false
+  rules: [UI-3]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      p:
+        type: string
+        readOnly: true
+        writeOnly: true
+
+- description: "readOnly true, writeOnly false"
+  valid: true
+  rules: [UI-3]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      p:
+        type: string
+        readOnly: true
+        writeOnly: false
+
+- description: group on the root
+  valid: false
+  rules: [UI-5]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    groups:
+      g: {}
+    group: g
+    properties:
+      a:
+        type: string
+
+- description: group on array items
+  valid: false
+  rules: [UI-5]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    groups:
+      g: {}
+    properties:
+      a:
+        items:
+          type: string
+          group: g
+
+- description: group on a member and next to $ref
+  valid: true
+  rules: [UI-5]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    groups:
+      g: {}
+    properties:
+      a:
+        type: string
+        group: g
+      b:
+        $ref: "#/$defs/s"
+        group: g
+    $defs:
+      s:
+        type: string
+
+- description: "group on a csv record (array item)"
+  valid: false
+  rules: [UI-5]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: csv
+    groups:
+      g: {}
+    items:
+      group: g
+      properties:
+        a:
+          type: string
+
+- description: "readOnly: false next to writeOnly: true (UI-3 is about the values)"
+  valid: true
+  rules: [UI-3]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      p:
+        type: string
+        readOnly: false
+        writeOnly: true
+
+- description: boolean default yes
+  valid: false
+  rules: [UI-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        type: boolean
+        default: "yes"
+
+- description: date examples with a number
+  valid: false
+  rules: [UI-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        format: date
+        examples: [5]
+
+- description: null default without nullable type
+  valid: false
+  rules: [UI-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: sqlite
+    properties:
+      t:
+        identity: [k]
+        items:
+          properties:
+            k:
+              type: string
+              default: null
+
+
+- description: default that does not match the pattern
+  valid: false
+  rules: [UI-1]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      code:
+        pattern: "^[A-Z]{2}$"
+        default: deu
+
+- description: title with a line break
+  valid: false
+  rules: [UI-2]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        type: string
+        title: "First line\nsecond line"
+
+- description: description with paragraphs
+  valid: true
+  rules: [UI-2]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        type: string
+        title: Name
+        description: "First paragraph.\n\nSecond paragraph."
+
+- description: group name that is not an anchor name
+  valid: false
+  rules: [UI-4]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    groups:
+      "1st group": {}
+    properties:
+      a:
+        type: string
+
+- description: group with a keyword other than title and description
+  valid: false
+  rules: [UI-4]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    groups:
+      general:
+        title: General
+        order: 1
+    properties:
+      a:
+        type: string
+
+- description: group that is not defined
+  valid: false
+  rules: [UI-5]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    groups:
+      general: {}
+    properties:
+      a:
+        type: string
+        group: advanced

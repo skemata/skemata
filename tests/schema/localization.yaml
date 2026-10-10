@@ -1,0 +1,86 @@
+- description: locale file with titles and descriptions
+  valid: true
+  rules: [LOC-2, LOC-4]
+  kind: locale
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/locale
+    schema: https://example.org/schemas/app-settings
+    $locale: de-AT
+    texts:
+      "#":
+        title: Einstellungen
+      "#/properties/Content%20Type":
+        title: Inhaltstyp
+        description: "Der Medientyp.\n\nWird beim Speichern gesetzt."
+      "#theme-dark":
+        title: Dunkel
+
+- description: locale file with another key
+  valid: false
+  rules: [LOC-2]
+  kind: locale
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/locale
+    schema: https://example.org/schemas/app-settings
+    $locale: de
+    author: Example
+    texts:
+      "#":
+        title: Einstellungen
+
+- description: locale file without texts
+  valid: false
+  rules: [LOC-2]
+  kind: locale
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/locale
+    schema: https://example.org/schemas/app-settings
+    $locale: de
+
+- description: "locale that is not a BCP 47 tag"
+  valid: false
+  rules: [LOC-2]
+  kind: locale
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/locale
+    schema: https://example.org/schemas/app-settings
+    $locale: de_DE
+    texts:
+      "#":
+        title: Einstellungen
+
+- description: text entry with a value other than title and description
+  valid: false
+  rules: [LOC-4]
+  kind: locale
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/locale
+    schema: https://example.org/schemas/app-settings
+    $locale: de
+    texts:
+      "#/properties/port":
+        title: Port
+        default: 8080
+
+- description: text entry without title or description
+  valid: false
+  rules: [LOC-4]
+  kind: locale
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/locale
+    schema: https://example.org/schemas/app-settings
+    $locale: de
+    texts:
+      "#/properties/port": {}
+
+- description: translated title with a line break
+  valid: false
+  rules: [LOC-4, UI-2]
+  kind: locale
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/locale
+    schema: https://example.org/schemas/app-settings
+    $locale: de
+    texts:
+      "#":
+        title: "Einstellungen\nder Anwendung"

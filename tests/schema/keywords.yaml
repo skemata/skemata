@@ -1,0 +1,1342 @@
+- description: "labeled enum on an object (no unions in csv)"
+  valid: false
+  rules: [CSV-1, KW-14]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: csv
+    items:
+      properties:
+        a:
+          type: object
+          oneOf:
+          - const: x
+
+- description: expandable with contentEncoding
+  valid: false
+  rules: [KW-26, REG-6]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    properties:
+      P:
+        type: string
+        contentEncoding: base64
+        expandable: true
+
+- description: attribute is an array
+  valid: false
+  rules: [KW-22]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      a:
+        attributes:
+          properties:
+            v:
+              type: array
+              items:
+                type: string
+
+- description: "attribute is an object (inferred)"
+  valid: false
+  rules: [KW-22]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      a:
+        attributes:
+          properties:
+            v:
+              properties:
+                x:
+                  type: string
+
+- description: content next to members
+  valid: false
+  rules: [KW-23]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      a:
+        content:
+          type: string
+        properties:
+          b:
+            type: string
+
+- description: "content next to additionalProperties: true"
+  valid: false
+  rules: [KW-23]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      a:
+        content:
+          type: string
+        additionalProperties: true
+
+- description: content is an object
+  valid: false
+  rules: [KW-23]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      a:
+        content:
+          type: object
+
+- description: "content with attributes and additionalProperties: false"
+  valid: true
+  rules: [KW-23]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      a:
+        attributes:
+          properties:
+            "n":
+              type: string
+        content:
+          format: uint16
+        additionalProperties: false
+
+- description: "nested array (inferred)"
+  valid: false
+  rules: [KW-11]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      a:
+        properties:
+          l:
+            items:
+              items:
+                type: string
+
+- description: namespace on array items
+  valid: false
+  rules: [KW-24]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      a:
+        properties:
+          l:
+            items:
+              type: string
+              namespace: urn:x
+
+- description: "namespace on members and attributes; union with attribute discriminator"
+  valid: true
+  rules: [KW-24]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      a:
+        namespace: urn:x
+        properties:
+          b:
+            type: object
+            oneOf:
+            - attributes:
+                properties:
+                  kind:
+                    const: x
+            - attributes:
+                properties:
+                  kind:
+                    const: "y"
+              content:
+                type: string
+
+- description: contentEncoding with format
+  valid: false
+  rules: [KW-21]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      b:
+        type: string
+        contentEncoding: base64
+        format: uri
+
+- description: prefixItems with uniqueItems
+  valid: false
+  rules: [KW-27]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      p:
+        prefixItems:
+        - type: number
+        uniqueItems: true
+
+- description: prefixItems with ordered
+  valid: false
+  rules: [KW-27]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      p:
+        prefixItems:
+        - type: number
+        ordered: false
+
+- description: identity with uniqueItems
+  valid: false
+  rules: [KW-13, KW-12]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      p:
+        identity: [k]
+        uniqueItems: true
+        items:
+          properties:
+            k:
+              type: string
+
+- description: "items: false without prefixItems"
+  valid: false
+  rules: [KW-11]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      p:
+        type: array
+        items: false
+
+- description: "items: false in csv (no tuples)"
+  valid: false
+  rules: [KW-11, CSV-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: csv
+    items: false
+
+- description: "tuple with items: false and minItems"
+  valid: true
+  rules: [KW-27]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      p:
+        prefixItems:
+        - type: number
+        - type: number
+        items: false
+        minItems: 1
+
+- description: labeled enum next to enum
+  valid: false
+  rules: [KW-14]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      p:
+        type: string
+        enum: [a, b]
+        oneOf:
+        - const: a
+        - const: b
+
+- description: value choice with const and enum
+  valid: false
+  rules: [KW-14]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      p:
+        type: string
+        oneOf:
+        - const: a
+          enum: [a]
+        - const: b
+
+- description: choice with neither a value nor a range keyword
+  valid: false
+  rules: [KW-14]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      p:
+        type: string
+        oneOf:
+        - const: a
+        - title: Other
+
+- description: value choices and one range choice
+  valid: true
+  rules: [KW-14]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    properties:
+      p:
+        format: uint32
+        oneOf:
+        - const: 0
+          title: Auto
+        - minimum: 1
+          title: Fixed
+
+- description: union next to properties
+  valid: false
+  rules: [KW-15]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      p:
+        properties:
+          m:
+            type: string
+        oneOf:
+        - properties:
+            m:
+              const: a
+
+- description: oneOf on an array
+  valid: false
+  rules: [KW-14]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      p:
+        type: array
+        items:
+          type: string
+        oneOf:
+        - const: a
+
+- description: textual on a string format in json
+  valid: false
+  rules: [KW-25]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      d:
+        type: string
+        format: date
+        textual: true
+
+- description: textual on a non-native string format in toml
+  valid: false
+  rules: [KW-25]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: toml
+    properties:
+      u:
+        type: string
+        format: uri
+        textual: true
+
+- description: textual on a string without format in toml
+  valid: false
+  rules: [KW-25]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: toml
+    properties:
+      u:
+        type: string
+        textual: true
+
+- description: textual local date and textual integer in toml
+  valid: true
+  rules: [KW-25]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: toml
+    properties:
+      d:
+        format: date
+        textual: true
+      "n":
+        type: integer
+        textual: true
+
+- description: uniqueItems on an array of objects
+  valid: false
+  rules: [KW-12]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        uniqueItems: true
+        items:
+          properties:
+            k:
+              type: string
+
+- description: unit on a string
+  valid: false
+  rules: [KW-17, UI-8]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        type: string
+        unit: byte
+
+- description: $ref next to type
+  valid: false
+  rules: [KW-5]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        $ref: "#/$defs/s"
+        type: string
+    $defs:
+      s:
+        type: string
+
+- description: $defs below the root
+  valid: false
+  rules: [KW-3]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        type: string
+        $defs: {}
+
+- description: type in propertyNames
+  valid: false
+  rules: [KW-10]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    propertyNames:
+      type: string
+
+- description: two non-null types
+  valid: false
+  rules: [KW-8]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        type: [string, integer]
+
+- description: null first in a nullable type
+  valid: true
+  rules: [KW-8]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        type: ["null", string]
+
+- description: union branch with content in an array item
+  valid: true
+  rules: [KW-23]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      r:
+        properties:
+          e:
+            items:
+              oneOf:
+              - attributes:
+                  properties:
+                    k:
+                      const: a
+                content:
+                  type: string
+                additionalProperties: false
+              - attributes:
+                  properties:
+                    k:
+                      const: b
+                properties:
+                  c:
+                    type: string
+
+- description: "nullable with format; set of $ref scalars; tuple"
+  valid: true
+  rules: [KW-8]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      d:
+        type: [string, "null"]
+        format: date
+      s:
+        uniqueItems: true
+        ordered: false
+        items:
+          $ref: "#/$defs/id"
+      t:
+        prefixItems:
+        - type: string
+        - format: uint16
+    $defs:
+      id:
+        format: uuid
+
+- description: "choices with enum, deprecated, $anchor; enclosing bounds"
+  valid: true
+  rules: [KW-14]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: yaml-1.2
+    properties:
+      c:
+        format: uint32
+        maximum: 100
+        oneOf:
+        - enum: [0, 1]
+          title: "Off"
+          deprecated: true
+          $anchor: c-off
+        - minimum: 2
+          title: Level
+          description: x
+
+- description: "branch without object keywords next to type: object"
+  valid: false
+  rules: [KW-30, KW-15]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      u:
+        type: object
+        oneOf:
+        - title: A
+        - properties:
+            k:
+              const: b
+
+- description: value choice with a bound
+  valid: false
+  rules: [KW-14]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      c:
+        type: integer
+        oneOf:
+        - const: 0
+          minimum: 1
+
+- description: "ordered in a json union branch (ordered on objects is xml only)"
+  valid: false
+  rules: [KW-2]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      u:
+        oneOf:
+        - ordered: true
+          properties:
+            k:
+              const: a
+
+- description: "nested array in sqlite (inferred)"
+  valid: false
+  rules: [KW-11, SQL-2]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: sqlite
+    properties:
+      t:
+        identity: [k]
+        items:
+          properties:
+            k:
+              items:
+                type: string
+
+- description: "textual on a date (inferred) in yaml"
+  valid: false
+  rules: [KW-25]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: yaml-1.2
+    properties:
+      d:
+        format: date
+        textual: true
+
+- description: "textual: false on a json string with a format"
+  valid: false
+  rules: [KW-25]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      d:
+        type: string
+        format: date
+        textual: false
+
+- description: "uniqueItems: false on an array of objects"
+  valid: false
+  rules: [KW-12]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        uniqueItems: false
+        items:
+          properties:
+            k:
+              type: string
+
+- description: "ordered: true next to prefixItems"
+  valid: false
+  rules: [KW-27]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      p:
+        prefixItems:
+        - type: number
+        ordered: true
+
+- description: "expandable: false next to format"
+  valid: false
+  rules: [KW-26, REG-6]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    properties:
+      u:
+        type: string
+        format: uri
+        expandable: false
+
+- description: bounds only
+  valid: false
+  rules: [KW-16]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        minimum: 0
+
+- description: title only
+  valid: false
+  rules: [KW-16, MOD-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        title: A
+
+- description: empty member
+  valid: false
+  rules: [KW-16, MOD-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a: {}
+
+- description: enum mixing strings and integers
+  valid: false
+  rules: [KW-16]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        enum: [1, a]
+
+- description: range choices only
+  valid: false
+  rules: [KW-16]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        oneOf:
+        - minimum: 1
+          title: X
+
+- description: "inferred: bounds next to pattern"
+  valid: false
+  rules: [KW-17]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        minimum: 1
+        pattern: x
+
+- description: "inferred: integer format next to maxLength"
+  valid: false
+  rules: [KW-16, KW-17]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: csv
+    items:
+      properties:
+        a:
+          format: uint32
+          maxLength: 3
+
+- description: "inferred: items next to properties"
+  valid: false
+  rules: [KW-16, KW-17]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        items:
+          type: string
+        properties:
+          b:
+            type: string
+
+- description: "integer inferred from value choices; number from a non-integral value; number from mixed enum"
+  valid: true
+  rules: [KW-16]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        oneOf:
+        - const: 1
+          title: A
+        - const: 0
+          title: B
+      b:
+        oneOf:
+        - const: 0.5
+        - const: 1
+      c:
+        enum: [1, 2.5]
+      d:
+        type: number
+        const: 5
+      e:
+        enum: [true, false]
+
+- description: string const 5
+  valid: false
+  rules: [KW-18]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        type: string
+        const: 5
+
+- description: integer enum with a string
+  valid: false
+  rules: [KW-18]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        type: integer
+        enum: [1, a]
+
+- description: null const without nullable type
+  valid: false
+  rules: [KW-18]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        type: string
+        const: null
+
+- description: choice const of another type
+  valid: false
+  rules: [KW-14, KW-18]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        type: integer
+        oneOf:
+        - const: a
+
+- description: string range choice with minimum
+  valid: false
+  rules: [KW-14, KW-17]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        type: string
+        oneOf:
+        - minimum: 1
+
+- description: two range choices
+  valid: false
+  rules: [KW-14]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    properties:
+      a:
+        format: uint32
+        oneOf:
+        - const: 0
+        - minimum: 1
+          maximum: 9
+        - minimum: 10
+
+- description: "nullable literals; base64; typed object and array literals"
+  valid: true
+  rules: [KW-18]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        type: [string, "null"]
+        default: null
+        enum: [a, null]
+      "n":
+        type: [integer, "null"]
+        oneOf:
+        - const: null
+          title: Unset
+        - minimum: 0
+          title: Set
+      b:
+        contentEncoding: base64
+        default: AAEC
+        examples: ["AAECAw=="]
+      o:
+        type: object
+        default: {}
+      l:
+        type: array
+        items:
+          type: string
+        examples:
+        - [a]
+
+- description: uint8 maximum 300
+  valid: false
+  rules: [KW-19]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        format: uint8
+        maximum: 300
+
+- description: "ranges at their limits; textual registry integer beyond uint32"
+  valid: true
+  rules: [KW-19]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    properties:
+      a:
+        type: integer
+        textual: true
+        maximum: 5000000000
+      b:
+        format: int64
+        minimum: -5
+      c:
+        format: uint32
+        maximum: 4294967295
+        default: 0
+      d:
+        type: integer
+        maximum: 4294967295
+
+- description: uint64 maximum and float limit
+  valid: true
+  rules: [KW-19]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        format: uint64
+        maximum: 18446744073709551615
+      b:
+        format: float
+        maximum: 3.4E+38
+      c:
+        format: int8
+        enum: [-128, 127]
+
+- description: registry choice with one range
+  valid: true
+  rules: [KW-14]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    properties:
+      a:
+        format: uint32
+        oneOf:
+        - const: 0
+        - minimum: 1
+          maximum: 9
+
+
+- description: unknown keyword
+  valid: false
+  rules: [KW-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        type: string
+        x-label: Name
+
+- description: excluded JSON Schema keyword allOf
+  valid: false
+  rules: [KW-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        allOf:
+        - type: string
+
+- description: reference to another document
+  valid: false
+  rules: [KW-4]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        $ref: "common.skemata.yaml#/$defs/name"
+
+- description: reference outside $defs
+  valid: false
+  rules: [KW-4]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        type: string
+      b:
+        $ref: "#/properties/a"
+
+- description: reference that does not resolve
+  valid: false
+  rules: [KW-4]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        $ref: "#/$defs/missing"
+    $defs:
+      name:
+        type: string
+
+- description: anchor reference that does not resolve
+  valid: false
+  rules: [KW-4]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        $ref: "#missing"
+
+- description: references that only refer to each other
+  valid: false
+  rules: [KW-6]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        $ref: "#/$defs/first"
+    $defs:
+      first:
+        $ref: "#/$defs/second"
+      second:
+        $ref: "#/$defs/first"
+
+- description: recursion through an optional member and an anchor
+  valid: true
+  rules: [KW-6, KW-7]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      root:
+        $ref: "#node"
+    $defs:
+      node:
+        $anchor: node
+        type: object
+        required: [name]
+        properties:
+          name:
+            type: string
+          children:
+            type: array
+            items:
+              $ref: "#node"
+
+- description: the same anchor twice
+  valid: false
+  rules: [KW-7]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        $anchor: name
+        type: string
+      b:
+        $anchor: name
+        type: string
+
+- description: anchor starting with a digit
+  valid: false
+  rules: [KW-7]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        $anchor: 1st
+        type: string
+
+- description: required names an undeclared member
+  valid: false
+  rules: [KW-9]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    required: [a, b]
+    properties:
+      a:
+        type: string
+
+- description: the same name twice in required
+  valid: false
+  rules: [KW-9]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    required: [a, a]
+    properties:
+      a:
+        type: string
+
+- description: identity refers to a nullable member
+  valid: false
+  rules: [KW-13]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      list:
+        identity: [id]
+        items:
+          properties:
+            id:
+              type: [string, "null"]
+
+- description: identity refers to an undeclared member
+  valid: false
+  rules: [KW-13]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      list:
+        identity: [id]
+        items:
+          properties:
+            name:
+              type: string
+
+- description: identity refers to an array
+  valid: false
+  rules: [KW-13]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      list:
+        identity: [/properties/tags]
+        items:
+          properties:
+            tags:
+              items:
+                type: string
+
+- description: identity through an attribute and a nested member
+  valid: true
+  rules: [KW-13]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      config:
+        properties:
+          entry:
+            identity: [/attributes/properties/key, /properties/scope/attributes/properties/name]
+            items:
+              attributes:
+                properties:
+                  key:
+                    type: string
+              properties:
+                scope:
+                  attributes:
+                    properties:
+                      name:
+                        type: string
+
+- description: value choices that overlap
+  valid: false
+  rules: [KW-14]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      level:
+        format: uint8
+        oneOf:
+        - enum: [0, 1]
+          title: Low
+        - enum: [1, 2]
+          title: High
+
+- description: a value choice inside the range choice
+  valid: false
+  rules: [KW-14]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      size:
+        format: uint32
+        oneOf:
+        - const: 0
+          title: Default
+        - minimum: 0
+          title: Fixed
+
+- description: union branch without discriminator
+  valid: false
+  rules: [KW-15]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      proxy:
+        oneOf:
+        - properties:
+            mode:
+              const: direct
+        - properties:
+            server:
+              format: hostname
+
+- description: union branches with the same discriminator value
+  valid: false
+  rules: [KW-15]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      proxy:
+        oneOf:
+        - properties:
+            mode:
+              const: fixed
+        - properties:
+            mode:
+              const: fixed
+            server:
+              format: hostname
+
+- description: union branch with two discriminators
+  valid: false
+  rules: [KW-15]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      proxy:
+        oneOf:
+        - properties:
+            mode:
+              const: direct
+            kind:
+              const: a
+        - properties:
+            mode:
+              const: fixed
+            kind:
+              const: b
+
+- description: unit next to a reference to a string
+  valid: false
+  rules: [KW-17]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        $ref: "#/$defs/name"
+        unit: byte
+    $defs:
+      name:
+        type: string
+
+- description: enum value that does not match the pattern
+  valid: false
+  rules: [KW-18]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      code:
+        pattern: "^[A-Z]{2}$"
+        enum: [DE, eng]
+
+- description: const above the maximum
+  valid: false
+  rules: [KW-18]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        format: uint16
+        maximum: 10
+        const: 20
+
+- description: range choice beyond the range of the format
+  valid: false
+  rules: [KW-19]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        format: uint8
+        oneOf:
+        - const: 0
+        - minimum: 1
+          maximum: 300
+
+- description: pattern that is not a regular expression
+  valid: false
+  rules: [KW-20]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        pattern: "(unclosed"
+
+- description: dependentRequired names an undeclared member
+  valid: false
+  rules: [KW-29]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      url:
+        format: uri
+    dependentRequired:
+      url: [proxy]
+
+- description: declared name that matches a pattern
+  valid: false
+  rules: [KW-31]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      x-default:
+        type: string
+    patternProperties:
+      "^x-":
+        type: string
+
+- description: patternProperties key that is not a regular expression
+  valid: false
+  rules: [KW-31]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    patternProperties:
+      "[a-":
+        type: string

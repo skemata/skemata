@@ -1,0 +1,176 @@
+- description: "column with type: object"
+  valid: false
+  rules: [CSV-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: csv
+    items:
+      properties:
+        a:
+          type: object
+          properties:
+            b:
+              type: string
+
+- description: "column with type: array"
+  valid: false
+  rules: [CSV-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: csv
+    items:
+      properties:
+        a:
+          type: array
+          items:
+            type: string
+
+- description: "column with inferred object (properties)"
+  valid: false
+  rules: [CSV-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: csv
+    items:
+      properties:
+        a:
+          properties:
+            b:
+              type: string
+
+- description: "column with inferred array (items)"
+  valid: false
+  rules: [CSV-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: csv
+    items:
+      properties:
+        a:
+          items:
+            type: string
+
+- description: "root type: object"
+  valid: false
+  rules: [CSV-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: csv
+    type: object
+    properties:
+      a:
+        type: string
+
+- description: record is an array
+  valid: false
+  rules: [CSV-1, KW-11]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: csv
+    items:
+      type: array
+      items:
+        type: string
+
+- description: record with additionalProperties object
+  valid: false
+  rules: [CSV-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: csv
+    items:
+      additionalProperties:
+        type: object
+
+- description: root array without items
+  valid: false
+  rules: [CSV-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: csv
+    type: array
+
+- description: "records with identity, dependentRequired, labeled enum"
+  valid: true
+  rules: [CSV-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: csv
+    identity: [id]
+    ordered: false
+    minItems: 1
+    items:
+      dependentRequired:
+        b: [a]
+      properties:
+        id:
+          format: uint32
+        a:
+          type: string
+        b:
+          format: date
+        c:
+          oneOf:
+          - const: "1"
+            title: "On"
+          - const: "0"
+            title: "Off"
+
+- description: column via $ref
+  valid: true
+  rules: [CSV-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: csv
+    items:
+      properties:
+        mail:
+          $ref: "#/$defs/mail"
+          title: Mail
+    $defs:
+      mail:
+        format: email
+
+- description: root $ref to the rows
+  valid: true
+  rules: [CSV-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: csv-semicolon
+    $ref: "#/$defs/rows"
+    $defs:
+      rows:
+        items:
+          properties:
+            a:
+              type: string
+
+- description: dynamic and pattern columns
+  valid: true
+  rules: [CSV-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: csv-tab
+    items:
+      additionalProperties:
+        type: string
+      patternProperties:
+        "^n_":
+          format: int32
+      propertyNames:
+        maxLength: 20
+
+- description: record via $ref
+  valid: true
+  rules: [CSV-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: csv
+    items:
+      $ref: "#/$defs/rec"
+    $defs:
+      rec:
+        properties:
+          a:
+            type: string
+

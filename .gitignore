@@ -2,3 +2,4 @@ bin/
 obj/
 .vs/
 schemas/draft-01/
+node_modules/

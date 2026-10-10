@@ -1,0 +1,34 @@
+- description: array root
+  valid: false
+  rules: [TML-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: toml
+    type: array
+    items:
+      type: string
+
+- description: "textual date-time string; local time"
+  valid: true
+  rules: [TML-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: toml
+    properties:
+      a:
+        type: string
+        format: date-time
+        textual: true
+      b:
+        format: time-local
+
+
+- description: empty key
+  valid: false
+  rules: [TML-4, MOD-3]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: toml
+    properties:
+      "":
+        type: string

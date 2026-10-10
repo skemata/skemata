@@ -1,0 +1,71 @@
+- description: empty name in json
+  valid: false
+  rules: [MOD-3, JSN-4]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      "":
+        type: string
+
+
+- description: section names that differ only in case (ini-windows)
+  valid: false
+  rules: [MOD-2]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: ini-windows
+    properties:
+      Settings:
+        properties:
+          a:
+            type: string
+      SETTINGS:
+        properties:
+          b:
+            type: string
+
+- description: keys that differ only in case (psd1)
+  valid: false
+  rules: [MOD-2]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: psd1
+    properties:
+      ModuleVersion:
+        type: string
+      moduleversion:
+        type: string
+
+- description: "value names that differ only in case (registry)"
+  valid: false
+  rules: [MOD-2]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    properties:
+      Path:
+        type: string
+      PATH:
+        type: string
+
+- description: names that differ only in case are distinct in xml
+  valid: true
+  rules: [MOD-2, XML-3]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      config:
+        attributes:
+          properties:
+            name:
+              type: string
+            Name:
+              type: string
+        properties:
+          name:
+            type: string

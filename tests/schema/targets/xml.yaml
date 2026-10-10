@@ -1,0 +1,232 @@
+- description: two document elements
+  valid: false
+  rules: [XML-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      a:
+        type: object
+      b:
+        type: object
+
+- description: scalar document element
+  valid: false
+  rules: [XML-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      a:
+        type: string
+
+- description: root additionalProperties
+  valid: false
+  rules: [XML-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    additionalProperties: false
+    properties:
+      a:
+        type: object
+
+- description: root attributes
+  valid: false
+  rules: [XML-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    attributes:
+      properties:
+        v:
+          type: string
+    properties:
+      a:
+        type: object
+
+- description: "non-ASCII element name (Größe)"
+  valid: true
+  rules: [XML-3]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      "Größe":
+        properties:
+          "Länge":
+            format: uint32
+
+- description: middle dot inside a name
+  valid: true
+  rules: [XML-3]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      "a·b":
+        type: object
+
+- description: name starts with a digit
+  valid: false
+  rules: [XML-3]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      "1a":
+        type: object
+
+- description: "names _x, x.y, x-y, é, 中文, combining mark, astral"
+  valid: true
+  rules: [XML-3]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      _x:
+        properties:
+          x.y:
+            type: string
+          x-y:
+            type: string
+          "é":
+            type: string
+          "中文":
+            type: string
+          "éa":
+            type: string
+          "\uD840\uDC00":
+            type: string
+        attributes:
+          properties:
+            "Größe":
+              type: string
+
+- description: name a:b
+  valid: false
+  rules: [XML-3]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      a:b:
+        type: object
+
+- description: name -a
+  valid: false
+  rules: [XML-3]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      "-a":
+        type: object
+
+- description: name .a
+  valid: false
+  rules: [XML-3]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      ".a":
+        type: object
+
+- description: name a b
+  valid: false
+  rules: [XML-3]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      a b:
+        type: object
+
+- description: "name ·a"
+  valid: false
+  rules: [XML-3]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      "·a":
+        type: object
+
+- description: attribute name a:b
+  valid: false
+  rules: [XML-3]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      a:
+        attributes:
+          properties:
+            x:y:
+              type: string
+
+- description: document element via $ref with namespace
+  valid: true
+  rules: [XML-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      configuration:
+        $ref: "#/$defs/c"
+        namespace: urn:example
+    $defs:
+      c:
+        ordered: true
+        properties:
+          a:
+            type: string
+
+- description: oneOf at the root
+  valid: false
+  rules: [XML-1, KW-15]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      a:
+        type: object
+    oneOf:
+    - properties:
+        a:
+          const: x
+
+- description: patternProperties at the root
+  valid: false
+  rules: [XML-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      a:
+        type: object
+    patternProperties:
+      "^b":
+        type: object
+
+- description: patternProperties in the document element and below
+  valid: true
+  rules: [XML-8]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      a:
+        patternProperties:
+          "^add":
+            attributes:
+              properties:
+                key:
+                  type: string
+        properties:
+          b:
+            patternProperties:
+              "^x":
+                type: string
+

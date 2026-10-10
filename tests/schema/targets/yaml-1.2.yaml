@@ -1,0 +1,28 @@
+- description: scalar root
+  valid: false
+  rules: [YML-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: yaml-1.2
+    type: integer
+
+
+- description: empty mapping key
+  valid: false
+  rules: [YML-2, MOD-3]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: yaml-1.2
+    properties:
+      "":
+        type: string
+
+- description: "merge key << is an ordinary member name"
+  valid: true
+  rules: [YML-2]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: yaml-1.2
+    properties:
+      "<<":
+        type: string

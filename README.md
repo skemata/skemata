@@ -67,14 +67,15 @@ the chapter of your target and its examples.
 ```
 spec/          the specification: core chapters, targets/, examples/
 schemas/       the source definition of the meta-schemas, and their generated output (not committed)
-tools/         Skemata.MetaSchemas: generates and verifies the meta-schemas
+tests/         the conformance test suite
+tools/         Skemata.MetaSchemas: generates and verifies the meta-schemas; completion-tests: editor checks
 ```
 
 ## Roadmap
 
 1. **Specification** (Draft 01)
 2. **Meta-schemas** for editor support and schema validation ([schemas/](schemas/))
-3. Conformance test suite
+3. **Conformance test suite** ([tests/](tests/)): schema validator cases; data validator cases to follow
 4. Reference validator and CLI in .NET. The specification does not depend on .NET; implementations in other
    languages are welcome.
 

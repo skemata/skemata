@@ -1,0 +1,162 @@
+- description: $id with fragment
+  valid: false
+  rules: [DOC-5]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    $id: "https://example.org/s#x"
+    properties:
+      a:
+        type: string
+
+- description: $locale de-AT
+  valid: true
+  rules: [DOC-6]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    $locale: de-AT
+    properties:
+      a:
+        type: string
+
+- description: "minimal schema with $id, $locale and groups"
+  valid: true
+  rules: [DOC-4, DOC-5, DOC-6]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $id: https://example.org/schemas/minimal
+    $target: json
+    $locale: en
+    groups:
+      general: {}
+    properties:
+      a:
+        type: string
+        group: general
+
+- description: missing $target
+  valid: false
+  rules: [DOC-4]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    properties:
+      a:
+        type: string
+
+- description: missing $schema
+  valid: false
+  rules: [DOC-4]
+  schema:
+    $target: json
+    properties:
+      a:
+        type: string
+
+- description: unknown version in $schema
+  valid: false
+  rules: [DOC-7]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-02/schema
+    $target: json
+    properties:
+      a:
+        type: string
+
+- description: unknown target
+  valid: false
+  rules: [TGT-2]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: ini
+    properties:
+      a:
+        properties:
+          b:
+            type: string
+
+- description: "$locale that is not a BCP 47 tag"
+  valid: false
+  rules: [DOC-6]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    $locale: de_DE
+    properties:
+      a:
+        type: string
+
+- description: neither JSON nor YAML
+  valid: false
+  rules: [DOC-1]
+  document: |
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties: [unclosed
+
+- description: two YAML documents
+  valid: false
+  rules: [DOC-2]
+  document: |
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    ---
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+
+- description: anchor and alias
+  valid: false
+  rules: [DOC-2]
+  metaSchemas: false
+  document: |
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a: &text
+        type: string
+      b: *text
+
+- description: explicit tag
+  valid: false
+  rules: [DOC-2]
+  metaSchemas: false
+  document: |
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        type: !!str string
+
+- description: merge key
+  valid: false
+  rules: [DOC-2]
+  metaSchemas: false
+  document: |
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      <<:
+        type: string
+
+- description: unquoted numeric mapping key
+  valid: false
+  rules: [DOC-2, DOC-3]
+  metaSchemas: false
+  document: |
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      1:
+        type: string
+
+- description: unquoted on as a value
+  valid: false
+  rules: [DOC-3]
+  metaSchemas: false
+  document: |
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: yaml-1.2
+    properties:
+      mode:
+        type: string
+        default: on

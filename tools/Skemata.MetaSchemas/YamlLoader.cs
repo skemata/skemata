@@ -11,10 +11,18 @@ public static class YamlLoader
 {
     public static JsonNode? Load(string path)
     {
-        var stream = new YamlStream();
         using var reader = new StreamReader(path);
+        return Load(reader, path);
+    }
+
+    /// <summary>Loads a document given as text, for example a test case written as raw YAML.</summary>
+    public static JsonNode? LoadText(string text, string name) => Load(new StringReader(text), name);
+
+    static JsonNode? Load(TextReader reader, string name)
+    {
+        var stream = new YamlStream();
         stream.Load(reader);
-        if (stream.Documents.Count != 1) throw new InvalidDataException($"{path}: expected exactly one YAML document");
+        if (stream.Documents.Count != 1) throw new InvalidDataException($"{name}: expected exactly one YAML document");
         return ToJson(stream.Documents[0].RootNode);
     }
 

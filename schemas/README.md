@@ -43,9 +43,12 @@ dotnet run --project tools/Skemata.MetaSchemas -- verify     # fails on outdated
 
 Both commands first compare the source definition with tables of the specification (5.2, 8.3, 8.4, 8.5) and
 stop if they disagree. The rest of the source definition (the positions below the root, name patterns, and
-the rules between keywords) is guarded by the worked examples: `verify` validates every example, valid ones
-must pass, and invalid ones must be caught unless spec 9.4.1 leaves the rule they break (the start of their
-file name) to a schema validator. The publishing workflow (`.github/workflows/pages.yml`) runs both.
+the rules between keywords) is guarded by the worked examples and the [conformance test suite](../tests/):
+`verify` validates every example and test case; valid ones must pass, and invalid ones must be caught unless
+spec 9.4.1 leaves their rules to a schema validator. Which keys editors offer is tested by
+[`tools/completion-tests`](../tools/completion-tests/completion-test.js) against the YAML language server of
+VS Code. The workflows in `.github/workflows/` run all of them on every push; `pages.yml` publishes the
+meta-schemas from `main`.
 
 ## Using the meta-schemas in an editor
 

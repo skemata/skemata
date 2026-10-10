@@ -1,0 +1,198 @@
+- description: nested object
+  valid: false
+  rules: [REG-2]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    properties:
+      Sub:
+        type: object
+        properties:
+          a:
+            type: string
+
+- description: member array of integers
+  valid: false
+  rules: [REG-7]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    properties:
+      L:
+        type: array
+        items:
+          type: integer
+
+- description: member array of expandable strings
+  valid: false
+  rules: [REG-7]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    properties:
+      L:
+        items:
+          type: string
+          expandable: true
+
+- description: member array of binary strings
+  valid: false
+  rules: [REG-7]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    properties:
+      L:
+        items:
+          contentEncoding: base64
+
+- description: root array of arrays
+  valid: false
+  rules: [REG-3, KW-11]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    items:
+      type: array
+      items:
+        type: string
+
+- description: root array of objects
+  valid: false
+  rules: [REG-3, REG-2]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    items:
+      properties:
+        a:
+          type: string
+
+- description: scalar root
+  valid: false
+  rules: [REG-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    type: string
+
+- description: "type: number without textual"
+  valid: false
+  rules: [REG-5]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    properties:
+      Z:
+        type: number
+
+- description: "format: double without textual"
+  valid: false
+  rules: [REG-5]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    properties:
+      Z:
+        format: double
+
+- description: expandable with format
+  valid: false
+  rules: [REG-6, KW-26]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    properties:
+      P:
+        type: string
+        format: uri
+        expandable: true
+
+- description: "textual number, string list, root (Default), uint64"
+  valid: true
+  rules: [REG-5]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    properties:
+      "":
+        type: string
+      Z:
+        type: number
+        textual: true
+      L:
+        items:
+          type: string
+          format: uri
+      Q:
+        format: uint64
+      E:
+        type: string
+        expandable: true
+
+- description: root array of integers
+  valid: true
+  rules: [REG-3]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    uniqueItems: true
+    items:
+      format: uint32
+
+- description: "root array via $ref; textual float in a list"
+  valid: true
+  rules: [REG-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    $ref: "#/$defs/list"
+    $defs:
+      list:
+        items:
+          format: float
+          textual: true
+
+- description: list item of type object
+  valid: false
+  rules: [REG-3, REG-2]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    items:
+      type: object
+
+- description: "registry integer below 0 (implicit uint32)"
+  valid: false
+  rules: [REG-4, KW-19]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    properties:
+      a:
+        type: integer
+        minimum: -1
+
+- description: registry integer default above uint32
+  valid: false
+  rules: [REG-4, UI-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    properties:
+      a:
+        type: integer
+        default: 5000000000
+
+- description: registry integer 0 .. uint32 max
+  valid: true
+  rules: [REG-4]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    properties:
+      a:
+        type: integer
+        minimum: 0
+        default: 4294967295
+

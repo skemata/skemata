@@ -1,0 +1,197 @@
+- description: table without identity
+  valid: false
+  rules: [SQL-4]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: sqlite
+    properties:
+      t:
+        items:
+          properties:
+            k:
+              type: string
+
+- description: required on rows
+  valid: false
+  rules: [SQL-3]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: sqlite
+    properties:
+      t:
+        identity: [k]
+        items:
+          required: [k]
+          properties:
+            k:
+              type: string
+
+- description: "column with type: object"
+  valid: false
+  rules: [SQL-2]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: sqlite
+    properties:
+      t:
+        identity: [k]
+        items:
+          properties:
+            k:
+              type: string
+            o:
+              type: object
+
+- description: table member is a scalar
+  valid: false
+  rules: [SQL-2]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: sqlite
+    properties:
+      t:
+        type: string
+
+- description: rows are scalars
+  valid: false
+  rules: [SQL-2]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: sqlite
+    properties:
+      t:
+        identity: [k]
+        items:
+          type: string
+
+- description: root additionalProperties is a subschema
+  valid: false
+  rules: [SQL-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: sqlite
+    additionalProperties:
+      type: array
+
+- description: root patternProperties
+  valid: false
+  rules: [SQL-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: sqlite
+    patternProperties:
+      "^t":
+        identity: [k]
+        items:
+          properties:
+            k:
+              type: string
+
+- description: "root type: array"
+  valid: false
+  rules: [SQL-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: sqlite
+    type: array
+    items:
+      type: object
+
+- description: table via $ref to a $defs entry with identity
+  valid: true
+  rules: [SQL-4]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: sqlite
+    additionalProperties: false
+    properties:
+      t:
+        $ref: "#/$defs/kv"
+    $defs:
+      kv:
+        identity: [k]
+        items:
+          properties:
+            k:
+              type: string
+            v:
+              type: [string, "null"]
+            "n":
+              type: integer
+              textual: true
+
+- description: "root $ref; BLOB and nullable integer columns"
+  valid: true
+  rules: [SQL-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: sqlite
+    $ref: "#/$defs/db"
+    $defs:
+      db:
+        additionalProperties: true
+        properties:
+          t:
+            identity: [k]
+            items:
+              properties:
+                k:
+                  type: integer
+                b:
+                  contentEncoding: base64
+                "n":
+                  type: [integer, "null"]
+                  format: int32
+
+- description: row via $ref
+  valid: true
+  rules: [SQL-2]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: sqlite
+    properties:
+      t:
+        identity: [k]
+        items:
+          $ref: "#/$defs/row"
+    $defs:
+      row:
+        properties:
+          k:
+            type: string
+
+
+- description: column names that differ in non-ASCII case are distinct
+  valid: true
+  rules: [SQL-5, MOD-2]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: sqlite
+    properties:
+      words:
+        identity: [id]
+        items:
+          properties:
+            id:
+              type: integer
+            ä:
+              type: string
+            Ä:
+              type: string
+
+- description: column names that differ in ASCII case
+  valid: false
+  rules: [MOD-2]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: sqlite
+    properties:
+      words:
+        identity: [id]
+        items:
+          properties:
+            id:
+              type: integer
+            ID:
+              type: integer

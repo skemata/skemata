@@ -42,6 +42,9 @@ A schema validator checks schema documents.
 non-conforming one for the versions and targets it claims to support. It SHOULD report the IDs of the
 violated rules.
 
+The repository's [conformance test suite](../tests/) contains schema documents that a schema validator must
+accept or reject, with the rules each one breaks.
+
 ### Data validators
 
 A data validator checks target data against a schema: it reads the data, maps it to the data model as
@@ -113,7 +116,7 @@ Some rules cannot be expressed in JSON Schema. A schema validator MUST check the
 | KW-13 | identity references resolve through members and attributes to non-nullable scalars |
 | KW-14, KW-15 | labeled-enum choices disjoint; exactly one union discriminator, with distinct values |
 | KW-17 | annotations next to `$ref`, such as `unit`, match the type of the referenced subschema |
-| KW-18, KW-19, UI-1 | `enum`, `const`, `default`, `examples` and the values of choices meet the other constraints of their subschema (`pattern`, lengths, bounds, string formats); choice values and bounds lie within the range of the format |
+| KW-18, KW-19, UI-1, INI-3 | `enum`, `const`, `default`, `examples` and the values of choices meet the other constraints of their subschema (`pattern`, lengths, bounds, string formats, and the implicit constraints of `ini-windows` strings); choice values and bounds lie within the range of the format |
 | KW-31 | `patternProperties` keys are valid patterns; no declared name matches a pattern |
 | UI-5, KW-24 | `group` values refer to existing groups; `group` and `namespace` only on values of `properties` |
 | LOC-3 | locale file keys resolve |

@@ -74,6 +74,13 @@ public static class SpecCheck
         return errors;
     }
 
+    /// <summary>The rule IDs that the spec defines (written as **[ID]** in the chapters and target chapters), in spec order.</summary>
+    public static List<string> DefinedRules(string specDir) =>
+        Directory.GetFiles(specDir, "*.md").Concat(Directory.GetFiles(Path.Combine(specDir, "targets"), "*.md"))
+            .OrderBy(f => f, StringComparer.Ordinal)
+            .SelectMany(f => Regex.Matches(File.ReadAllText(f), @"\*\*\[([A-Z]+-\d+)\]\*\*").Select(m => m.Groups[1].Value))
+            .Distinct().ToList();
+
     /// <summary>The rule IDs in the first column of the table in spec 9.4.1: rules that the meta-schemas leave to a schema validator.</summary>
     public static HashSet<string> DelegatedRules(string specPath)
     {

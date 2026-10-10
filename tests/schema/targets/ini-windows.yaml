@@ -1,0 +1,174 @@
+- description: "global key (root member is a scalar)"
+  valid: false
+  rules: [INI-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: ini-windows
+    properties:
+      Version:
+        type: integer
+
+- description: root additionalProperties describes scalars
+  valid: false
+  rules: [INI-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: ini-windows
+    additionalProperties:
+      type: string
+
+- description: "section member with type: object"
+  valid: false
+  rules: [INI-2]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: ini-windows
+    properties:
+      S:
+        properties:
+          K:
+            type: object
+
+- description: section member with inferred object
+  valid: false
+  rules: [INI-2]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: ini-windows
+    properties:
+      S:
+        properties:
+          K:
+            properties:
+              x:
+                type: string
+
+- description: "section name contains ]"
+  valid: false
+  rules: [INI-4]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: ini-windows
+    properties:
+      "a]b":
+        properties:
+          K:
+            type: string
+
+- description: "key name contains ="
+  valid: false
+  rules: [INI-4]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: ini-windows
+    properties:
+      S:
+        properties:
+          "a=b":
+            type: string
+
+- description: "key name starts with ;"
+  valid: false
+  rules: [INI-4]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: ini-windows
+    properties:
+      S:
+        properties:
+          ";k":
+            type: string
+
+- description: name with leading space
+  valid: false
+  rules: [INI-4]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: ini-windows
+    properties:
+      " S":
+        properties:
+          K:
+            type: string
+
+- description: dynamic sections and dynamic keys
+  valid: true
+  rules: [INI-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: ini-windows
+    additionalProperties:
+      additionalProperties:
+        type: string
+      propertyNames:
+        pattern: "^[0-9]+$"
+    properties:
+      Main Section:
+        properties:
+          Key Name.1:
+            format: uint16
+          "a]b":
+            type: string
+
+- description: section via $ref with title and group
+  valid: true
+  rules: [INI-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: ini-windows
+    groups:
+      g: {}
+    properties:
+      S:
+        $ref: "#/$defs/s"
+        title: Section
+        group: g
+    $defs:
+      s:
+        properties:
+          K:
+            type: string
+
+- description: "key name starting with ["
+  valid: false
+  rules: [INI-4]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: ini-windows
+    properties:
+      S:
+        properties:
+          "[k":
+            type: string
+
+
+- description: default with leading whitespace
+  valid: false
+  rules: [INI-3]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: ini-windows
+    properties:
+      Settings:
+        properties:
+          Prefix:
+            type: string
+            default: " log"
+
+- description: value choice enclosed in quotation marks
+  valid: false
+  rules: [INI-3]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: ini-windows
+    properties:
+      Settings:
+        properties:
+          Mode:
+            oneOf:
+            - const: "'fast'"
+              title: Fast
+            - const: slow
+              title: Slow

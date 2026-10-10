@@ -1,0 +1,111 @@
+- description: integer format on a string
+  valid: false
+  rules: [TYP-7, KW-17]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        type: string
+        format: uint32
+
+- description: boolean in csv
+  valid: false
+  rules: [TYP-3, KW-2]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: csv
+    items:
+      properties:
+        a:
+          type: boolean
+
+- description: binary default not base64
+  valid: false
+  rules: [TYP-5, UI-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        contentEncoding: base64
+        default: "not base64!"
+
+- description: int8 const -129
+  valid: false
+  rules: [TYP-1, KW-18]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        format: int8
+        const: -129
+
+- description: uint16 enum with 70000
+  valid: false
+  rules: [TYP-1, KW-18]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: toml
+    properties:
+      a:
+        format: uint16
+        enum: [1, 70000]
+
+- description: float maximum 1e39
+  valid: false
+  rules: [KW-19]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        format: float
+        maximum: 1E+39
+
+- description: integer without format above int64
+  valid: false
+  rules: [KW-19]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        type: integer
+        maximum: 1E+19
+
+- description: integer at int64 limits
+  valid: true
+  rules: [TYP-1]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        type: integer
+        minimum: -9223372036854775808
+        maximum: 9223372036854775807
+
+- description: binary default base64
+  valid: true
+  rules: [TYP-5]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        contentEncoding: base64
+        default: "AA=="
+
+
+- description: float const beyond the range of binary32
+  valid: false
+  rules: [TYP-2, KW-18]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        format: float
+        const: 1.0e+39

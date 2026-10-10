@@ -1,0 +1,36 @@
+# Checks every push and pull request: the source definition against the spec, the generated meta-schemas
+# against the worked examples and the conformance test suite (tests/), and which keys editors offer.
+name: Check
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Generate meta-schemas
+        run: dotnet run --project tools/Skemata.MetaSchemas -- generate
+
+      - name: Verify meta-schemas, examples and test suite
+        run: dotnet run --project tools/Skemata.MetaSchemas -- verify
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Completion tests
+        working-directory: tools/completion-tests
+        run: |
+          npm install --no-audit --no-fund
+          npm test

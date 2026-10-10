@@ -86,4 +86,4 @@ many kinds of data.
 
 ## License
 
-To be decided.
+[MIT](LICENSE). This covers the specification, the meta-schemas, the test suite and the tools.

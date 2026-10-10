@@ -2,7 +2,10 @@
 // the Red Hat YAML extension for VS Code uses, requests completions in the documents of scenarios.js at the
 // position marked "|", and checks the keys that must be offered ("expect") and those that must not ("forbid").
 //
-//   npm install && node completion-test.js                     the server from npm (package.json pins it)
+// The language server is a Node.js program, so this is the only part of the tooling that needs Node.js
+// (version 24, as bundled with VS Code); everything else is .NET.
+//
+//   npm ci && npm test                                         the server from npm (package-lock.json pins it)
 //   node completion-test.js <server.js> [schema] [scenarios]   another server, for example the one in VS Code:
 //                                                              <extension>/dist/languageserver.js
 // Run `generate` first; the default schema is schemas/draft-01/schema.bundled.json.

@@ -34,7 +34,7 @@ public sealed record KeywordDefinition(string Name, string? Position, HashSet<st
 /// </summary>
 public sealed record LayoutPosition(
     List<string> Kinds, string? Members, string? Items, string? Names, int? MemberCount,
-    HashSet<string> Absent, List<string> Present, Dictionary<string, JsonNode?> Values, string? Rule);
+    HashSet<string> Absent, List<string> Present, Dictionary<string, JsonNode?> Values, string? Rule, bool TypeUnion = true);
 
 /// <summary>The keywords allowed at a special position, and those of which it needs at least one.</summary>
 public sealed record SpecialPosition(List<string> Keywords, List<string> RequireAny);
@@ -145,7 +145,8 @@ public sealed class SourceDefinition
         Strings(o["absent"]).ToHashSet(),
         Strings(o["present"]),
         Map(o["values"]),
-        o["rule"]?.GetValue<string>());
+        o["rule"]?.GetValue<string>(),
+        o["typeUnion"]?.GetValue<bool>() ?? true);
 
     static KeywordRule Rule(JsonObject o) => new(
         o["id"]!.GetValue<string>(),

@@ -23,6 +23,10 @@ JSON's data model is the model JSON Schema was made for, and Skemata's data mode
 A typical Skemata schema for a `json` target therefore looks almost exactly like a JSON Schema for the same
 data.
 
+A type union ([KW-32](../04-keywords.md#oneof)) tells its branches apart by the JSON type of the value: string,
+number, `true`/`false`, object, array or `null`. Because a number branch accepts integers, `integer` and `number`
+MUST NOT both be branch types, and at most one branch MAY be nullable.
+
 ## 2 Comments and trailing commas
 
 **[JSN-2]** A `json` document MAY contain comments (`// …` to the end of the line, and `/* … */`) and trailing
@@ -63,6 +67,7 @@ object, a data validator MUST report the data as ambiguous.
 | [firefox-policies](../examples/json/firefox-policies.skemata.yaml) | [policies.json](../examples/json/policies.json) | native booleans, nested objects, a dynamic-key map, `patternProperties`, `dependentRequired`, a labeled enum, recursive bookmark folders |
 | [terminal-settings](../examples/json/terminal-settings.skemata.yaml) | [terminal-settings.json](../examples/json/terminal-settings.json) | a keyed list with GUID identity, `$ref`; data with comments and trailing commas |
 | [geojson-linestring](../examples/json/geojson-linestring.skemata.yaml) | [geojson-linestring.json](../examples/json/geojson-linestring.json) | tuples inside a nested array (not settings data) |
+| [lint-rules](../examples/json/lint-rules.skemata.yaml) | [lint-rules.json](../examples/json/lint-rules.json) | type unions: a value that is a number, a name or a list; one name or several |
 
 Invalid: [KW-31](../examples/json/invalid/KW-31-declared-name-matches-pattern.skemata.yaml) declared name matches a pattern,
 [JSN-1](../examples/json/invalid/JSN-1-scalar-root.skemata.yaml) scalar root,

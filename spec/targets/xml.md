@@ -70,6 +70,11 @@ ordinary object member. `identity: [/attributes/properties/key]` is a JSON Point
 of each item ([KW-13](../04-keywords.md#identity)); a plain name such as `[key]` would refer to a child
 element `key`.
 
+An array member is never absent: if its parent element has no child elements of its name, the member is an
+empty array. `minItems: 1` requires at least one element.
+
+**[XML-9]** `required` MUST NOT name array members.
+
 ## 3 Attributes and content
 
 Attributes are described with `attributes`, the text of an element with `content`
@@ -95,7 +100,19 @@ content:
   type: string
 ```
 
-Namespace declarations (`xmlns` and `xmlns:…`) are not attributes in the data model.
+Namespace declarations (`xmlns` and `xmlns:…`) are not attributes in the data model. Attributes of the XML Schema
+instance namespace, such as `xsi:schemaLocation` or `xsi:type`, are ordinary attributes in the namespace
+`http://www.w3.org/2001/XMLSchema-instance`. A closed attribute set declares those that documents use:
+
+```yaml
+attributes:
+  properties:
+    version: { type: string }
+    schemaLocation:
+      type: string
+      namespace: http://www.w3.org/2001/XMLSchema-instance
+  additionalProperties: false
+```
 
 ## 4 Names and namespaces
 
@@ -103,8 +120,9 @@ Namespace declarations (`xmlns` and `xmlns:…`) are not attributes in the data 
 compared case-sensitively.
 
 **[XML-4]** A member's or attribute's namespace is given by `namespace`. A child element without `namespace`
-is in the namespace of its parent element. An attribute without `namespace` is in no namespace. Prefixes are
-not significant: `<a:x xmlns:a="urn:n"/>` and `<x xmlns="urn:n"/>` are the same element.
+is in the namespace of its parent element; `namespace: ""` puts it in no namespace, as XML Schema does for local
+elements with `elementFormDefault="unqualified"`. An attribute without `namespace` is in no namespace. Prefixes
+are not significant: `<a:x xmlns:a="urn:n"/>` and `<x xmlns="urn:n"/>` are the same element.
 
 The namespace of the document element is declared with `namespace` on the root's single member.
 
@@ -116,12 +134,15 @@ enums of their stored text, and `xsi:nil` is not supported.
 
 **[XML-5]** Scalar values are the attribute values and element texts as reported by an XML 1.0 parser: after
 entity expansion and attribute-value normalization, and with CDATA sections merged into the text. Validators
-MUST NOT trim or otherwise change them.
+MUST NOT change them, except that leading and trailing XML whitespace (space, tab, carriage return, line feed)
+is removed from values that are not plain strings: integers, numbers, strings with a `format` and binary
+values, as XML Schema does for its corresponding types. `<port> 8080 </port>` holds the integer 8080; plain
+strings keep their text exactly.
 
 An attribute `a=""` or an element `<a/>` holds the empty string. A missing attribute or element is absent.
 
 **[XML-6]** For an element described with `content`, the content is the element's whole text, including
-whitespace. It exists whenever the element exists; an element without text has the empty string as content.
+whitespace (XML-5 removes it around content that is not a plain string). It exists whenever the element exists; an element without text has the empty string as content.
 If such an element has child elements, the data is invalid. For an element described without `content`,
 whitespace-only text between child elements is ignored, and other text is undescribed content.
 

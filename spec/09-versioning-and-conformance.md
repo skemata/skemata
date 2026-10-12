@@ -118,6 +118,8 @@ Some rules cannot be expressed in JSON Schema. A schema validator MUST check the
 | KW-17 | annotations next to `$ref`, such as `unit`, match the type of the referenced subschema |
 | KW-18, KW-19, UI-1, INI-3 | `enum`, `const`, `default`, `examples` and the values of choices meet the other constraints of their subschema (`pattern`, lengths, bounds, string formats, and the implicit constraints of `ini-windows` strings); choice values and bounds lie within the range of the format |
 | KW-31 | `patternProperties` keys are valid patterns; no declared name matches a pattern |
+| KW-32 | the branches of a type union have different types that the target tells apart, and none is a type union itself |
+| XML-9 | `required` names no array member |
 | UI-5, KW-24 | `group` values refer to existing groups; `group` and `namespace` only on values of `properties` |
 | LOC-3 | locale file keys resolve |
 

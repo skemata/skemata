@@ -20,7 +20,9 @@ to. For example, the root of a `registry` schema is one registry key (an object 
 a `sqlite` schema is one database (an object).
 
 **[MOD-1]** Every subschema that describes a node MUST determine exactly one node kind without looking at
-data. [Section 4.5](04-keywords.md#45-node-kind) defines how each subschema form determines its kind.
+data, with one exception: a type union ([KW-32](04-keywords.md#oneof)) offers branches of different types,
+each of which determines its kind, and the type of the value in the data selects the branch.
+[Section 4.5](04-keywords.md#45-node-kind) defines how each subschema form determines its kind.
 
 ## 3.2 Scalar values
 

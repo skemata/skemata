@@ -27,3 +27,16 @@
             k:
               const: b
 
+
+- description: "type union: one name or a list of names"
+  valid: true
+  rules: [KW-32, PSD-4]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: psd1
+    properties:
+      FunctionsToExport:
+        oneOf:
+        - type: string
+        - items:
+            type: string

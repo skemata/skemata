@@ -1,0 +1,48 @@
+# The rules of a fictitious linter, configured like ESLint. A rule is a level
+# (a number or its name), or a list of the level and options; "extends" names
+# one configuration or several. Shows type unions (KW-32): the type of the
+# value in the data selects the branch.
+# Sample data: lint-rules.json
+$schema: https://skemata.github.io/skemata/draft-01/schema
+$id: https://skemata.github.io/skemata/examples/json/lint-rules
+$target: json
+title: Lint rules
+type: object
+properties:
+  extends:
+    title: Base configurations
+    oneOf:
+      - { type: string, title: One configuration }
+      - { items: { type: string }, title: Several configurations }
+  rules:
+    propertyNames:
+      pattern: "^[a-z][a-z0-9-]*$"
+    additionalProperties:
+      $ref: "#/$defs/rule"
+$defs:
+  level:
+    title: Level
+    format: uint8
+    oneOf:
+      - { const: 0, title: "Off" }
+      - { const: 1, title: Warning }
+      - { const: 2, title: Error }
+  levelName:
+    title: Level name
+    oneOf:
+      - { const: "off", title: "Off" }
+      - { const: warn, title: Warning }
+      - { const: error, title: Error }
+  severity:
+    oneOf:
+      - $ref: "#/$defs/level"
+      - $ref: "#/$defs/levelName"
+  rule:
+    oneOf:
+      - $ref: "#/$defs/level"
+      - $ref: "#/$defs/levelName"
+      - title: Level with options
+        prefixItems:
+          - $ref: "#/$defs/severity"
+          - { type: object, title: Options }
+        minItems: 1                # explicit: the options may be left out

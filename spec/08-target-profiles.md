@@ -71,6 +71,7 @@ later version of this specification.
 | `ordered` on objects | — | — | ✓ | — | — | — | — | — | — |
 | `oneOf` as labeled enum | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `oneOf` as discriminated union | — | — | ✓ | ✓ | ✓ | ✓ | — | — | ✓ |
+| `oneOf` as type union | ✓ | — | — | ✓ | ✓ | ✓ | ✓ | — | ✓ |
 | `enum`, `const` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `minimum`, `maximum`, `exclusiveMinimum`, `exclusiveMaximum`, `multipleOf` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `minLength`, `maxLength`, `pattern` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
@@ -92,6 +93,10 @@ Notes:
 
 Target chapters add position-specific restrictions. For example, `registry` allows `items` only on the root
 array and on string arrays (REG-2, REG-7).
+
+A type union (KW-32) needs data that shows the type of a value. In `ini-windows`, `xml` and `csv`, every value
+is text, so `1` and `"1"` look alike and type unions are not allowed. The other target chapters define which
+types their data tells apart.
 
 ## 8.5 Type and format × target matrix
 

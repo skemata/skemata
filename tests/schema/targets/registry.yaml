@@ -196,3 +196,45 @@
         minimum: 0
         default: 4294967295
 
+
+- description: "type union: REG_SZ when set, REG_DWORD 0 when not configured"
+  valid: true
+  rules: [KW-32, REG-8]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    properties:
+      HomepageLocation:
+        oneOf:
+        - format: uri
+          title: Home page
+        - format: uint32
+          const: 0
+          title: Not configured
+
+- description: "type union with two REG_SZ branches"
+  valid: false
+  rules: [KW-32]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    properties:
+      Zoom:
+        oneOf:
+        - type: string
+        - type: number
+          textual: true
+
+- description: "type union at the root"
+  valid: false
+  rules: [REG-10]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: registry
+    oneOf:
+    - properties:
+        a:
+          type: string
+    - items:
+        type: string

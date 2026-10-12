@@ -185,4 +185,5 @@ on it, so authors can control the order in a UI without an extra keyword.
 | object with `attributes` or `content` | fields for the attributes and the content, next to those of the members |
 | `dependentRequired` | dependent fields become mandatory once their trigger is filled in |
 | discriminated union | choice of the discriminator, then that branch's fields |
+| type union | choice of the branch by its title, then that branch's control |
 | recursive structure | tree view, expanded on demand |

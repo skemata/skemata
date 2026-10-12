@@ -26,6 +26,11 @@ data model.
 
 **[TML-1]** The root schema MUST describe an object.
 
+A type union ([KW-32](../04-keywords.md#oneof)) tells its branches apart by the TOML value type: string,
+integer, float, boolean, offset date-time, local date-time, local date, local time, array or table. A string
+with a temporal format is a native date or time unless it is `textual`. `integer` and `number` MUST NOT both
+be branch types, because a number branch accepts integers.
+
 ## 2 Values
 
 **[TML-2]** TOML has no null and no unsigned 64-bit integers. Nullable types and `format: uint64` MUST NOT be

@@ -287,13 +287,14 @@ a boolean.
 
 ### `oneOf`
 
-JSON Schema meaning: the node is valid against exactly one branch. Skemata allows `oneOf` in two forms only,
+JSON Schema meaning: the node is valid against exactly one branch. Skemata allows `oneOf` in three forms only,
 recognised by their branches.
 
-**[KW-30]** A `oneOf` is a **discriminated union** if every branch is an object description: it contains
-`type: object` or at least one of `properties`, `required`, `dependentRequired`, `additionalProperties`,
-`patternProperties`, `propertyNames`, `minProperties`, `maxProperties`, `attributes` and `content`. It is a
-**labeled enum** if no branch is an object description. A `oneOf` that mixes both kinds of branches is
+**[KW-30]** A `oneOf` is a **type union** if its branches determine pairwise different types (4.5). Otherwise
+it is a **discriminated union** if every branch is an object description: it contains `type: object` or at
+least one of `properties`, `required`, `dependentRequired`, `additionalProperties`, `patternProperties`,
+`propertyNames`, `minProperties`, `maxProperties`, `attributes` and `content`; and a **labeled enum** if no
+branch is an object description. A `oneOf` that mixes object descriptions with other branches of one type is
 invalid.
 
 **Labeled enum.** A list of **choices**, each with its own title. A **value choice** stands for one value
@@ -359,6 +360,34 @@ declared in every branch with a `const` value: either a member (`/properties/<na
 (`/attributes/properties/<name>`) of the branch. This location is the discriminator. It is implicitly
 required in every branch, and its `const` values MUST be distinct across branches.
 
+**Type union.** A node that takes values of different types, such as "one file or a list of files", or a
+width that may also be the string `tab` or a width with options. Each branch is a complete subschema with a
+type of its own, and the type of the value in the data selects the branch:
+
+```yaml
+files:
+  oneOf:
+    - { type: string, title: One file }
+    - { items: { type: string }, title: Several files }
+
+indent:                          # 2, "tab", or [2, { SwitchCase: 1 }]
+  oneOf:
+    - { format: uint8, title: Width }
+    - { const: tab, title: Tab }
+    - title: Width with options
+      prefixItems:
+        - { format: uint8 }
+        - properties:
+            SwitchCase: { format: uint8 }
+```
+
+**[KW-32]** A type union MUST only be used where the target allows it
+([8.4](08-target-profiles.md#84-keyword--target-matrix)). Its enclosing subschema MUST NOT contain keywords
+other than `oneOf`, `title`, `description`, `default`, `examples`, `deprecated`, `readOnly`, `writeOnly`,
+`group`, `$anchor` and `$comment`. Every branch MUST determine a type (4.5) and MUST NOT be a type union
+itself, and the target MUST be able to tell the branches apart in its data: the target chapter defines which
+types it distinguishes. A data validator selects the branch by the stored type of the value.
+
 ## 4.5 Node kind
 
 [MOD-1](03-data-model.md#31-nodes) requires that every subschema describing a node determines its kind. A
@@ -371,11 +400,13 @@ subschema determines it as follows:
 | contains `$ref` | the kind of the referenced subschema |
 | branch of a labeled enum | the enclosing subschema's kind (scalar) |
 | branch of a discriminated union | object |
+| type union | the kind of the branch that the data selects; each branch determines its kind as listed here |
 | value of `attributes` | the attribute set, an object |
 | value of `propertyNames` | a string (the names) |
 
 **[KW-16]** Every subschema that describes a node MUST contain `type` or allow its type to be inferred
-(4.11.1), unless it contains `$ref`, is a `oneOf` branch, or is the value of `attributes` or `propertyNames`.
+(4.11.1), unless it contains `$ref`, is a branch of a labeled enum or of a discriminated union, encloses a type
+union, or is the value of `attributes` or `propertyNames`.
 
 ## 4.6 Value keywords
 
@@ -487,11 +518,11 @@ the logical value.
 
 ### `namespace`
 
-The namespace of a member's or attribute's name, as an absolute URI. Inheritance rules are defined by the
-target (`xml`).
+The namespace of a member's or attribute's name, as an absolute URI (empty for no namespace). Inheritance rules
+are defined by the target (`xml`).
 
-**[KW-24]** `namespace` MUST be an absolute URI. It MUST only be used on subschemas that are values of
-`properties`, either of an object or inside `attributes`.
+**[KW-24]** `namespace` MUST be an absolute URI, or the empty string for no namespace. It MUST only be used on
+subschemas that are values of `properties`, either of an object or inside `attributes`.
 
 ### `textual`
 
@@ -523,7 +554,7 @@ The following JSON Schema 2020-12 keywords are not part of Skemata draft-01 (KW-
 
 | Keywords | Reason |
 |---|---|
-| `allOf`, `anyOf` | Composition makes the node kind and member set depend on evaluation. Use `$ref` and explicit `properties`. |
+| `allOf`, `anyOf` | Composition makes the node kind and member set depend on evaluation. Use `$ref` and explicit `properties`, or a type union (`oneOf`, KW-32) for values of different types. |
 | `not` | Negative constraints can be neither rendered nor mapped to a store. |
 | `if`, `then`, `else`, `dependentSchemas` | Conditional structure. Candidates for a later draft as validation-only rules. |
 | `contains`, `minContains`, `maxContains` | Validation-only. Candidates for a later draft. |
@@ -566,7 +597,8 @@ When `type` is absent, it is inferred from the other keywords of the subschema:
 
 If the keywords present imply different types, or none at all, the type cannot be inferred, and KW-16
 requires `type`. Numeric bounds alone (`minimum`, …) imply no type, because they apply to integers and
-numbers alike. A nullable type is never inferred.
+numbers alike. A nullable type is never inferred, and nothing is inferred for the enclosing subschema of a type
+union: its branches carry the types (KW-32).
 
 In JSON Schema, a subschema without `type` accepts values of every type. Inference tightens this, as allowed
 by principle 1: a JSON Schema validator would accept more data than Skemata, but never reject data that Skemata

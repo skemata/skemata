@@ -117,6 +117,20 @@ On/off values are labeled enums of their stored values, typically DWORD `1` and 
 **[REG-8]** A data validator MUST report a declared value whose registry type differs from the type that the
 schema determines (for example REG_SZ where REG_DWORD is expected).
 
+Some values change their registry type with their meaning, for example a policy that writes a URL as REG_SZ
+when enabled and the DWORD `0` when disabled. A type union ([KW-32](../04-keywords.md#oneof)) describes them; the
+registry type of the value selects the branch, so every branch MUST be stored as a different registry type
+(section 5). A string and a textual number are both REG_SZ; `uint32` and `int64` are REG_DWORD and REG_QWORD.
+
+```yaml
+HomepageLocation:
+  oneOf:
+    - { format: uri, title: Home page }
+    - { format: uint32, const: 0, title: Not configured }
+```
+
+**[REG-10]** The root MUST NOT be a type union.
+
 ## 6 Names
 
 **[REG-9]** Value names are compared case-insensitively ([3.3.2](../03-data-model.md#332-names)). A value name

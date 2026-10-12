@@ -195,3 +195,21 @@
               type: integer
             ID:
               type: integer
+
+- description: "type union of TEXT and INTEGER columns values"
+  valid: true
+  rules: [KW-32]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: sqlite
+    properties:
+      settings:
+        identity: [key]
+        items:
+          properties:
+            key:
+              type: string
+            value:
+              oneOf:
+              - type: string
+              - type: integer

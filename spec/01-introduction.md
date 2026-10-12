@@ -85,6 +85,17 @@ Skemata is **styled after** JSON Schema 2020-12, but it is its own language:
   format, and mappings between formats would be ambiguous. Data stored in two formats needs two schemas.
 
 As a result, a typical Skemata schema for a `json` target looks almost exactly like the equivalent JSON Schema.
+Where Skemata is stricter, a converted schema accepts less data unless the converter writes the difference:
+
+| Skemata | JSON Schema 2020-12 | When converting |
+|---|---|---|
+| Tuples are closed: `items: false` and a `minItems` of all positions are implied (KW-27) | further items allowed, positions optional | write `items` and `minItems` to keep an open tuple |
+| `format` values form a closed set and are always checked (5.1) | any value, an annotation by default | describe other formats with `pattern` |
+| Every subschema has one type, written or inferred (KW-16, 4.11.1) | without `type`, any value | write `type`; values of several types are a type union |
+| `oneOf` is a labeled enum, a discriminated union or a type union (KW-30) | any subschemas | rewrite other forms |
+| A member name matches at most one pattern, and declared names none (KW-31) | all matching subschemas apply | make patterns disjoint |
+| A keyword is used when it is present, whatever its value (4.1) | default values have no effect | leave out keywords with default values where they are not allowed |
+| `allOf`, `anyOf`, `not`, `if`/`then`/`else` and others are excluded (4.10) | allowed | resolve them into explicit subschemas |
 Skemata schemas are nevertheless not JSON Schemas: their targets are mostly not JSON, so JSON Schema validators
 cannot validate the data they describe.
 

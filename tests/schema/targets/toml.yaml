@@ -32,3 +32,17 @@
     properties:
       "":
         type: string
+
+- description: "type union of a string and a native local date"
+  valid: true
+  rules: [KW-32]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: toml
+    properties:
+      expires:
+        oneOf:
+        - format: date
+          title: Date
+        - const: never
+          title: Never

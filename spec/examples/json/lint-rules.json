@@ -1,0 +1,9 @@
+{
+  "extends": ["recommended", "strict"],
+  "rules": {
+    "no-unused-vars": "warn",
+    "eqeqeq": 2,
+    "indent": ["error", { "size": 2 }],
+    "max-len": ["warn"]
+  }
+}

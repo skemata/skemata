@@ -138,6 +138,16 @@ module.exports = [
     expect: ['int32', 'uint16'], forbid: ['date', 'float', 'uri'],
   },
   {
+    name: 'type-union branch after type: array -> array keys only',
+    yaml: head('json') + `properties:\n  files:\n    oneOf:\n      - type: string\n      - type: array\n        |`,
+    expect: ['items', 'minItems', 'uniqueItems'], forbid: [...stringKeys, ...numberKeys, ...objectKeys],
+  },
+  {
+    name: 'registry type-union branch after format: uri -> string keys only',
+    yaml: head('registry') + `properties:\n  Home:\n    oneOf:\n      - format: uri\n        |\n      - format: uint32\n        const: 0`,
+    expect: ['pattern', 'maxLength'], forbid: [...numberKeys, 'items', 'properties'],
+  },
+  {
     name: 'xml element with content -> no members',
     yaml: head('xml') + `properties:\n  doc:\n    properties:\n      e:\n        content:\n          type: string\n        |`,
     expect: ['attributes', 'additionalProperties'], forbid: ['properties', 'required', 'patternProperties'],

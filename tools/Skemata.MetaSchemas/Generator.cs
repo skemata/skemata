@@ -301,6 +301,17 @@ public static class Generator
                 }
             }
 
+            // A type union (KW-32): branches of different types, each a subschema of this position but not a type
+            // union itself. Whether the target tells the branches apart is left to the schema validator (9.4.1).
+            if (Row("`oneOf` as type union") && layout.TypeUnion && layout.Present.Count == 0 && types.Count > 1)
+            {
+                var branch = Alternative($"{name}.branch", new JsonObject { ["anyOf"] = alternatives.DeepClone() });
+                var keywords = s.Positions["typeUnion"].Keywords.Where(k => Allowed(Keyword(k)) && KeywordAllowed(k)).ToList();
+                var node = Closed($"{name}.typeUnion", keywords, new Context(layout, types, [.. keywords]), ["oneOf"], root, "typeUnion", null);
+                node["properties"]!["oneOf"] = new JsonObject { ["type"] = "array", ["minItems"] = 2, ["items"] = branch };
+                alternatives.Add(Alternative($"{name}.typeUnion", node));
+            }
+
             var position = new JsonObject();
             if (layout.Rule != null) position["$comment"] = layout.Rule;
             position["anyOf"] = alternatives;

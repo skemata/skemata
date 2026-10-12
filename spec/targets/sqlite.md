@@ -66,6 +66,11 @@ There is no Boolean storage class. On/off columns are labeled enums of their sto
 and `0` ([TYP-3](../05-types-and-formats.md#54-booleans)). INTEGER is signed, so `format: uint64` is not
 allowed.
 
+A column whose values have different storage classes is a type union ([KW-32](../04-keywords.md#oneof)): the
+storage class of the value (TEXT, INTEGER, REAL, BLOB) selects the branch. Branches MUST have different storage
+classes; because a number branch accepts INTEGER (SQL-7), `integer` and `number` MUST NOT both be branch types,
+and at most one branch MAY be nullable.
+
 Authors should choose types that match the columns' declared types. A schema that describes text in an
 INTEGER-affinity column, for example, describes data that SQLite may convert when it is stored.
 

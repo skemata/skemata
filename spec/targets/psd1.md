@@ -52,6 +52,11 @@ command or a script block) makes the data invalid.
 
 **[PSD-4]** Where the schema declares an array of scalars, a single scalar value is read as an array with one
 item. Data files commonly write one-element lists that way, for example `FunctionsToExport = 'Get-Example'`.
+PSD-4 does not apply within a type union: there, a single scalar selects a scalar branch.
+
+A type union ([KW-32](../04-keywords.md#oneof)) tells its branches apart by the type of the literal: string,
+integer, floating-point number, `$true`/`$false`, hashtable, array or `$null`. `integer` and `number` MUST NOT
+both be branch types, and at most one branch MAY be nullable.
 
 `format: uint64` is not allowed: Windows PowerShell 5.1 has no literal for unsigned 64-bit integers
 ([8.5](../08-target-profiles.md#85-type-and-format--target-matrix)).

@@ -1340,3 +1340,156 @@
     patternProperties:
       "[a-":
         type: string
+
+- description: "type union: one file or a list of files"
+  valid: true
+  rules: [KW-30, KW-32]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      files:
+        title: Files
+        oneOf:
+        - type: string
+          title: One file
+        - items:
+            type: string
+          title: Several files
+
+- description: "type union: a severity, its name, or a severity with options"
+  valid: true
+  rules: [KW-30, KW-32]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      indent:
+        oneOf:
+        - format: uint8
+          title: Width
+        - oneOf:
+          - const: "off"
+            title: "Off"
+          - const: tab
+            title: Tab
+        - title: Width with options
+          prefixItems:
+          - format: uint8
+          - properties:
+              SwitchCase:
+                format: uint8
+
+- description: "type union with a branch through $ref"
+  valid: true
+  rules: [KW-32]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: yaml-1.2
+    properties:
+      proxy:
+        oneOf:
+        - format: uri
+        - $ref: "#/$defs/proxy"
+    $defs:
+      proxy:
+        properties:
+          host:
+            format: hostname
+
+- description: "type union in ini-windows"
+  valid: false
+  rules: [KW-32, KW-2]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: ini-windows
+    properties:
+      Settings:
+        properties:
+          Level:
+            oneOf:
+            - type: string
+            - type: integer
+
+- description: "type union in xml"
+  valid: false
+  rules: [KW-32, KW-2]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      config:
+        properties:
+          level:
+            oneOf:
+            - type: string
+            - type: integer
+
+- description: "type union in csv"
+  valid: false
+  rules: [KW-32, KW-2]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: csv
+    items:
+      properties:
+        level:
+          oneOf:
+          - type: string
+          - type: integer
+
+- description: "type next to a type union"
+  valid: false
+  rules: [KW-32]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      files:
+        type: string
+        oneOf:
+        - type: string
+        - items:
+            type: string
+
+- description: "type union nested in a type union"
+  valid: false
+  rules: [KW-32]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        oneOf:
+        - type: boolean
+        - oneOf:
+          - type: string
+          - type: integer
+
+- description: "type union with two string branches"
+  valid: false
+  rules: [KW-32]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        oneOf:
+        - format: uri
+        - type: string
+          maxLength: 10
+        - type: integer
+
+- description: "type union of integer and number"
+  valid: false
+  rules: [KW-32]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: json
+    properties:
+      a:
+        oneOf:
+        - type: integer
+        - type: number

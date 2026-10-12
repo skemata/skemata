@@ -64,6 +64,8 @@ rows:
   - cell: "`oneOf` as discriminated union"
     allowed: [xml, json, yaml-1.2, toml, psd1]
     types: [object]
+  - cell: "`oneOf` as type union"
+    allowed: [registry, json, yaml-1.2, toml, sqlite, psd1]
   - cell: "`enum`, `const`"
     allowed: all
   - cell: "`minimum`, `maximum`, `exclusiveMinimum`, `exclusiveMaximum`, `multipleOf`"
@@ -176,14 +178,16 @@ namePatterns:
 # prefixItems; they default to "schema". "names" restricts the names of members
 # at the position. "absent" keywords are not allowed, "present" ones must be
 # written unless the subschema is a $ref, "values" restricts keyword values, and
-# "memberCount" fixes the number of declared members.
+# "memberCount" fixes the number of declared members. Where the target allows type
+# unions (KW-32), every position with several types also accepts one, unless
+# "typeUnion" is false.
 # Every column also has the positions "schema" (any subschema: every kind the
 # target allows; also $defs entries), "item" (where nested arrays are not
 # allowed, items of "schema" arrays: every kind but array) and "scalar"
 # (attributes, content and the items of sets).
 layouts:
   registry:
-    root:        { rule: REG-1, kinds: [object, array], members: value, items: listItem }
+    root:        { rule: "REG-1, REG-10", kinds: [object, array], members: value, items: listItem, typeUnion: false }
     value:       { rule: REG-2, kinds: [scalar, array], items: multiString }
     listItem:    { rule: REG-3, kinds: [scalar] }
     multiString: { rule: REG-7, kinds: [string], absent: [expandable, contentEncoding, textual] }
@@ -277,7 +281,7 @@ keywords:
   contentEncoding:      { types: [string], value: { const: base64 } }
   attributes:           { types: [object], value: { $ref: "@attributeSet" } }
   content:              { types: [object], value: { $ref: "@scalar" } }
-  namespace:            { position: member, value: { type: string, format: uri } }
+  namespace:            { position: member, value: { anyOf: [ { type: string, format: uri }, { const: "" } ] } }
   textual:              { types: [integer, number, string], value: { type: boolean } }
   expandable:           { types: [string], value: { type: boolean } }
 
@@ -316,9 +320,10 @@ rules:
   - { id: KW-27, if: [prefixItems], absent: [uniqueItems, identity, ordered] }
   - { id: UI-3, if: { readOnly: true }, values: { writeOnly: false } }
 
-# Keywords allowed at special positions (KW-5, KW-10, KW-14, KW-15, KW-22), and
+# Keywords allowed at special positions (KW-5, KW-10, KW-14, KW-15, KW-22, KW-32), and
 # those of which a position needs at least one: a choice has a value or a range
-# (KW-14), and a union branch describes an object (KW-30).
+# (KW-14), a union branch describes an object (KW-30), and the enclosing
+# subschema of a type union has its oneOf (KW-32).
 positions:
   refSiblings: [$ref, title, description, default, examples, deprecated, readOnly, writeOnly, group, unit, $comment, $anchor, namespace]
   choice:
@@ -330,6 +335,9 @@ positions:
                minProperties, maxProperties, attributes, content, ordered, title, description, deprecated, $anchor, $comment]
     requireAny: [type, properties, required, dependentRequired, additionalProperties, patternProperties, propertyNames,
                  minProperties, maxProperties, attributes, content]
+  typeUnion:
+    keywords: [oneOf, title, description, default, examples, deprecated, readOnly, writeOnly, group, $anchor, $comment]
+    requireAny: [oneOf]
   attributeSet:
     keywords: [type, properties, required, dependentRequired, additionalProperties, patternProperties, propertyNames,
                minProperties, maxProperties, $comment]

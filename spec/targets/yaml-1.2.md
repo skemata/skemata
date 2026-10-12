@@ -28,6 +28,9 @@ separate `yaml-1.1` target ([8.7](../08-target-profiles.md#87-candidate-targets-
 
 `textual: true` stores an integer or number as a string in its lexical form, such as `port: "8080"`.
 
+A type union ([KW-32](../04-keywords.md#oneof)) tells its branches apart by the core-schema type of the node,
+as in `json`: `integer` and `number` MUST NOT both be branch types, and at most one branch MAY be nullable.
+
 ## 3 Names
 
 **[YML-2]** Mapping keys are compared case-sensitively. The empty name is not allowed

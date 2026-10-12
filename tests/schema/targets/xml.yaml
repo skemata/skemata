@@ -230,3 +230,63 @@
               "^x":
                 type: string
 
+
+- description: "element in no namespace under a namespaced parent"
+  valid: true
+  rules: [XML-4, KW-24]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      config:
+        namespace: urn:example:config
+        properties:
+          setting:
+            namespace: ""
+            type: string
+
+- description: "closed attribute set that declares xsi:schemaLocation"
+  valid: true
+  rules: [XML-4]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      config:
+        attributes:
+          properties:
+            version:
+              type: string
+            schemaLocation:
+              type: string
+              namespace: http://www.w3.org/2001/XMLSchema-instance
+          additionalProperties: false
+
+- description: "required names an array member"
+  valid: false
+  rules: [XML-9]
+  metaSchemas: false
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      config:
+        required: [add]
+        properties:
+          add:
+            items:
+              attributes:
+                properties:
+                  key:
+                    type: string
+
+- description: "namespace that is neither a URI nor empty"
+  valid: false
+  rules: [KW-24]
+  schema:
+    $schema: https://skemata.github.io/skemata/draft-01/schema
+    $target: xml
+    properties:
+      config:
+        namespace: not a uri
+        type: object
